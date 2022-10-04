@@ -37,17 +37,17 @@ class AnimationList{
         let index = this.animationList.findIndex(i => i == animation);
         delete this.animationListData.splice(index, 1);
         this.animationList.splice(index, 1).forEach(i => i.DeleteThis());
+        this.animationIndex--;
     }
 
     BuildAnimationSprite = (imageArray) => {
-        let animation = new Animation(this.animationIndex.toString());
+        let animation = new Animation(this.animationIndex);
         animation.AddTableRow(this.animationListElem);
         this.AddToList(animation);
         this.animationIndex++;
 
         for(let x = 0; x < imageArray.length;x++){
             let picture = new FileReader();
-
             picture.addEventListener('load', (e)=>{
                 let newImage = e.target.result;
                 let frameData = new Frame(animation, newImage, imageArray[x].name);

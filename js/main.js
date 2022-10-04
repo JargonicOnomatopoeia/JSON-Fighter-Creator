@@ -1,5 +1,6 @@
 import {animationList, AnimationListInit} from './animationlist.js'
 import { DisplayInJson } from './JSONOutput.js';
+import { CanvasInitialize, canvasAnimator} from './canvas.js'
 
 
 window.onload = () => {
@@ -15,7 +16,7 @@ window.onload = () => {
     let buttonClipboard = document.getElementById("json-clipboard");
 
     AnimationListInit();
-    //CanvasInitialize();
+    CanvasInitialize();
     //FrameData.Initialize();
     //HitboxRows.Initialize();
     //#endregion
@@ -68,9 +69,9 @@ window.onload = () => {
         pasteCancelContainer.style.display = "none";
         buttonCopyHitbox.hidden = false;
     });
-
-    requestAnimationFrame(AnimationPlayer.AnimationPlay);
 */
+    requestAnimationFrame(canvasAnimator.AnimationPlay);
+
 }
 /*
 

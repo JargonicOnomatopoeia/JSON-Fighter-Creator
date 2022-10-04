@@ -1,5 +1,7 @@
-export const canvasAnimator = null;
-export const canvasEditor = null;
+import { animationList } from "./animationlist.js";
+
+export let canvasAnimator = null;
+export let canvasEditor = null;
 
 export const CanvasInitialize = () => {
     canvasEditor = new CanvasEditor();
@@ -9,7 +11,7 @@ export const CanvasInitialize = () => {
 class Canvas{
     constructor(document, _width, _height){
         this.canvas = document;
-        this.context = this.canvas.context('2d');
+        this.context = this.canvas.getContext('2d');
         this.screen = {
             width: _width,
             height: _height
@@ -21,6 +23,10 @@ class Canvas{
     Resize = () => {
         this.canvas.width = this.canvas.width * (this.canvas.width/this.screen.width);
         this.canvas.height = this.canvas.height * (this.canvas.height/this.screen.height);
+    }
+
+    Erase = () => {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 }
 
@@ -34,43 +40,49 @@ class CanvasEditor{
 class CanvasAnimator{
     constructor(){
         let canvas = document.getElementById("animation-canvas");
+        this.showHitboxes = true;
         this.canvasClass = new Canvas(canvas, 1317, 635);
-        this.animationSet = null;
         this.animationFrame = 0;
         this.animationFrameTime = 0;
         this.animationIndex = 0;
         this.animationSpeed = 12;
     }
 
-    Initialize = (_animationSet) => {
-        this.animationSet = _animationSet;
+    Initialize = () => {
         this.animationFrame = 0;
         this.animationFrameTime = 0;
         this.animationFrameIndex = 0;
     }
 
     AnimationPlay = () => {
-        requestAnimationFrame(AnimationPlayer);
+        requestAnimationFrame(this.AnimationPlay);
+        let animation = animationList.currentAnimation;
 
-        if(this.animationSet != null && this.animationSet.animatonset.frameDataListClasses[this.animationFrameIndex].frametime <= this.animationFrameTime){
-            let frameData  = this.animationSet.frameDataListClasses[this.animationFrameIndex];
-            
-            frameData.Draw(this.canvas, this.context, this.canvasClass.scale);
+        if(animation == null){
+            return;
+        }
 
-            for(let x = 0; x < frameData.hitboxListClasses.length;x++){
-                let hitbox = frameData.hitboxListClasses[x];
-                let midx = -(frameData.image.width/2);
-                let midy = -(frameData.image.height/2);
-                hitbox.Draw(this.canvas, this.context, midx, midy, this.canvasClass.scale);
+        let currentAnimFrame = animation.frameDataListClasses[this.animationFrameIndex];
+
+        if(currentAnimFrame.frameData.frametime <= this.animationFrameTime){
+            this.canvasClass.Erase();
+            currentAnimFrame.Draw(this.canvasClass.canvas, this.canvasClass.context, this.canvasClass.scale);
+
+            for(let x = 0;this.showHitboxes !=  false && x < currentAnimFrame.hitboxListClasses.length;x++){
+                let hitbox = currentAnimFrame.hitboxListClasses[x];
+                hitbox.Draw(this.canvasClass.canvas, this.canvasClass.context, this.canvasClass.scale);
             }
 
             if(this.animationFrame >= this.animationSpeed){
                 this.animationFrame = this.animationFrame % this.animationSpeed;
                 this.animationFrameTime = 0;
-                this.animationFrameIndex = this.animationFrameIndex % this.animationSet.frameDataListClasses.length;
+                this.animationFrameIndex = ++this.animationFrameIndex % animation.frameDataListClasses.length;
+            }else{
+                this.animationFrame++;
             }
         }else{
             this.animationFrameTime++;
         }
+        
     }
 }

@@ -23,6 +23,7 @@ export class Hitbox{
         this.selectType = ["hurtbox", "hitbox"];
         this.tableRow = null;
     }
+
     //#region For Canvas
     GetHitboxColor = () => {
         switch(this.hitbox.type == "hitbox"){
@@ -31,14 +32,16 @@ export class Hitbox{
         }
     }
 
-    Draw = (canvas, context, offsetx, offsety, scale) => {
+    Draw = (canvas, context, scale) => {
+        let hitboxPosx = this.hitbox.offset.x - (this.frameData.image.height/2)
+        let hitboxPosy = this.hitbox.offset.y - (this.frameData.image.width/2)
         context.save();
         
         context.translate(canvas.width/2, canvas.height/2);
         context.scale(scale, scale)
 
-        context.fillStyle = GetHitboxColor();
-        context.fillRect(this.hitbox.offset.x + offsetx, this.hitbox.offset.y + offsety, this.hitbox.width, this.hitbox.height);
+        context.fillStyle = this.GetHitboxColor();
+        context.fillRect(hitboxPosx , hitboxPosy, this.hitbox.width, this.hitbox.height);
         context.restore();
     }
     //#endregion
@@ -53,7 +56,6 @@ export class Hitbox{
         // Index
 
         let indexContainer = document.createElement('td');
-        console.log(this.frameData);
         indexContainer.innerText = this.frameData.hitboxListClasses.findIndex(i => i == this).toString();
         container.appendChild(indexContainer);
         //#region Select
@@ -71,6 +73,7 @@ export class Hitbox{
 
             typeSelect.addEventListener("change", () => {
                 this.hitbox.type = typeSelect.selectedOptions[0].value;
+                DisplayInJson();
             });
 
             typeSelect.appendChild(typeOption);

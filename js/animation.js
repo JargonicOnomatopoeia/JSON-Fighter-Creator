@@ -1,4 +1,5 @@
 import { animationList } from "./animationlist.js";
+import { canvasAnimator } from "./canvas.js";
 import { DisplayInJson } from "./JSONOutput.js";
 import { DeleteRow } from "./table.js";
 
@@ -28,6 +29,12 @@ export class Animation{
 
         nameInput.addEventListener('input', () => {
             this.animation.name = nameInput.value;
+            DisplayInJson();
+        });
+
+        nameInput.addEventListener('click', () => {
+            animationList.currentAnimation = this;
+            canvasAnimator.Initialize();
         });
         //#endregion
         contentList.push(nameInput);

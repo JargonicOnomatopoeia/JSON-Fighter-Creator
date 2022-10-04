@@ -2,12 +2,14 @@ import { animationList } from "./animationlist.js";
 import { DisplayInJson } from "./JSONOutput.js";
 import { DeleteRow } from "./table.js";
 import { Hitbox } from "./hbox.js"
+import { canvasAnimator } from "./canvas.js";
 
 export class Frame {
     constructor(_animRef = null, _imageSource = "", _frameName="", _rotation = 0, _offsetx = 0, _offsety = 0, _veloX = 0, _veloY = 0, _frametime = 0, _hitbox = []){
         
         this.animRef = _animRef
-        this.image = _imageSource
+        this.image = new Image();
+        this.image.src = _imageSource
 
         this.hitboxListClasses = [];
         
@@ -81,6 +83,7 @@ export class Frame {
         name.addEventListener("click", () => {
             animationList.currentFrame = this;
             animationList.currentAnimation = this.animRef;
+            canvasAnimator.Initialize();
             let y = 1;
             console.log("Working");
             for(let x = 0; x < frameDataElems.length;){ 
