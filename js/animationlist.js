@@ -85,7 +85,6 @@ class AnimationList{
         let primeObjectKeys = Object.keys(tempFrame.frameData);
         
         for(let y = 0;y < this.frameDataInputElems.length;){
-            console.log(this.frameDataInputElems[y])
             let primeKey = primeObjectKeys[x];
             switch(tempFrameData[primeKey] instanceof Object){
                 case true:
