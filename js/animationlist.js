@@ -36,7 +36,7 @@ class AnimationList{
     RemoveFromList = (animation) => {
         let index = this.animationList.findIndex(i => i == animation);
         delete this.animationListData.splice(index, 1);
-        this.animationList.splice(index, 1).forEach(i => i.DeleteThis());
+        delete this.animationList.splice(index, 1);
         this.animationIndex--;
     }
 

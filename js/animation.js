@@ -75,8 +75,8 @@ export class Animation{
         //#region DeleteRows
         console.log("Working");
         for(let x = 0; x < this.frameDataListClasses.length;x++){
-            console.log(this.frameDataListClasses[x].tableRow);
             DeleteRow(this.frameDataListClasses[x].tableRow);
+            this.frameDataListClasses[x].tableRow = null;
         }
 
         if(animationList.currentAnimation == this){

@@ -225,7 +225,6 @@ export const DeleteRow = (container) => {
     }
 
     container.remove();
-    console.log(container.firstChild);
     container = null;
 }
 
