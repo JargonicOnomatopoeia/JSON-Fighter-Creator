@@ -67,8 +67,7 @@ export class Animation{
     DeleteFrameData = (_frameData) => {
         let index = this.frameDataListClasses.findIndex(i => i == _frameData);
         delete this.animation.frameDataList.splice(index, 1);
-        let temp = this.frameDataListClasses.splice(index, 1);
-        temp[0].DeleteThis();
+        delete this.frameDataListClasses.splice(index, 1);
     }
 
     DeleteThis = () => {

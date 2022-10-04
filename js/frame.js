@@ -153,19 +153,22 @@ export class Frame {
     
     DeleteHitbox = (_hitbox) => {
         let index = this.hitboxListClasses.findIndex(i => i == _hitbox);
-        this.frameData.hitboxList.splice(index , 1);
-        this.hitboxListClasses.splice(index, 1)
+        delete this.frameData.hitboxList.splice(index , 1);
+        delete this.hitboxListClasses.splice(index, 1);
     }
 
     DeleteThis = () => {
-        for(let x = 0; this.hitboxListClasses.length > 0; x++){
-            console.log(this.hitboxListClasses[x].tableRow);
+        for(let x = 0; x < this.hitboxListClasses.length; x++){
+            DeleteRow(this.hitboxListClasses[x].tableRow);
+        }
+
+        while(this.hitboxListClasses.length > 0){
+            this.DeleteHitbox(this.hitboxListClasses[0]);
         }
 
         if(animationList.currentFrame == this){
             animationList.currentFrame = null;
         }
-
         this.animRef.DeleteFrameData(this);
     }
 

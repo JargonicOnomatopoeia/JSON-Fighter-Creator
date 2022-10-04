@@ -213,7 +213,10 @@ export const FrameData = {
 }*/
 
 export const DeleteRow = (container) => {
-    
+    if(container == null){
+        return;
+    }
+
     while(container.hasChildNodes()){
         let child = container.firstChild;
         //console.log(child);
