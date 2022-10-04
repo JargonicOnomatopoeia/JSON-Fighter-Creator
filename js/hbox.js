@@ -1,14 +1,15 @@
-import { DeleteRow } from "./table";
+import { DisplayInJson } from "./JSONOutput.js";
+import { DeleteRow } from "./table.js";
 
-class Hitbox{
+export class Hitbox{
     constructor(_frameData = null){
         this.frameData = _frameData;
 
         this.hitbox = {
             type: "hurtbox", 
             offset: {
-                x,
-                y
+                x: 0,
+                y: 0
             },
             width: 0,
             height: 0,
@@ -50,15 +51,18 @@ class Hitbox{
         let container = document.createElement("tr");
         this.tableRow = container;
         // Index
-        indexContainer.innerText = this.frameData.hitBoxListClasses.findIndex(i => i == this);
-        tableContent.push(indexContainer);
+
+        let indexContainer = document.createElement('td');
+        console.log(this.frameData);
+        indexContainer.innerText = this.frameData.hitboxListClasses.findIndex(i => i == this).toString();
+        container.appendChild(indexContainer);
         //#region Select
         let typeSelect = document.createElement("select");
         for(let x = 0; x < this.selectType.length;x++){
             let typeOption = document.createElement("option");
             let tempString = this.selectType[x];
             
-            typeOption.innerText = tempString[0].toUpperCase() + tempString.splice(1);
+            typeOption.innerText = tempString[0].toUpperCase() + tempString.slice(1 ,tempString.length);
             typeOption.value = tempString;
             
             if(this.selectType[x] == this.hitbox.type){
@@ -74,35 +78,52 @@ class Hitbox{
         tableContent.push(typeSelect);
         //#endregion
         
+        let inputNumbers = (number) => {
+            let input = document.createElement('input');
+            input.type = "number";
+            input.value = number;
+
+            return input;
+        }
+
+        let inputFilter = (input) => {
+            let rnumber = parseInt(input.value);
+                if(isNaN(rnumber) && input.value != ""){
+                    input.value = 0;
+                    return 0;
+                }
+
+                if(input.value == ""){
+                    return 0;
+                }
+                
+                input.value = rnumber;
+                return rnumber;
+        }
+        
         //#region Inputs
-        for(let x = 1; x < this.hitbox.length;x++){
+        for(let x = 1; x < this.keys.length;x++){
             let key = this.keys[x];
-            let inputNumbers = (number) => {
-                let input = document.createElement('input');
-                input.type = "number";
-                input.value = number;
-
-                input.addEventListener("input", () => {
-                    let number = parseInt(input.value);
-                    if(isNaN(number) || input.value == ""){
-                        input.value = 0;
-                        return;
-                    }
-
-                    input.value = number;
-                });
-
-                tableContent.push(input);
-            }
             switch(this.hitbox[key] instanceof Object){
                 case true:
                     let secKeys = Object.keys(this.hitbox[key]);
                     for(let y = 0; y < secKeys.length;y++){
-                        inputNumbers(this.hitbox[key][secKeys[y]]);
+                        let secKey = secKeys[y];
+                        let input = inputNumbers(this.hitbox[key][secKey]);
+                        input.addEventListener("input", () => {
+                            this.hitbox[key][secKey] = inputFilter(input);
+                            DisplayInJson();
+                        });
+                        tableContent.push(input);
                     }
                 break;
                 case false:
-                    inputNumbers(this.hitbox[key][secKeys[y]]);
+                    let input = inputNumbers(this.hitbox[key]);
+                    input.addEventListener("input", () => {
+                        this.hitbox[key] = inputFilter(input);
+                        DisplayInJson();
+                    });
+                    tableContent.push(input);
                 break;
             }
         }
@@ -113,15 +134,16 @@ class Hitbox{
         deleteButton.addEventListener('click', ()=> {
             DeleteRow(this.tableRow);
             this.DeleteThis();
+            DisplayInJson();
         });
+
+        tableContent.push(deleteButton);
         //#endregion
 
-        //For Index Cell
-        cell.appendChild(tableContent.pop());
         //Popping Continues
         while(tableContent.length != 0){
             let cell = document.createElement('td');
-            cell.appendChild(tableContent.pop());
+            cell.appendChild(tableContent.shift());
             container.appendChild(cell);
         }
 
@@ -130,7 +152,6 @@ class Hitbox{
     //#endregion
 
     DeleteThis(){
-        this.DeleteTableRow();
         this.frameData.DeleteHitbox(this);
     }
 }

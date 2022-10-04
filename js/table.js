@@ -1,9 +1,7 @@
-import { InitializeFrameData } from "./animationlist.js";
 import { DisplayInJson } from "./JSONOutput.js";
-import { currentFrame } from "./main.js";
 import {FilterStringNoIndentsLines, NumberNotEmpty, SelectedTextFilter } from "./textfilter.js";
 
-export const Hitbox = {
+/*export const Hitbox = {
 
     table : null,
     rows : [],
@@ -212,12 +210,13 @@ export const FrameData = {
             }
         }
     }
-}
+}*/
 
 export const DeleteRow = (container) => {
     
     while(container.hasChildNodes()){
         let child = container.firstChild;
+        //console.log(child);
         while(child.hasChildNodes()){
             child.removeChild(child.firstChild);
         }
@@ -226,6 +225,7 @@ export const DeleteRow = (container) => {
     }
 
     container.remove();
+    console.log(container.firstChild);
     container = null;
 }
 

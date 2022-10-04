@@ -1,14 +1,8 @@
-import {BuildTreeList} from './animationlist.js'
-import { FrameData, HitboxRows } from './table.js';
-import { CopyJSONToClipboard, DisplayInJson, DownloadJSON } from './JSONOutput.js';
-import { canvasAnimator, canvasEditor, CanvasInitialize } from './canvas.js';
+import {animationList, AnimationListInit} from './animationlist.js'
+import { DisplayInJson } from './JSONOutput.js';
 
-export const animationList = [];
-export const currentAnimation = null;
-export const currentFrame = null;
 
 window.onload = () => {
-    hitboxList = document.getElementById("hitboxes");
 
     //#region Declarations
     let imageUploader = document.getElementById("image-upload");
@@ -20,27 +14,31 @@ window.onload = () => {
     let buttonDownload = document.getElementById("json-download");
     let buttonClipboard = document.getElementById("json-clipboard");
 
-    CanvasInitialize();
-    FrameData.Initialize();
-    HitboxRows.Initialize();
+    AnimationListInit();
+    //CanvasInitialize();
+    //FrameData.Initialize();
+    //HitboxRows.Initialize();
     //#endregion
     
     imageUploader.addEventListener("change", (e) =>{
         if(window.File && window.FileReader && window.FileList && window.Blob){
-            let files = e.target.files;
-            BuildTreeList(files, currentAnimation, animationList);
+            animationList.BuildAnimationSprite(e.target.files);
             DisplayInJson();
         }
     });
 
     buttonNewHitbox.addEventListener("click", () => {
-        HitboxRows.AddHitbox();
-        DisplayInJson();
+        if(animationList.currentFrame != null){
+            let newHitbox = animationList.currentFrame.AddNewHitbox();
+            newHitbox.AddTableRow(animationList.hitboxListElem);
+            DisplayInJson();
+        }
+        
     });
 
-    buttonDownload.addEventListener("click", DownloadJSON);
-    buttonClipboard.addEventListener("click", CopyJSONToClipboard);
-
+    //buttonDownload.addEventListener("click", DownloadJSON);
+    //buttonClipboard.addEventListener("click", CopyJSONToClipboard);
+    /*
     buttonCopyHitbox.addEventListener("click", () => {
         let checker = HitboxRows.CopyAll();
         switch(checker){
@@ -72,7 +70,9 @@ window.onload = () => {
     });
 
     requestAnimationFrame(AnimationPlayer.AnimationPlay);
+*/
 }
+/*
 
 window.onresize = () => {
     ResizeCanvas();
@@ -83,4 +83,4 @@ const ResizeCanvas = () => {
     canvasEditor.Resize();
 }
 
-
+*/

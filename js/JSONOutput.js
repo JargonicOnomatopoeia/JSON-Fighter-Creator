@@ -1,13 +1,12 @@
-import { animationList } from "./main.js"
+import { animationList } from "./animationlist.js";
 
 export const DisplayInJson = () =>{
     let outputScreen = document.getElementById("text20 jsonoutput");
-
-    outputScreen.value = JSON.stringify(animationList);
+    outputScreen.value = JSON.stringify(animationList.animationListData);
 }
 
 export const DownloadJSON = () => {
-    let string = JSON.stringify(animationList);
+    let string = JSON.stringify(GetData());
 
     let tempLink = document.createElement("a");
     tempLink.download = "JSON-Fighter-Creater.json";
@@ -24,6 +23,6 @@ export const DownloadJSON = () => {
 
 export const CopyJSONToClipboard = () => {
     if(navigator.clipboard){
-        navigator.clipboard.writeText(JSON.stringify(animationList));
+        navigator.clipboard.writeText(JSON.stringify(GetData()));
     }
 }

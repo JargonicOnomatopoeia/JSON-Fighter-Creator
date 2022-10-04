@@ -1,13 +1,15 @@
-import { FrameData } from "./table.js";
+import { animationList } from "./animationlist.js";
+import { DisplayInJson } from "./JSONOutput.js";
+import { DeleteRow } from "./table.js";
 
-class Animation{
+export class Animation{
     constructor(_animationName = ""){
 
-        this.framaDataListClasses = [];
+        this.frameDataListClasses = [];
 
         this.animation = {
-            name: "",
-            framaDataList: []
+            name: _animationName,
+            frameDataList: []
         }
 
         this.tableRow = null;
@@ -17,10 +19,12 @@ class Animation{
         let contentList = [];
         let container = document.createElement('tr');
         this.tableRow = container;
+
         //#region 
         let nameInput = document.createElement('input');
         nameInput.type = 'text';
         nameInput.value = this.animation.name;
+        
 
         nameInput.addEventListener('input', () => {
             this.animation.name = nameInput.value;
@@ -30,10 +34,10 @@ class Animation{
 
         //#region 
         let deleteButton = document.createElement('button');
-        deleteButton.innerText = 'X';
+        deleteButton.innerText = 'Delete';
 
         deleteButton.addEventListener('click', () => {
-            DeleteRow(this.tableRow);
+            this.DeleteThis();
         });
         //#endregion
         contentList.push(deleteButton);
@@ -43,28 +47,48 @@ class Animation{
             containerC.appendChild(contentList.shift());
             container.appendChild(containerC);
         }
-        
+        container.firstElementChild.setAttribute('colspan', 2);
         table.appendChild(container);
     }
 
     AddFrameData = (_frameData) => {
-        this.framaDataListClasses.push(_frameData);
-        this.animation.framaDataList.push(_frameData.frameData);
+        this.frameDataListClasses.push(_frameData);
+        this.animation.frameDataList.push(_frameData.frameData);
     }
 
     //#region Delete Region
     DeleteFrameData = (_frameData) => {
-        let index = this.framaDataListClasses.findIndex(i => i == _frameData);
-        this.animation.frameDataList.splice(index, 1);
-        this.framaDataListClasses.splice(index, 1).DeleteThis();
+        let index = this.frameDataListClasses.findIndex(i => i == _frameData);
+        delete this.animation.frameDataList.splice(index, 1);
+        let temp = this.frameDataListClasses.splice(index, 1);
+        temp[0].DeleteThis();
     }
 
     DeleteThis = () => {
-        while(this.frameDataListClasses.length > 0){
-            DeleteFrameData(this.frameDataListClasses[0]);
+        //#region DeleteRows
+        console.log("Working");
+        for(let x = 0; x < this.frameDataListClasses.length;x++){
+            console.log(this.frameDataListClasses[x].tableRow);
+            DeleteRow(this.frameDataListClasses[x].tableRow);
         }
 
-        delete this;
+        if(animationList.currentAnimation == this){
+            animationList.currentAnimation = null;
+            animationList.currentFrame = null;
+        }
+        console.log(this.tableRow);
+        DeleteRow(this.tableRow);
+        //#endregion
+
+        //#region Delete Data
+        while(this.frameDataListClasses > 0){
+            this.DeleteFrameData(this.frameDataListClasses[0]);
+        }
+
+        animationList.RemoveFromList(this);
+        DisplayInJson();
+        //#endregion
+        
     }   
     //#endregion
 }
