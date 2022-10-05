@@ -22,18 +22,28 @@ export class Hitbox{
         this.keysLength = this.keys.length;
         this.selectType = ["hurtbox", "hitbox"];
         this.tableRow = null;
-        this.color = "";
+        //For Canvas
+        this.fillColor = "";
+        this.border = {
+            width: 0,
+            color: "black"
+        }
     }
 
     //#region For Canvas Display
     SetHitboxColor = (hitbox, hurtbox) => {
         switch(this.hitbox.type == "hitbox"){
-            case true: this.color = hitbox;break;
-            case false: this.color =  hurtbox;break;
+            case true: this.fillColor = hitbox;break;
+            case false: this.fillColor =  hurtbox;break;
         }
     }
 
-    Draw = (canvasClass) => {
+    SetHitboxBorder = (width, color) => {
+        this.border.width = width;
+        this.border.color = color;
+    }
+
+    Draw = (canvasClass, hasBorder = false) => {
         let hitboxPosx = (this.hitbox.offset.x + this.frameData.frameData.offset.x) - (this.hitbox.width/2);// + (this.frameData.image.width/2);
         let hitboxPosy = (this.hitbox.offset.y + this.frameData.frameData.offset.y) - (this.hitbox.height/2);// + (this.frameData.image.height/2);
 
@@ -41,8 +51,13 @@ export class Hitbox{
         
         canvasClass.context.translate((canvasClass.canvas.width/2), (canvasClass.canvas.height/2));
 
-        canvasClass.context.fillStyle = this.color;
+        canvasClass.context.fillStyle = this.fillColor;
         canvasClass.context.fillRect(hitboxPosx , hitboxPosy, this.hitbox.width, this.hitbox.height);
+        if(this.border.width > 0 && hasBorder == true){
+            canvasClass.context.lineWidth = this.border.width;
+            canvasClass.context.strokeStyle = this.border.color;
+            canvasClass.context.strokeRect(hitboxPosx, hitboxPosy, this.hitbox.width, this.hitbox.height);
+        }
         canvasClass.context.restore();
     }
     //#endregion
