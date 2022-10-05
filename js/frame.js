@@ -44,19 +44,18 @@ export class Frame {
         this.frameData.hitboxList.push(_hitbox.hitbox);
     }
     //#region For Canvas
-    Draw = (canvas, context, scale) => {
-        context.save(); 
+    Draw = (canvasClass) => {
+        canvasClass.context.save(); 
         
-        context.translate(canvas.width/2, canvas.height/2);
-        context.scale(scale, scale);
+        canvasClass.context.translate((canvasClass.canvas.width/2)+canvasClass.offset.x, (canvasClass.canvas.height/2) + canvasClass.offset.y);
 
         let midx = this.image.width/2;
         let midy = this.image.height/2;
 
-        context.rotate(this.frameData.rotation * Math.PI/180);
-        context.drawImage(this.image, this.frameData.offset.x - midx, this.frameData.offset.y - midy)
+        canvasClass.context.rotate(this.frameData.rotation * Math.PI/180);
+        canvasClass.context.drawImage(this.image, this.frameData.offset.x - midx, this.frameData.offset.y - midy)
 
-        context.restore();
+        canvasClass.context.restore();
     }
     //#endregion
     
@@ -85,7 +84,6 @@ export class Frame {
             animationList.currentAnimation = this.animRef;
             canvasAnimator.Initialize();
             let y = 1;
-            console.log("Working");
             for(let x = 0; x < frameDataElems.length;){ 
                 let primaryKey = primeKeys[y];
                 switch(this.frameData[primaryKey] instanceof Object){

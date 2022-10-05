@@ -24,26 +24,80 @@ export class Hitbox{
         this.tableRow = null;
     }
 
-    //#region For Canvas
-    GetHitboxColor = () => {
+    //#region For Canvas Display
+    GetHitboxColor = (hitbox, hurtbox) => {
         switch(this.hitbox.type == "hitbox"){
-            case true: return "rgba(255, 0, 0, 0.41)";break;
-            case false: return "rgba(0, 255, 34, 0.41)";break;
+            case true: return hitbox;break;
+            case false: return hurtbox;break;
         }
     }
 
-    Draw = (canvas, context, scale) => {
-        let hitboxPosx = this.hitbox.offset.x - (this.frameData.image.height/2)
-        let hitboxPosy = this.hitbox.offset.y - (this.frameData.image.width/2)
-        context.save();
-        
-        context.translate(canvas.width/2, canvas.height/2);
-        context.scale(scale, scale)
+    Draw = (canvasClass) => {
+        let hitboxPosx = (this.hitbox.offset.x + this.frameData.frameData.offset.x) - (this.hitbox.width/2);// + (this.frameData.image.width/2);
+        let hitboxPosy = (this.hitbox.offset.y + this.frameData.frameData.offset.y) - (this.hitbox.height/2);// + (this.frameData.image.height/2);
 
-        context.fillStyle = this.GetHitboxColor();
-        context.fillRect(hitboxPosx , hitboxPosy, this.hitbox.width, this.hitbox.height);
-        context.restore();
+        canvasClass.context.save();
+        
+        canvasClass.context.translate((canvasClass.canvas.width/2), (canvasClass.canvas.height/2));
+
+        canvasClass.context.fillStyle = this.GetHitboxColor("rgba(255, 0, 0, 0.41)", "rgba(0, 255, 34, 0.41)");
+        canvasClass.context.fillRect(hitboxPosx , hitboxPosy, this.hitbox.width, this.hitbox.height);
+        canvasClass.context.restore();
     }
+    //#endregion
+
+    //#region Canvas Interaction
+    CheckMouseWithinArea = (canvasEditor, posx, posy) => {
+        let canvas = canvasEditor.canvas;
+        let rect = canvas.getBoundingClientRect();
+
+        let mousePosX = (posx - rect.x + canvasEditor.offset.x) * (canvasEditor.scale + 1);
+        let mousePosY = (posy - rect.y + canvasEditor.offset.y) * (canvasEditor.scale + 1);
+
+        //Get Top Left
+        let hitboxPosxPrime = ((canvas.width/2) + ((this.hitbox.offset.x + this.frameData.frameData.offset.x) - (this.hitbox.width/2))) * (canvasEditor.scale + 1);
+        let hitboxPosyPrime = ((canvas.height/2) + ((this.hitbox.offset.y + this.frameData.frameData.offset.y) - (this.hitbox.height/2))) * (canvasEditor.scale + 1);
+        
+        // Get Bottom Right
+        let hitboxPosx = (hitboxPosxPrime + this.hitbox.width) * (canvasEditor.scale + 1);
+        let hitboxPosy = (hitboxPosyPrime + this.hitbox.height) * (canvasEditor.scale + 1);
+
+        return (mousePosX >= hitboxPosxPrime && mousePosX <= hitboxPosx) && (mousePosY >= hitboxPosyPrime && mousePosY <= hitboxPosy);
+    }
+
+    Click = (canvasEditor, posx, posy) => {
+        let checker = this.CheckMouseWithinArea(canvasEditor, posx, posy);
+
+        if(checker == true){
+            canvasEditor.startX = posx;
+            canvasEditor.startY = posy;
+        }
+        
+        return checker;
+    }
+
+    Move = (canvasEditor, posx, posy) => {
+        let deltaX = parseInt(posx - canvasEditor.startX);
+        let deltaY = parseInt(posy - canvasEditor.startY);
+
+        this.hitbox.offset.x += deltaX;
+        this.hitbox.offset.y += deltaY;
+
+        this.tableRow.children[2].firstElementChild.value = parseInt(this.hitbox.offset.x);
+        this.tableRow.children[3].firstElementChild.value = parseInt(this.hitbox.offset.y);
+
+        canvasEditor.startX = posx;
+        canvasEditor.startY = posy;
+
+        DisplayInJson();
+    }
+
+    //Not Sure LOL
+    Resize = () => {
+
+    }
+
+
     //#endregion
     
     //#region For Table

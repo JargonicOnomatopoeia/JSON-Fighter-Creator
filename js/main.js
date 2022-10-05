@@ -1,6 +1,6 @@
 import {animationList, AnimationListInit} from './animationlist.js'
 import { DisplayInJson } from './JSONOutput.js';
-import { CanvasInitialize, canvasAnimator} from './canvas.js'
+import { CanvasInitialize, canvasAnimator, canvasEditor} from './canvas.js'
 
 
 window.onload = () => {
@@ -71,6 +71,7 @@ window.onload = () => {
     });
 */
     requestAnimationFrame(canvasAnimator.AnimationPlay);
+    requestAnimationFrame(canvasEditor.ShowFrame);
 
 }
 /*
