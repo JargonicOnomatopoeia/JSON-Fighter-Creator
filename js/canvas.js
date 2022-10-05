@@ -50,7 +50,7 @@ class CanvasEditor{
         let enableResize = false;
         
         let toMove = false;
-        let indexHitbox = -1;
+        this.indexHitbox = -1;
 
         let clickAreaShrink = 0;
         let clickResizeExpansion = 0;
@@ -59,41 +59,39 @@ class CanvasEditor{
             if(animationList.currentFrame != null){
                 e.preventDefault();
                 let hitboxes = animationList.currentFrame.hitboxListClasses;
-                let x;
-                for(x = 0 ; x < hitboxes.length  && hitboxes[x].Click(this.canvasClass, e.clientX, e.clientY) != true;x++){}
-                toMove = x < hitboxes.length;
-                indexHitbox = x;
-                console.log(indexHitbox);
+                toMove = this.indexHitbox < hitboxes.length && this.indexHitbox != -1;
+                if(toMove){
+                    hitboxes[this.indexHitbox].Click(this.canvasClass, e.clientX, e.clientY);
+                }
             }
         });
 
-        /*canvas.addEventListener("mouseover", (e) => {
-            if(animationList.currentFrame != null){
-                let frame = animationList.currentFrame;
-                for(let x = 0; x < frame.hitboxListClasses.length;x++){
-                    
-                }
-            }
-        })*/
-
         canvas.addEventListener("mousemove", (e) =>{
-            if(animationList.currentFrame != null && toMove != false && indexHitbox > -1 && indexHitbox < animationList.currentFrame.hitboxListClasses.length){
-                e.preventDefault();
-                let hitbox = animationList.currentFrame.hitboxListClasses[indexHitbox];
-                hitbox.Move(this.canvasClass, e.clientX, e.clientY);
+            if(animationList.currentFrame != null){
+                let hitboxes = animationList.currentFrame.hitboxListClasses;
+                if(toMove != true){
+                    e.preventDefault();
+                    let x = 0;
+                    for(; x < hitboxes.length && hitboxes[x].CheckMouseWithinArea(this.canvasClass, e.clientX, e.clientY) != true;x++){}
+                    this.indexHitbox = x;
+                }
+                if(toMove != false && this.indexHitbox > -1 && this.indexHitbox < hitboxes.length){
+                    let hitbox = animationList.currentFrame.hitboxListClasses[this.indexHitbox];
+                    hitbox.Move(this.canvasClass, e.clientX, e.clientY);
+                }
             }
         });
 
         canvas.addEventListener("mouseup", () =>{
             toMove = false;
-            indexHitbox = -1;
+            //this.indexHitbox = -1;
             this.startX = -1;
             this.startY = -1;
         });
 
         canvas.addEventListener("mouseout", () => {
             toMove = false;
-            indexHitbox = -1;
+            this.indexHitbox = -1;
             this.startX = -1;
             this.startY = -1;
         });
@@ -113,7 +111,15 @@ class CanvasEditor{
         let hitboxes = frame.hitboxListClasses;
 
         frame.Draw(this.canvasClass);
-        for(let x = 0; x < hitboxes.length;x++){
+        for(let x = hitboxes.length-1; x >= 0;x--){
+            switch(this.indexHitbox >= 0 && this.indexHitbox == x){
+                case true:
+                    hitboxes[x].SetHitboxColor("rgba(59, 67, 234, 0.78)", "rgba(164, 59, 235, 0.78)");
+                ;break;
+                case false:
+                    hitboxes[x].SetHitboxColor("rgba(255, 0, 0, 0.41)", "rgba(0, 255, 34, 0.41)");
+                ;break;
+            }
             hitboxes[x].Draw(this.canvasClass);
         }
     }
@@ -152,6 +158,7 @@ class CanvasAnimator{
             currentAnimFrame.Draw(this.canvasClass);
 
             for(let x = 0;this.showHitboxes !=  false && x < currentAnimFrame.hitboxListClasses.length;x++){
+                currentAnimFrame.hitboxListClasses[x].SetHitboxColor("rgba(255, 0, 0, 0.41)", "rgba(0, 255, 34, 0.41)");
                 currentAnimFrame.hitboxListClasses[x].Draw(this.canvasClass);
             }
 

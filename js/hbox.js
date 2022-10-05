@@ -22,13 +22,14 @@ export class Hitbox{
         this.keysLength = this.keys.length;
         this.selectType = ["hurtbox", "hitbox"];
         this.tableRow = null;
+        this.color = "";
     }
 
     //#region For Canvas Display
-    GetHitboxColor = (hitbox, hurtbox) => {
+    SetHitboxColor = (hitbox, hurtbox) => {
         switch(this.hitbox.type == "hitbox"){
-            case true: return hitbox;break;
-            case false: return hurtbox;break;
+            case true: this.color = hitbox;break;
+            case false: this.color =  hurtbox;break;
         }
     }
 
@@ -40,7 +41,7 @@ export class Hitbox{
         
         canvasClass.context.translate((canvasClass.canvas.width/2), (canvasClass.canvas.height/2));
 
-        canvasClass.context.fillStyle = this.GetHitboxColor("rgba(255, 0, 0, 0.41)", "rgba(0, 255, 34, 0.41)");
+        canvasClass.context.fillStyle = this.color;
         canvasClass.context.fillRect(hitboxPosx , hitboxPosy, this.hitbox.width, this.hitbox.height);
         canvasClass.context.restore();
     }
