@@ -1,0 +1,74 @@
+#hitbox-list {
+  &-body {
+    height: 170px;
+  }
+
+  &-buttons {
+    flex-basis: 29.7%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+
+    .button {
+      font-family: $header-font-stack;
+      font-weight: 600;
+      font-size: 14px;
+      background: $neonYellow;
+      color: $black;
+      border-radius: 10px;
+      width: 100%;
+      padding: 30px 0px;
+      text-align: center;
+    }
+
+    .button:hover {
+      opacity: 80%;
+      cursor: pointer;
+    }
+
+    .button:active {
+      opacity: 100%;
+      background-color: $neonYellow;
+      color: white;
+      cursor: pointer;
+    }
+  }
+
+  &-table {
+    flex-grow:1;
+
+    &-header {
+      display:flex;
+      @include label-text;
+    }
+
+    &-row {
+      @include item-container;
+      background: $greenGrey;
+      padding: 10px 0px;
+      column-gap: unset;
+
+      .num-col {
+        @include label-text;
+        text-align: center;
+      }
+    }
+
+    &-body {
+      @include scrollable;
+    }
+
+    .num-col {
+      flex-basis: 6.25%;
+    }
+
+    .type-col {
+      flex-grow: 1;
+    }
+
+    .table-cell {
+      flex-basis: 10.42%;
+    }
+
+  }
+}

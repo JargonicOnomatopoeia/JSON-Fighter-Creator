@@ -1,0 +1,30 @@
+#canvas-containers {
+  @include flex-mixin;
+  flex-grow: 1;
+}
+
+.canvas-view {
+  @include flex-mixin;
+  row-gap: unset !important;
+  flex-basis: 50%;
+  flex-direction: column;
+
+  .canvas-body {
+    @include flex-mixin;
+    flex-grow: 1;
+    flex-direction: column;
+    
+    .canvas-end {
+      @include flex-mixin;
+      align-items: center;
+      .list-item {
+        width: unset;
+
+        input {
+          text-align: center;
+          width: 30px;
+        }
+      }
+    }
+  }
+}

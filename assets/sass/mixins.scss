@@ -1,0 +1,34 @@
+@mixin flex-mixin {
+  display: flex;
+  column-gap: 16px;
+  row-gap: 16px;
+}
+
+@mixin label-text {
+  font-family: $header-font-stack;
+  color: $neonYellow;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 21px;
+}
+
+@mixin scrollable {
+  overflow-y: scroll;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@mixin item-container {
+  display: flex;
+  align-items: center;
+  color: $neonYellow;
+  border-radius: 6px;
+  padding: 10px 16px;
+  column-gap: 8px;
+}
+
+
+// background: $greenGrey;

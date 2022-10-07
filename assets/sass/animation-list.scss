@@ -1,0 +1,34 @@
+@mixin list-item {
+  @include item-container;
+  background: $darkBlueGrey;
+ 
+  
+
+  &-active {
+    background: $blueGrey;
+  }
+}
+
+#animation-list {
+  flex-basis: 20.8%;
+
+  &-list {
+    @include scrollable;
+
+    .list-list {
+      display: flex;
+      flex-direction: column;
+      row-gap: 8px;
+    }
+
+    .list-item {
+      @include list-item;
+    }
+
+    .list-sub-item {
+      @include list-item;
+      margin-left: 16px;
+    }
+  }
+
+}
