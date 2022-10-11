@@ -212,7 +212,7 @@ class CanvasEditor{
         let imageoffsetx = frameData.offset.x - centerImage.x;
         let imageoffsety = frameData.offset.y - centerImage.y;
 
-        context.rotate(frameData.rotate);
+        context.rotate(frameData.rotate * Math.PI / 180);
         context.drawImage(frame.image, imageoffsetx, imageoffsety);
         context.restore();
 
@@ -401,7 +401,7 @@ class CanvasAnimator{
             context.translate(centerCan.x + this.pan.x, centerCan.y + this.pan.y);
             context.scale(this.scale, this.scale);
             
-            context.rotate(framedata.rotate);
+            context.rotate(framedata.rotate * Math.PI / 180);
             context.drawImage(frameClass.image, imageoffsetx, imageoffsety);
             context.restore();
 

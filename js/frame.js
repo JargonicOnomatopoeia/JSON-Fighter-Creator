@@ -15,7 +15,7 @@ export class Frame {
         
         this.frameData = {
             name: _frameName,
-            rotation: _rotation,
+            rotate: _rotation,
             offset:{
                 x: _offsetx,
                 y: _offsety,
