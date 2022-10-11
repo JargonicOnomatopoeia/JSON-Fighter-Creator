@@ -36,7 +36,7 @@ class CanvasEditor{
         this.canvasClass = new Canvas(canvas);
         this.onionSkinBack = 0;
         this.onionSkinFront = 0;
-
+        this.decimal = 1000
         this.highlight = -1;
         this.scale = 1;
         
@@ -114,8 +114,8 @@ class CanvasEditor{
                 }
                 
                 if(toMove == true){
-                    hitboxData.offset.x += (current.x - start.x)/ this.scale;
-                    hitboxData.offset.y += (current.y - start.y)/ this.scale;
+                    hitboxData.offset.x += Math.round(((current.x - start.x)/ this.scale) * this.decimal)/this.decimal;
+                    hitboxData.offset.y += Math.round(((current.y - start.y)/ this.scale) * this.decimal)/this.decimal;
                     let children = tableRow.children;
                     children[2].firstElementChild.value = hitboxData.offset.x;
                     children[3].firstElementChild.value = hitboxData.offset.y;
@@ -123,8 +123,8 @@ class CanvasEditor{
                 }
 
                 if(toResize == true){
-                    let resultX = (current.x - start.x)/ this.scale;
-                    let resultY = (current.y - start.y)/ this.scale;
+                    let resultX = Math.round(((current.x - start.x)/ this.scale) * this.decimal) / this.decimal;
+                    let resultY = Math.round(((current.y - start.y)/ this.scale) * this.decimal) / this.decimal;
                     if(this.resizeArea.left == true){
                         hitboxData.offset.x += resultX/2
                         hitboxData.width -= resultX
@@ -263,8 +263,8 @@ class CanvasEditor{
         let left = pointx + scalemin;
         let top = pointy + scalemin;
 
-        let right = left + ((hitboxData.width - this.resizeProp.min) * this.scale);
-        let bottom = top + ((hitboxData.height - this.resizeProp.min) * this.scale);
+        let right = pointx + ((hitboxData.width - this.resizeProp.min) * this.scale);
+        let bottom = pointy + ((hitboxData.height - this.resizeProp.min) * this.scale);
 
         return this.IsBetween(mousePos.x, left, right) && this.IsBetween(mousePos.y, top, bottom);
     }
