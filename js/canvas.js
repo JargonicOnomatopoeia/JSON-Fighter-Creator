@@ -145,7 +145,7 @@ class CanvasEditor{
                         hitboxData.height += resultY;
                     }
                     let children = tableRow.children;
-                    //console.log(children[2].firstElementChild.value);
+                    
                     children[2].firstElementChild.value = hitboxData.offset.x;
                     children[3].firstElementChild.value = hitboxData.offset.y;
                     children[4].firstElementChild.value = hitboxData.width;
@@ -156,7 +156,6 @@ class CanvasEditor{
                 if(toPan == true){
                     this.pan.x += current.x - start.x;
                     this.pan.y += current.y - start.y;
-                    DisplayInJson();
                 }
 
                 start = current;
