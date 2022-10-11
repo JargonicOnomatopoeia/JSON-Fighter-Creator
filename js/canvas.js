@@ -114,8 +114,8 @@ class CanvasEditor{
                 }
                 
                 if(toMove == true){
-                    hitboxData.offset.x += current.x - start.x;
-                    hitboxData.offset.y += current.y - start.y;
+                    hitboxData.offset.x += (current.x - start.x)/ this.scale;
+                    hitboxData.offset.y += (current.y - start.y)/ this.scale;
                     let children = tableRow.children;
                     children[2].firstElementChild.value = hitboxData.offset.x;
                     children[3].firstElementChild.value = hitboxData.offset.y;
@@ -123,8 +123,8 @@ class CanvasEditor{
                 }
 
                 if(toResize == true){
-                    let resultX = current.x - start.x;
-                    let resultY = current.y - start.y;
+                    let resultX = (current.x - start.x)/ this.scale;
+                    let resultY = (current.y - start.y)/ this.scale;
                     if(this.resizeArea.left == true){
                         hitboxData.offset.x += resultX/2
                         hitboxData.width -= resultX
@@ -145,7 +145,7 @@ class CanvasEditor{
                         hitboxData.height += resultY;
                     }
                     let children = tableRow.children;
-                    console.log(children[2].firstElementChild.value);
+                    //console.log(children[2].firstElementChild.value);
                     children[2].firstElementChild.value = hitboxData.offset.x;
                     children[3].firstElementChild.value = hitboxData.offset.y;
                     children[4].firstElementChild.value = hitboxData.width;
@@ -179,6 +179,14 @@ class CanvasEditor{
             mousedown = false;
             this.highlight = -1;
         });
+
+        canvas.addEventListener("wheel", (e) => {
+            if(animationList.currentFrame == null){
+                return;
+            }
+
+            this.scale -= 0.0005 * e.deltaY
+        })
         
     }
 
@@ -240,22 +248,23 @@ class CanvasEditor{
         let canvas = this.canvasClass.canvas;
         let centerCan = Middle(canvas.width, canvas.height);
         
-
-        //mousePos.x -= centerCan.x + this.pan.x;
-        //mousePos.y -= centerCan.y + this.pan.y; 
+        //mousePos.x *= this.scale;
+        //mousePos.y *= this.scale; 
 
         let hitboxData = hitbox.hitbox;
 
         let centerh = Middle(hitboxData.width, hitboxData.height);
 
-        let pointx = centerCan.x + hitboxData.offset.x + frameData.offset.x - centerh.x + this.pan.x;
-        let pointy = centerCan.y + hitboxData.offset.y + frameData.offset.y - centerh.y + this.pan.y;
+        let pointx = centerCan.x + hitboxData.offset.x + frameData.offset.x - (centerh.x * this.scale) + this.pan.x;
+        let pointy = centerCan.y + hitboxData.offset.y + frameData.offset.y - (centerh.y * this.scale) + this.pan.y;
 
-        let left = pointx + this.resizeProp.min;
-        let top = pointy + this.resizeProp.min;
+        let scalemin = this.resizeProp.min * this.scale;
 
-        let right = left + hitboxData.width - this.resizeProp.min;
-        let bottom = top + hitboxData.height - this.resizeProp.min;
+        let left = pointx + scalemin;
+        let top = pointy + scalemin;
+
+        let right = left + ((hitboxData.width - this.resizeProp.min) * this.scale);
+        let bottom = top + ((hitboxData.height - this.resizeProp.min) * this.scale);
 
         return this.IsBetween(mousePos.x, left, right) && this.IsBetween(mousePos.y, top, bottom);
     }
@@ -266,30 +275,30 @@ class CanvasEditor{
         let canvas = this.canvasClass.canvas;
         let centerCan = Middle(canvas.width, canvas.height);
 
-        //mousePos.x -= centerCan.x;
-        //mousePos.y -= centerCan.y;
+        //mousePos.x *= this.scale;
+        //mousePos.y *= this.scale;
 
         let hitboxData = hitbox.hitbox;
 
         let centerh = Middle(hitboxData.width, hitboxData.height);
 
-        let pointx = hitboxData.offset.x + frameData.offset.x + centerCan.x - centerh.x + this.pan.x;
-        let pointy = hitboxData.offset.y + frameData.offset.y + centerCan.y - centerh.y + this.pan.y;
+        let pointx = (hitboxData.offset.x + frameData.offset.x + centerCan.x - (centerh.x * this.scale) + this.pan.x);
+        let pointy = (hitboxData.offset.y + frameData.offset.y + centerCan.y - (centerh.y * this.scale) + this.pan.y);
 
-        let leftMin = pointx + this.resizeProp.min;
-        let leftMax = pointx - this.resizeProp.max;
+        let scaleMin = this.resizeProp.min * this.scale;
+        let scaleMax = this.resizeProp.max * this.scale;
+        
+        let leftMin = (pointx + scaleMin);
+        let leftMax = (pointx - scaleMax);
 
-        let topMin = pointy + this.resizeProp.min;
-        let topMax = pointy - this.resizeProp.max;
+        let topMin = (pointy + scaleMin);
+        let topMax = (pointy - scaleMax);
 
-        let pointx_p = pointx + hitboxData.width;
-        let pointy_p = pointy + hitboxData.height;
+        let rightMin = (pointx + ((hitboxData.width - this.resizeProp.min) * this.scale));
+        let rightMax = (pointx + ((hitboxData.width + this.resizeProp.max) * this.scale));
 
-        let rightMin = pointx_p - this.resizeProp.min;
-        let rightMax = pointx_p + this.resizeProp.max;
-
-        let bottomMin = pointy_p - this.resizeProp.min;
-        let bottomMax = pointy_p + this.resizeProp.max;
+        let bottomMin = (pointy + ((hitboxData.height - this.resizeProp.min) * this.scale));
+        let bottomMax = (pointy + ((hitboxData.height + this.resizeProp.max) * this.scale));
 
         let left = this.IsBetween(mousePos.x, leftMax, leftMin) && this.IsBetween(mousePos.y, topMax, bottomMax);
         let right = this.IsBetween(mousePos.x, rightMin, rightMax) && this.IsBetween(mousePos.y, topMax, bottomMax);
@@ -359,8 +368,8 @@ class CanvasAnimator{
             if(animationList.currentAnimation == null){
                 return;
             }
-            this.scale += e.deltaY;
-        })
+            this.scale -= 0.0005 * e.deltaY;
+        });
         //#endregion
     }
 
