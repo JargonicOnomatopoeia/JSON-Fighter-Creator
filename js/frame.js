@@ -44,19 +44,7 @@ export class Frame {
         this.frameData.hitboxList.push(_hitbox.hitbox);
     }
     //#region For Canvas
-    Draw = (canvasClass) => {
-        canvasClass.context.save(); 
-        
-        canvasClass.context.translate((canvasClass.canvas.width/2)+canvasClass.offset.x, (canvasClass.canvas.height/2) + canvasClass.offset.y);
-
-        let midx = this.image.width/2;
-        let midy = this.image.height/2;
-
-        canvasClass.context.rotate(this.frameData.rotation * Math.PI/180);
-        canvasClass.context.drawImage(this.image, this.frameData.offset.x - midx, this.frameData.offset.y - midy)
-
-        canvasClass.context.restore();
-    }
+    
     //#endregion
     
     AddTableRow = (table, hitboxTable, frameDataElems) => {
