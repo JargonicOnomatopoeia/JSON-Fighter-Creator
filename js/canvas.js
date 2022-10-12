@@ -34,19 +34,25 @@ class Canvas{
         }
     }
 
-    DisplayerFrame = (frame) => {
+    DisplayerFrame = (frame, stroke = false) => {
         this.context.save();
         let cframeData = frame.frameData;
         let cImage = Middle(frame.image.width, frame.image.height);
         let imgoffsetx = cframeData.offset.x - cImage.x;
         let imgoffsety = cframeData.offset.y - cImage.y;
 
-        this.context.rotate(cframeData.rotate * Math.PI / 180);
-        this.context.drawImage(frame.image, imgoffsetx, imgoffsety);
+        if(stroke == false){
+            this.context.rotate(cframeData.rotate * Math.PI / 180);
+            this.context.drawImage(frame.image, imgoffsetx, imgoffsety);
+        }else{
+            //this.context.strokeStyle = color;
+            this.context.strokeRect(imgoffsetx, imgoffsety, frame.image.width, frame.image.height);
+        }   
+        
         this.context.restore();
     }
 
-    DisplayerHitbox = (currentHitbox, currentFrame, color) => {
+    DisplayerHitbox = (currentHitbox, currentFrame, color, stroke = false) => {
         let hitboxData = currentHitbox.hitbox;
         let frameData = currentFrame.frameData;
         let centerh = Middle(hitboxData.width, hitboxData.height);
@@ -54,8 +60,14 @@ class Canvas{
         let offsetx = hitboxData.offset.x + frameData.offset.x - centerh.x;
         let offsety = hitboxData.offset.y + frameData.offset.y - centerh.y;
 
-        this.context.fillStyle = color;
-        this.context.fillRect(offsetx, offsety, hitboxData.width, hitboxData.height);
+        if(stroke == false){
+            this.context.fillStyle = color;
+            this.context.fillRect(offsetx, offsety, hitboxData.width, hitboxData.height);
+        }else{
+            this.context.strokeStyle = color;
+            this.context.strokeRect(offsetx, offsety, hitboxData.width, hitboxData.height);
+        }
+        
     }
 }
 
@@ -73,6 +85,8 @@ class CanvasEditor{
         this.highlightHitbox = "rgba(164, 59, 235, 0.78)";
         this.highlightHurtbox = "rgba(59, 67, 234, 0.78)";
         
+        this.editHitbox = false;
+        this.highlightImage = false;
         let toMove = false;
 
         let toPan = false;
@@ -101,49 +115,59 @@ class CanvasEditor{
         let mousedown = false;
 
         canvas.addEventListener("mousedown",(e) => {
-            if(animationList.currentFrame != null){
-                e.preventDefault();
+            e.preventDefault();  
+            if(animationList.currentFrame == null){
+                return;
+            }
+            
+            if(this.editHitbox == true){  
+                
                 let hitboxes = animationList.currentFrame.hitboxListClasses;
                 if(this.highlight < hitboxes.length){
                     
-                    toMove = this.BoundChecker(e.clientX, e.clientY, hitboxes[this.highlight]);
-                    toResize = this.ResizeChecker(e.clientX, e.clientY, hitboxes[this.highlight]);
+                    toMove = this.HitboxBoundChecker(e.clientX, e.clientY, hitboxes[this.highlight]);
+                    toResize = this.HitboxResizeChecker(e.clientX, e.clientY, hitboxes[this.highlight]);
                 }
-
                 //console.log(toMove);
                 //console.log(toResize);
-
                 toPan = !toMove && !toResize;
-
-                if(toMove == true || toResize == true || toPan == true){
-                    let current = this.canvasClass.GetMousPos(e.clientX, e.clientY);
-                    start = current;
-                }
-
-                mousedown = true;
+            }else{
+                toMove = this.FrameBoundChecker(e.clientX, e.clientY, animationList.currentFrame);
+                console.log(toMove);
+                toPan = !toMove;
             }
+
+            if(toMove == true || toResize == true || toPan == true){
+                let current = this.canvasClass.GetMousPos(e.clientX, e.clientY);
+                start = current;
+            }
+
+            mousedown = true;
         });
 
         canvas.addEventListener("mousemove", (e) =>{
             e.preventDefault();
-            if(animationList.currentFrame != null){
+            if(animationList.currentFrame == null){
+                return;
+            }
+            let current = this.canvasClass.GetMousPos(e.clientX, e.clientY);
+            if(this.editHitbox == true){
                 let hitboxes = animationList.currentFrame.hitboxListClasses;
-                
                 if(mousedown == false){
                     let x = 0;
-                    for(; x < hitboxes.length && this.BoundChecker(e.clientX, e.clientY, hitboxes[x]) != true 
-                    && this.ResizeChecker(e.clientX, e.clientY, hitboxes[x]) != true;x++){}
+                    for(; x < hitboxes.length && this.HitboxBoundChecker(e.clientX, e.clientY, hitboxes[x]) != true 
+                    && this.HitboxResizeChecker(e.clientX, e.clientY, hitboxes[x]) != true;x++){}
 
                     this.highlight = x;
                     return;
                 }
                 
-                let current = this.canvasClass.GetMousPos(e.clientX, e.clientY);
                 let hitboxData;
                 let tableRow;
                 if(toMove || toResize){
                     tableRow = hitboxes[this.highlight].tableRow;
                     hitboxData = hitboxes[this.highlight].hitbox;
+                    start = current;
                 }
                 
                 if(toMove == true){
@@ -153,14 +177,15 @@ class CanvasEditor{
                     children[2].firstElementChild.value = hitboxData.offset.x;
                     children[3].firstElementChild.value = hitboxData.offset.y;
                     DisplayInJson();
+                    start = current;
                 }
 
                 if(toResize == true){
                     let resultX = Math.round(((current.x - start.x)/ this.scale) * this.decimal) / this.decimal;
                     let resultY = Math.round(((current.y - start.y)/ this.scale) * this.decimal) / this.decimal;
                     if(this.resizeArea.left == true){
-                        hitboxData.offset.x += resultX/2
-                        hitboxData.width -= resultX
+                        hitboxData.offset.x += resultX/2;
+                        hitboxData.width -= resultX;
                     }
 
                     if(this.resizeArea.top == true){
@@ -184,15 +209,30 @@ class CanvasEditor{
                     children[4].firstElementChild.value = hitboxData.width;
                     children[5].firstElementChild.value = hitboxData.height;
                     DisplayInJson();
+                    start = current;
+                }
+            }else{
+                if(mousedown == false){
+                    this.highlightImage = this.highlightImage = this.FrameBoundChecker(e.clientX, e.clientY, animationList.currentFrame);
                 }
 
-                if(toPan == true){
-                    this.pan.x += current.x - start.x;
-                    this.pan.y += current.y - start.y;
-                }
+                if(toMove == true){
+                    let frameData = animationList.currentFrame.frameData;
+                    frameData.offset.x += Math.round(((current.x - start.x)/ this.scale) * this.decimal)/this.decimal;
+                    frameData.offset.y += Math.round(((current.y - start.y)/ this.scale) * this.decimal)/this.decimal;
 
+                    let frameDataElems = animationList.frameDataInputElems;
+                    frameDataElems[1].value = frameData.offset.x;
+                    frameDataElems[2].value = frameData.offset.y;
+                    DisplayInJson();
+                    start = current;
+                }
+            }
+            
+            if(toPan == true){
+                this.pan.x += current.x - start.x;
+                this.pan.y += current.y - start.y;
                 start = current;
-                
             }
         });
 
@@ -216,9 +256,9 @@ class CanvasEditor{
             if(animationList.currentFrame == null){
                 return;
             }
-
             this.scale -= speedZoom * e.deltaY;
             this.scale = Clamp(this.scale, 0.1, 2);
+            console.log(this.scale);
         })
         
     }
@@ -237,7 +277,7 @@ class CanvasEditor{
         let frameIndex = frameClasses.findIndex(i => i == frame);
 
         let onionSkinMin = Clamp(frameIndex - this.onionSkinBack, 0, frameClasses.length);
-        let onionSkinMax = Clamp(frameIndex + this.onionSkinFront, 0, frameClasses.length);
+        let onionSkinMax = Clamp(frameIndex + this.onionSkinFront + 1, 0, frameClasses.length);
 
         const onionSkin = (min, max, opacity) => {
             context.globalAlpha = opacity;
@@ -256,27 +296,54 @@ class CanvasEditor{
         
         onionSkin(onionSkinMin, frameIndex, 0.2);
         this.canvasClass.DisplayerFrame(frame);
+        if(this.highlightImage){
+            this.canvasClass.DisplayerFrame(frame, true);
+        }
         onionSkin(frameIndex+1, onionSkinMax, 0.2);
 
         let hitboxes = frame.hitboxListClasses;
         for(let x = 0; x < hitboxes.length ;x++){
             let hitboxData = hitboxes[x].hitbox;
             switch(this.highlight == x){
-                case true: this.canvasClass.DisplayerHitbox(hitboxes[x], frame, (hitboxData.type == 'hitbox')? this.highlightHitbox: this.highlightHurtbox);break;
+                case true: 
+                    if(toMove == true){
+                        this.canvasClass.DisplayerHitbox(hitboxes[x], frame, (hitboxData.type == 'hitbox')? this.highlightHitbox: this.highlightHurtbox);
+                    }
+                    if(toResize == true){
+                        this.canvasClass.DisplayerHitbox(hitboxes[x], frame, (hitboxData.type == 'hitbox')? this.highlightHitbox: this.highlightHurtbox, true);
+                    }
+                    
+                break;
                 case false: this.canvasClass.DisplayerHitbox(hitboxes[x], frame, (hitboxData.type == 'hitbox')? colorHitbox: colorHurtbox);break;
             }
         }
         context.restore();
     }
 
-    BoundChecker = (clientX, clientY, hitbox) => {
+    FrameBoundChecker = (clientX , clientY, frame) => {
+        let frameData = frame.frameData;
+        let mousePos = this.canvasClass.GetMousPos(clientX, clientY);
+        let canvas = this.canvasClass.canvas;
+        let centerCan = Middle(canvas.width, canvas.height);
+        let centeri = Middle(frame.image.width, frame.image.height);
+
+        let pointx = centerCan.x + frameData.offset.x - (centeri.x * this.scale) + this.pan.x;
+        let pointy = centerCan.y + frameData.offset.y - (centeri.y * this.scale) + this.pan.y;
+
+        let left = pointx;
+        let top = pointy;
+
+        let right = pointx + (frame.image.width * this.scale);
+        let bottom = pointy + (frame.image.height * this.scale);
+
+        return this.IsBetween(mousePos.x, left, right) && this.IsBetween(mousePos.y, top, bottom);
+    }
+
+    HitboxBoundChecker = (clientX, clientY, hitbox) => {
         let frameData = hitbox.frameData.frameData;
         let mousePos = this.canvasClass.GetMousPos(clientX, clientY);
         let canvas = this.canvasClass.canvas;
         let centerCan = Middle(canvas.width, canvas.height);
-        
-        //mousePos.x *= this.scale;
-        //mousePos.y *= this.scale; 
 
         let hitboxData = hitbox.hitbox;
 
@@ -296,14 +363,11 @@ class CanvasEditor{
         return this.IsBetween(mousePos.x, left, right) && this.IsBetween(mousePos.y, top, bottom);
     }
 
-    ResizeChecker = (clientX, clientY, hitbox) => {
+    HitboxResizeChecker = (clientX, clientY, hitbox) => {
         let frameData = hitbox.frameData.frameData;
         let mousePos = this.canvasClass.GetMousPos(clientX, clientY);
         let canvas = this.canvasClass.canvas;
         let centerCan = Middle(canvas.width, canvas.height);
-
-        //mousePos.x *= this.scale;
-        //mousePos.y *= this.scale;
 
         let hitboxData = hitbox.hitbox;
 
@@ -456,3 +520,4 @@ const Middle = (width, height) => {
 const Clamp = (num, min, max) => {
     return Math.max(min, Math.min( num, max));
 }
+
