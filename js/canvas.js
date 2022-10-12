@@ -76,6 +76,8 @@ class CanvasEditor{
     constructor(){
         let canvas = document.getElementById("editor-canvas");
         this.canvasClass = new Canvas(canvas);
+        this.oSkinOpacityBack = 0.3;
+        this.oSkinOpacityFront = 0.3;
         this.onionSkinBack = 2;
         this.onionSkinFront = 2;
         this.decimal = 1000
@@ -294,12 +296,12 @@ class CanvasEditor{
         context.scale(this.scale, this.scale);
         
         
-        onionSkin(onionSkinMin, frameIndex, 0.2);
+        onionSkin(onionSkinMin, frameIndex, this.oSkinOpacityBack);
         this.canvasClass.DisplayerFrame(frame);
         if(this.highlightImage){
             this.canvasClass.DisplayerFrame(frame, true);
         }
-        onionSkin(frameIndex+1, onionSkinMax, 0.2);
+        onionSkin(frameIndex+1, onionSkinMax, this.oSkinOpacityFront);
 
         let hitboxes = frame.hitboxListClasses;
         for(let x = 0; x < hitboxes.length ;x++){
