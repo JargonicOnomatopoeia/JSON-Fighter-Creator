@@ -1,6 +1,12 @@
 import { animationList } from "./animationlist.js";
 import { DisplayInJson } from "./JSONOutput.js";
 
+export let colorHitbox = "rgba(255, 0, 0, 0.41)";
+export let colorHurtbox = "rgba(0, 255, 34, 0.41)";
+
+export let speedPan = 1;
+export let speedZoom = 0.0005;
+
 export let canvasAnimator = null;
 export let canvasEditor = null;
 
@@ -27,6 +33,30 @@ class Canvas{
             y: clientY - rect.top
         }
     }
+
+    DisplayerFrame = (frame) => {
+        this.context.save();
+        let cframeData = frame.frameData;
+        let cImage = Middle(frame.image.width, frame.image.height);
+        let imgoffsetx = cframeData.offset.x - cImage.x;
+        let imgoffsety = cframeData.offset.y - cImage.y;
+
+        this.context.rotate(cframeData.rotate * Math.PI / 180);
+        this.context.drawImage(frame.image, imgoffsetx, imgoffsety);
+        this.context.restore();
+    }
+
+    DisplayerHitbox = (currentHitbox, currentFrame, color) => {
+        let hitboxData = currentHitbox.hitbox;
+        let frameData = currentFrame.frameData;
+        let centerh = Middle(hitboxData.width, hitboxData.height);
+
+        let offsetx = hitboxData.offset.x + frameData.offset.x - centerh.x;
+        let offsety = hitboxData.offset.y + frameData.offset.y - centerh.y;
+
+        this.context.fillStyle = color;
+        this.context.fillRect(offsetx, offsety, hitboxData.width, hitboxData.height);
+    }
 }
 
 class CanvasEditor{
@@ -34,11 +64,14 @@ class CanvasEditor{
     constructor(){
         let canvas = document.getElementById("editor-canvas");
         this.canvasClass = new Canvas(canvas);
-        this.onionSkinBack = 0;
-        this.onionSkinFront = 0;
+        this.onionSkinBack = 2;
+        this.onionSkinFront = 2;
         this.decimal = 1000
         this.highlight = -1;
         this.scale = 1;
+
+        this.highlightHitbox = "rgba(164, 59, 235, 0.78)";
+        this.highlightHurtbox = "rgba(59, 67, 234, 0.78)";
         
         let toMove = false;
 
@@ -77,8 +110,8 @@ class CanvasEditor{
                     toResize = this.ResizeChecker(e.clientX, e.clientY, hitboxes[this.highlight]);
                 }
 
-                console.log(toMove);
-                console.log(toResize);
+                //console.log(toMove);
+                //console.log(toResize);
 
                 toPan = !toMove && !toResize;
 
@@ -184,7 +217,8 @@ class CanvasEditor{
                 return;
             }
 
-            this.scale -= 0.0005 * e.deltaY
+            this.scale -= speedZoom * e.deltaY;
+            this.scale = Clamp(this.scale, 0.1, 2);
         })
         
     }
@@ -199,45 +233,39 @@ class CanvasEditor{
             return;
         }
 
-        
+        let frameClasses = animationList.currentAnimation.frameDataListClasses;
+        let frameIndex = frameClasses.findIndex(i => i == frame);
+
+        let onionSkinMin = Clamp(frameIndex - this.onionSkinBack, 0, frameClasses.length);
+        let onionSkinMax = Clamp(frameIndex + this.onionSkinFront, 0, frameClasses.length);
+
+        const onionSkin = (min, max, opacity) => {
+            context.globalAlpha = opacity;
+            for(let x = min;x < max ; x++){
+                this.canvasClass.DisplayerFrame(frameClasses[x])
+            }
+            context.globalAlpha = 1;
+        }
+
         let centerCan = Middle(this.canvasClass.canvas.width, this.canvasClass.canvas.height);
         let context = this.canvasClass.context;
         context.save();
         context.translate(centerCan.x + this.pan.x, centerCan.y + this.pan.y);
         context.scale(this.scale, this.scale);
+        
+        
+        onionSkin(onionSkinMin, frameIndex, 0.2);
+        this.canvasClass.DisplayerFrame(frame);
+        onionSkin(frameIndex+1, onionSkinMax, 0.2);
 
-        let frameData = frame.frameData;
-        let centerImage = Middle(frame.image.width, frame.image.height);
-        let imageoffsetx = frameData.offset.x - centerImage.x;
-        let imageoffsety = frameData.offset.y - centerImage.y;
-
-        context.rotate(frameData.rotate * Math.PI / 180);
-        context.drawImage(frame.image, imageoffsetx, imageoffsety);
-        context.restore();
-
-        context.save();
-        context.translate(centerCan.x + this.pan.x, centerCan.y + this.pan.y);
-        context.scale(this.scale, this.scale);
         let hitboxes = frame.hitboxListClasses;
-
-        for(let x = hitboxes.length-1; x >= 0;x--){
-            let hitbox = hitboxes[x].hitbox;
-            let centerh = Middle(hitbox.width, hitbox.height);
-
-            let hitboxPosX = frameData.offset.x + hitbox.offset.x - centerh.x;
-            let hitboxPosY = frameData.offset.y + hitbox.offset.y - centerh.y;
-
+        for(let x = 0; x < hitboxes.length ;x++){
+            let hitboxData = hitboxes[x].hitbox;
             switch(this.highlight == x){
-                case true:
-                    context.fillStyle = (hitbox.type == 'hitbox')? "rgba(164, 59, 235, 0.78)": "rgba(59, 67, 234, 0.78)";
-                ;break;
-                case false:
-                    context.fillStyle = (hitbox.type == 'hitbox')? "rgba(255, 0, 0, 0.41)": "rgba(0, 255, 34, 0.41)";
-                ;break;
+                case true: this.canvasClass.DisplayerHitbox(hitboxes[x], frame, (hitboxData.type == 'hitbox')? this.highlightHitbox: this.highlightHurtbox);break;
+                case false: this.canvasClass.DisplayerHitbox(hitboxes[x], frame, (hitboxData.type == 'hitbox')? colorHitbox: colorHurtbox);break;
             }
-            context.fillRect(hitboxPosX, hitboxPosY, hitbox.width, hitbox.height);
         }
-
         context.restore();
     }
 
@@ -390,36 +418,16 @@ class CanvasAnimator{
         let frameClass = animation.frameDataListClasses[this.index];
 
         if(frameClass.frameData.frametime <= this.frametime){
-            let context = this.canvasClass.context;
-            let framedata = frameClass.frameData;
-            let centerImg = Middle(frameClass.image.width, frameClass.image.height);
             let centerCan = Middle(this.canvasClass.canvas.width, this.canvasClass.canvas.height);
-            let imageoffsetx = framedata.offset.x - centerImg.x;
-            let imageoffsety = framedata.offset.y - centerImg.y;
+            let context = this.canvasClass.context;
             context.save();
             context.translate(centerCan.x + this.pan.x, centerCan.y + this.pan.y);
             context.scale(this.scale, this.scale);
-            
-            context.rotate(framedata.rotate * Math.PI / 180);
-            context.drawImage(frameClass.image, imageoffsetx, imageoffsety);
-            context.restore();
-
-            context.save();
-            context.translate(centerCan.x + this.pan.x, centerCan.y + this.pan.y);
-            context.scale(this.scale, this.scale);
+            this.canvasClass.DisplayerFrame(frameClass);
             let hitboxClasses = frameClass.hitboxListClasses;
             for(let x = 0;this.showHitboxes !=  false && x < hitboxClasses.length;x++){
                 let hitboxData = hitboxClasses[x].hitbox;
-                let centerh = Middle(hitboxData.width, hitboxData.height);
-
-                let recPosX = hitboxData.offset.x + framedata.offset.x - centerh.x;
-                let recPosY = hitboxData.offset.y + framedata.offset.y - centerh.y;
-
-                context.fillStyle = (hitboxData.type == 'hitbox')? "rgba(255, 0, 0, 0.41)": "rgba(0, 255, 34, 0.41)";
-                context.fillRect(recPosX, recPosY, hitboxData.width, hitboxData.height);
-
-                //frameClass[x].SetHitboxColor();
-                //frameClass[x].Draw(this.canvasClass);
+                this.canvasClass.DisplayerHitbox(hitboxClasses[x], frameClass, (hitboxData.type == 'hitbox')? colorHitbox: colorHurtbox);
             }
             context.restore();
 
@@ -442,4 +450,8 @@ const Middle = (width, height) => {
         x: width/2,
         y: height/2
     }
+}
+
+const Clamp = (num, min, max) => {
+    return Math.max(min, Math.min( num, max));
 }
