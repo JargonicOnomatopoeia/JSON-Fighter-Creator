@@ -34,20 +34,20 @@ class Canvas{
         }
     }
 
-    DisplayerFrame = (frame, stroke = false) => {
+    DisplayerFrame = (frame, hasFilter = false, filterString = 'sepia(100%)') => {
         this.context.save();
         let cframeData = frame.frameData;
         let cImage = Middle(frame.image.width, frame.image.height);
         let imgoffsetx = cframeData.offset.x - cImage.x;
         let imgoffsety = cframeData.offset.y - cImage.y;
-
-        if(stroke == false){
-            this.context.rotate(cframeData.rotate * Math.PI / 180);
-            this.context.drawImage(frame.image, imgoffsetx, imgoffsety);
-        }else{
+        
+        this.context.rotate(cframeData.rotate * Math.PI / 180);
+        if(hasFilter == true){
+            this.context.filter = filterString;
+        }
+        this.context.drawImage(frame.image, imgoffsetx, imgoffsety);
             //this.context.strokeStyle = color;
-            this.context.strokeRect(imgoffsetx, imgoffsety, frame.image.width, frame.image.height);
-        }   
+            //this.context.strokeRect(imgoffsetx, imgoffsety, frame.image.width, frame.image.height);   
         
         this.context.restore();
     }
@@ -76,10 +76,16 @@ class CanvasEditor{
     constructor(){
         let canvas = document.getElementById("editor-canvas");
         this.canvasClass = new Canvas(canvas);
+        
         this.oSkinOpacityBack = 0.3;
+        this.hueOSkinBack = 90;
+        
         this.oSkinOpacityFront = 0.3;
+        this.hueOSkinFront = 200;
+
         this.onionSkinBack = 2;
         this.onionSkinFront = 2;
+        
         this.decimal = 1000
         this.highlight = -1;
         this.scale = 1;
@@ -281,10 +287,10 @@ class CanvasEditor{
         let onionSkinMin = Clamp(frameIndex - this.onionSkinBack, 0, frameClasses.length);
         let onionSkinMax = Clamp(frameIndex + this.onionSkinFront + 1, 0, frameClasses.length);
 
-        const onionSkin = (min, max, opacity) => {
+        const onionSkin = (min, max, opacity, filterMode = "hue-rotate(90deg)") => {
             context.globalAlpha = opacity;
             for(let x = min;x < max ; x++){
-                this.canvasClass.DisplayerFrame(frameClasses[x])
+                this.canvasClass.DisplayerFrame(frameClasses[x], true, filterMode);
             }
             context.globalAlpha = 1;
         }
@@ -296,12 +302,15 @@ class CanvasEditor{
         context.scale(this.scale, this.scale);
         
         
-        onionSkin(onionSkinMin, frameIndex, this.oSkinOpacityBack);
-        this.canvasClass.DisplayerFrame(frame);
+        onionSkin(onionSkinMin, frameIndex, this.oSkinOpacityBack, "hue-rotate("+this.hueOSkinBack+"deg)");
+        
         if(this.highlightImage){
-            this.canvasClass.DisplayerFrame(frame, true);
+            this.canvasClass.DisplayerFrame(frame, true, 'brightness(150%)');
+        }else{
+            this.canvasClass.DisplayerFrame(frame);
         }
-        onionSkin(frameIndex+1, onionSkinMax, this.oSkinOpacityFront);
+        
+        onionSkin(frameIndex+1, onionSkinMax, this.oSkinOpacityFront, "hue-rotate("+this.hueOSkinFront+"deg)");
 
         let hitboxes = frame.hitboxListClasses;
         for(let x = 0; x < hitboxes.length ;x++){
