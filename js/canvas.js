@@ -395,7 +395,8 @@ class CanvasAnimator{
             if(animationList.currentAnimation == null){
                 return;
             }
-            this.scale -= 0.0005 * e.deltaY;
+            this.scale -= speedZoom * e.deltaY;
+            this.scale = Clamp(this.scale, 0.1, 2);
         });
         //#endregion
     }
