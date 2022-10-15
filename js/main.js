@@ -1,6 +1,7 @@
-import {animationList, AnimationListInit} from './animationlist.js'
-import { DisplayInJson } from './JSONOutput.js';
-import { CanvasInitialize, canvasAnimator, canvasEditor} from './canvas.js'
+import * as animationList from './animationList.js'
+import { displayInJson } from './jsonOutput.js';
+import { animationPlay , animatorInitialize }from './animator.js';
+import { showFrame , editorInitialize } from './editor.js';
 
 
 window.onload = () => {
@@ -15,24 +16,25 @@ window.onload = () => {
     let buttonDownload = document.getElementById("json-download");
     let buttonClipboard = document.getElementById("json-clipboard");
 
-    AnimationListInit();
-    CanvasInitialize();
+    animationList.initialize();
+    editorInitialize();
+    animatorInitialize();
     //FrameData.Initialize();
     //HitboxRows.Initialize();
     //#endregion
     
     imageUploader.addEventListener("change", (e) =>{
         if(window.File && window.FileReader && window.FileList && window.Blob){
-            animationList.BuildAnimationSprite(e.target.files);
-            DisplayInJson();
+            animationList.buildAnimationSprite(e.target.files);
+            displayInJson();
         }
     });
 
     buttonNewHitbox.addEventListener("click", () => {
         if(animationList.currentFrame != null){
             let newHitbox = animationList.currentFrame.AddNewHitbox();
-            newHitbox.AddTableRow(animationList.hitboxListElem);
-            DisplayInJson();
+            newHitbox.addTableRow(animationList.hitboxListElem);
+            displayInJson();
         }
         
     });
@@ -58,7 +60,7 @@ window.onload = () => {
                 buttonCopyHitbox.hidden = false;
                 HitboxRows.Clear();
                 HitboxRows.AddRows();
-                DisplayInJson();
+                displayInJson();
                 break;
             case false:;break;
         }
@@ -70,8 +72,8 @@ window.onload = () => {
         buttonCopyHitbox.hidden = false;
     });
 */
-    requestAnimationFrame(canvasAnimator.AnimationPlay);
-    requestAnimationFrame(canvasEditor.ShowFrame);
+    requestAnimationFrame(animationPlay);
+    requestAnimationFrame(showFrame);
 
 }
 /*

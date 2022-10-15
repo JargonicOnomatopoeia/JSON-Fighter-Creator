@@ -1,7 +1,7 @@
-import { DisplayInJson } from "./JSONOutput.js";
-import { DeleteRow } from "./table.js";
+import { displayInJson } from "./jsonOutput.js";
+import { deleteRow } from "./table.js";
 
-export class Hitbox{
+export class hitbox{
     constructor(_frameData = null){
         this.frameData = _frameData;
 
@@ -31,7 +31,7 @@ export class Hitbox{
     //#endregion
     
     //#region For Table
-    AddTableRow = (table) => {
+    addTableRow = (table) => {
         // array of cells
         let tableContent = [];
         //Create Table Row
@@ -57,7 +57,7 @@ export class Hitbox{
 
             typeSelect.addEventListener("change", () => {
                 this.hitbox.type = typeSelect.selectedOptions[0].value;
-                DisplayInJson();
+                displayInJson();
             });
 
             typeSelect.appendChild(typeOption);
@@ -99,7 +99,7 @@ export class Hitbox{
                         let input = inputNumbers(this.hitbox[key][secKey]);
                         input.addEventListener("input", () => {
                             this.hitbox[key][secKey] = inputFilter(input);
-                            DisplayInJson();
+                            displayInJson();
                         });
                         tableContent.push(input);
                     }
@@ -108,7 +108,7 @@ export class Hitbox{
                     let input = inputNumbers(this.hitbox[key]);
                     input.addEventListener("input", () => {
                         this.hitbox[key] = inputFilter(input);
-                        DisplayInJson();
+                        displayInJson();
                     });
                     tableContent.push(input);
                 break;
@@ -119,9 +119,9 @@ export class Hitbox{
         deleteButton.innerText = 'X';
 
         deleteButton.addEventListener('click', ()=> {
-            DeleteRow(this.tableRow);
-            this.DeleteThis();
-            DisplayInJson();
+            deleteRow(this.tableRow);
+            this.deleteThis();
+            displayInJson();
         });
 
         tableContent.push(deleteButton);
@@ -138,7 +138,7 @@ export class Hitbox{
     }
     //#endregion
 
-    DeleteThis(){
+    deleteThis(){
         this.frameData.DeleteHitbox(this);
     }
 }

@@ -1,10 +1,10 @@
-import { animationList } from "./animationlist.js";
-import { DisplayInJson } from "./JSONOutput.js";
-import { DeleteRow } from "./table.js";
-import { Hitbox } from "./hbox.js"
-import { canvasAnimator } from "./canvas.js";
+import { displayInJson } from "./jsonOutput.js";
+import { deleteRow } from "./table.js";
+import { hitbox } from "./hitboxClass.js";
+import * as animator from "./animator.js";
+import * as animationList from "./animationList.js";
 
-export class Frame {
+export class frame{
     constructor(_animRef = null, _imageSource = "", _frameName="", _rotation = 0, _offsetx = 0, _offsety = 0, _veloX = 0, _veloY = 0, _frametime = 0, _hitbox = []){
         
         this.animRef = _animRef
@@ -31,15 +31,7 @@ export class Frame {
         this.tableRow = null;
     }
 
-    GetData = () => {
-        this.frameData;
-    }
-
-    GetHitboxData = () => {
-        this.frameData.hitboxList;
-    }
-
-    AddHitbox = (_hitbox) => {
+    addHitbox = (_hitbox) => {
         this.hitboxListClasses.push(_hitbox);
         this.frameData.hitboxList.push(_hitbox.hitbox);
     }
@@ -47,7 +39,7 @@ export class Frame {
     
     //#endregion
     
-    AddTableRow = (table, hitboxTable, frameDataElems) => {
+    addTableRow = (table, hitboxTable, frameDataElems) => {
         let contentList = [];
         let container = document.createElement('tr');
         this.tableRow = container;
@@ -68,9 +60,9 @@ export class Frame {
 
         let primeKeys = Object.keys(this.frameData);
         name.addEventListener("click", () => {
-            animationList.currentFrame = this;
-            animationList.currentAnimation = this.animRef;
-            canvasAnimator.Initialize();
+            animationList.setCurrentFrame(this);
+            animationList.setCurrentAnim(this.animRef);
+            animator.reset();
             let y = 1;
             for(let x = 0; x < frameDataElems.length;){ 
                 let primaryKey = primeKeys[y];
@@ -92,15 +84,15 @@ export class Frame {
             }
 
             while(hitboxTable.hasChildNodes()){
-                DeleteRow(hitboxTable.firstChild);
+                deleteRow(hitboxTable.firstChild);
             }
 
             for(let x = 0; x < this.hitboxListClasses.length;x++){
                 let hitboxRow = this.hitboxListClasses[x];
-                hitboxRow.AddTableRow(hitboxTable);
+                hitboxRow.addTableRow(hitboxTable);
             }
 
-            DisplayInJson();
+            displayInJson();
         });
         contentList.push(name);
         //#endregion
@@ -109,14 +101,14 @@ export class Frame {
         close.innerText = 'X';
 
         close.addEventListener("click", () => {
-            DeleteRow(this.tableRow);
+            deleteRow(this.tableRow);
             if(this.animRef.frameDataListClasses.length == 1){
-                DeleteRow(this.animRef.tableRow);
-                animationList.RemoveFromList(this.animRef);
+                deleteRow(this.animRef.tableRow);
+                animationList.removeFromList(this.animRef);
                 return;
             }
-            DisplayInJson();
-            this.DeleteThis();
+            displayInJson();
+            this.deleteThis();
             
         });
         contentList.push(close);
@@ -130,7 +122,7 @@ export class Frame {
     }
 
     AddNewHitbox = () => {
-        let newHitbox = new Hitbox(this);
+        let newHitbox = new hitbox(this);
         this.frameData.hitboxList.push(newHitbox.hitbox);
         this.hitboxListClasses.push(newHitbox);
 
@@ -143,9 +135,9 @@ export class Frame {
         delete this.hitboxListClasses.splice(index, 1);
     }
 
-    DeleteThis = () => {
+    deleteThis = () => {
         for(let x = 0; x < this.hitboxListClasses.length; x++){
-            DeleteRow(this.hitboxListClasses[x].tableRow);
+            deleteRow(this.hitboxListClasses[x].tableRow);
         }
 
         while(this.hitboxListClasses.length > 0){
@@ -153,9 +145,9 @@ export class Frame {
         }
 
         if(animationList.currentFrame == this){
-            animationList.currentFrame = null;
+            animationList.setCurrentFrame();
         }
-        this.animRef.DeleteFrameData(this);
+        this.animRef.deleteFrameData(this);
     }
 
     CopyHitboxes = () => {
@@ -163,7 +155,7 @@ export class Frame {
         
 
         for(let x = 0; x < this.hitboxListClasses.length; x++){
-            let tempHitbox = new Hitbox();
+            let tempHitbox = new hitbox();
             let tempObjectKeys = Object.keys(tempHitbox.hitbox.keys);
             let hitbox = this.hitboxListClasses[x].hitbox;
             for(let y = 0; y < tempObjectKeys.length;y++){
