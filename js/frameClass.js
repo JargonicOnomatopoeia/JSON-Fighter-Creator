@@ -35,7 +35,7 @@ export class frame{
         this.hitboxListClasses.push(_hitbox);
         this.frameData.hitboxList.push(_hitbox.hitbox);
     }
-    //#region For Canvas
+    //#region For canvas
     
     //#endregion
     

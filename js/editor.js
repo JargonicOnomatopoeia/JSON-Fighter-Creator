@@ -52,7 +52,7 @@ let mousedown = false;
 
 export const editorInitialize = () =>{
     canvas = document.getElementById("editor-canvas");
-    canvasClass = new canvasUtil.Canvas(canvas);
+    canvasClass = new canvasUtil.canvas(canvas);
     canvas.addEventListener("mousedown",(e) => {
         e.preventDefault();  
         if(animationList.currentFrame == null){

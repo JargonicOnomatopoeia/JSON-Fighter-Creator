@@ -24,7 +24,7 @@ export class hitbox{
         this.tableRow = null;
     }
 
-    //#region For Canvas Display
+    //#region For canvas Display
     //#endregion
 
 

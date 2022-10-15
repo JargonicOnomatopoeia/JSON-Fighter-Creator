@@ -20,7 +20,7 @@ let pan = {
 let startPan;
 export const animatorInitialize = () => {
     canvas = document.getElementById("animation-canvas");
-    canvasClass = new canvasUtil.Canvas(canvas);
+    canvasClass = new canvasUtil.canvas(canvas);
     canvas.addEventListener("mousedown", (e) => {
         if(animationList.currentAnimation == null){
             return; 
