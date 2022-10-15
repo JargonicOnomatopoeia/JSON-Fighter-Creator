@@ -72,7 +72,6 @@ export const editorInitialize = () =>{
             toPan = !toMove && !toResize;
         }else{
             toMove =  FrameBoundChecker(e.clientX, e.clientY, animationList.currentFrame);
-            console.log(toMove);
             toPan = !toMove;
         }
 
