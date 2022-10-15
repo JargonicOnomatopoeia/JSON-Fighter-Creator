@@ -6,7 +6,7 @@ export let colorHurtbox = "rgba(0, 255, 34, 0.41)";
 export let speedPan = 1;
 export let speedZoom = 0.0005;
 
-export class Canvas{
+export class canvas{
     constructor(document, _width = 0, _height = 0, _offsetx = 0, _offsety = 0){
         this.canvas = document;
         this.context = this.canvas.getContext('2d');
