@@ -8,7 +8,7 @@ export class animation{
 
         this.frameDataListClasses = [];
 
-        this.animation = {
+        this.animationData = {
             name: _animationName,
             frameDataList: []
         }
@@ -24,11 +24,11 @@ export class animation{
         //#region 
         let nameInput = document.createElement('input');
         nameInput.type = 'text';
-        nameInput.value = this.animation.name;
+        nameInput.value = this.animationData.name;
         
 
         nameInput.addEventListener('input', () => {
-            this.animation.name = nameInput.value;
+            this.animationData.name = nameInput.value;
             displayInJson();
         });
 
@@ -60,13 +60,13 @@ export class animation{
 
     addFrameData = (_frameData) => {
         this.frameDataListClasses.push(_frameData);
-        this.animation.frameDataList.push(_frameData.frameData);
+        this.animationData.frameDataList.push(_frameData.frameData);
     }
 
     //#region Delete Region
     deleteFrameData = (_frameData) => {
         let index = this.frameDataListClasses.findIndex(i => i == _frameData);
-        delete this.animation.frameDataList.splice(index, 1);
+        delete this.animationData.frameDataList.splice(index, 1);
         delete this.frameDataListClasses.splice(index, 1);
     }
 

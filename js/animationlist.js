@@ -1,5 +1,5 @@
 import { frame } from "./frameClass.js";
-import { animation } from "./animationClass.js";
+import { animation } from "./animationClass.js"
 import { displayInJson } from "./jsonOutput.js";
 
 export let animationListData = [];
@@ -35,7 +35,7 @@ export const setCurrentAnim = (animation = null) => {
 
 export const addToList = (animation) => {
     animationListClasses.push(animation);
-    animationListData.push(animation.animation);
+    animationListData.push(animation.animationData);
 }
 
 export const removeFromList = (animation) => {
@@ -46,17 +46,17 @@ export const removeFromList = (animation) => {
 }
 
 export const buildAnimationSprite = (imageArray) => {
-    let animation = new animation(animationIndex);
-    animation.addTableRow(animationListElem);
-    addToList(animation);
+    let animationTemp = new animation(animationIndex);
+    animationTemp.addTableRow(animationListElem);
+    addToList(animationTemp);
     animationIndex++;
 
     for(let x = 0; x < imageArray.length;x++){
         let picture = new FileReader();
         picture.addEventListener('load', (e)=>{
             let newImage = e.target.result;
-            let frameData = new frame(animation, newImage, imageArray[x].name);
-            animation.addFrameData(frameData);
+            let frameData = new frame(animationTemp, newImage, imageArray[x].name);
+            animationTemp.addFrameData(frameData);
             frameData.addTableRow(animationListElem, hitboxListElem, frameDataInputElems);
         });
         picture.readAsDataURL(imageArray[x]);
