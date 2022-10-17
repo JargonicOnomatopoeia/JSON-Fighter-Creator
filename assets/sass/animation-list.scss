@@ -1,24 +1,11 @@
-@mixin list-item {
-  @include item-container;
-  background: $darkBlueGrey;
- 
-  
-
-  &-active {
-    background: $blueGrey;
-  }
-}
-
 #animation-list {
-  flex-basis: 20.8%;
-
-  &-list {
-    @include scrollable;
+  flex-basis: 50%;
 
     .list-list {
       display: flex;
       flex-direction: column;
       row-gap: 8px;
+      height: 0px;
     }
 
     .list-item {
@@ -29,6 +16,4 @@
       @include list-item;
       margin-left: 16px;
     }
-  }
-
 }

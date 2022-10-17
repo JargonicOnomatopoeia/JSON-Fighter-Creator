@@ -4,9 +4,8 @@
 		<meta charset="utf-16" />
 		<title>JSON Fighter Creator | A Javascript Tool by William Starkovich | Modified By Clone1542</title>
 		<link rel='stylesheet' href='style.css' />
-		<!---<link rel="stylesheet" href="https://unpkg.com/98.css"> -->
 		<link rel="stylesheet" href="./css/index.css">
-		<!--- <script type="text/javascript" src="./js/jhbc.js"></script> -->
+		<link rel="stylesheet" href="./css/Glyphter.css">
 		<script type="module" src="./js/animation.js"></script>
 		<script type="module" src="./js/frame.js"></script>
 		<script type="module" src="./js/main.js"></script>
@@ -14,125 +13,293 @@
 
 	<body>
 		<div id="app" class="flex-dir-row">
-			<div id="animation-list" class="container">
-				<div class="title">Animation List</div>
-				<div id="animation-list-list">
-					<div class="list-list">
-						<div class="list-item list-item-active">
-							<span>v</span>
-							<input class="flex-grow" type="text" value="Animation#0" />
-							<span>c</span>
-							<span>x</span>
-						</div>
-						<div class="list-sub-item list-sub-item-active">
-							<span>v</span>
-							<input class="flex-grow" type="text" value="walkFront000.png" />
-							<span>c</span>
-							<span>x</span>
-						</div>
-						<div class="list-sub-item">
-							<span>v</span>
-							<input class="flex-grow" type="text" value="walkFront000.png" />
-							<span>c</span>
-							<span>x</span>
-						</div>
-						<div class="list-sub-item">
-							<span>v</span>
-							<input class="flex-grow" type="text" value="walkFront000.png" />
-							<span>c</span>
-							<span>x</span>
-						</div>
-						<div class="list-sub-item">
-							<span>v</span>
-							<input class="flex-grow" type="text" value="walkFront000.png" />
-							<span>c</span>
-							<span>x</span>
-						</div>
-						<div class="list-sub-item">
-							<span>v</span>
-							<input class="flex-grow" type="text" value="walkFront000.png" />
-							<span>c</span>
-							<span>x</span>
-						</div>
-						<div class="list-sub-item">
-							<span>v</span>
-							<input class="flex-grow" type="text" value="walkFront000.png" />
-							<span>c</span>
-							<span>x</span>
-						</div>
-				  </div>
-				</div>
-			</div>
-			<div class="flex-grow flex-dir-col" >
-				<div class="flex-grow flex-dir-row">
-					<div id="frame-data" class="container">
-						<div class="title">Frame Data</div>
-						<div class="flex-dir-col-small">
-							<div class="list-item">
-								<div class="label-text">OffsetX</div>
-								<div class="flex-grow"></div>
-								<input type="number" value="0" />
+			<div id="animation-col">
+				<div id="animation-list" class="container">
+					<div class="title">
+						Animation List
+						<div class="flex-pad" ></div>
+						<i class="icon-add-file clickable">
+							<div class="tooltip">
+								Add File
 							</div>
-							<div class="list-item">
-								<div class="label-text">OffsetY</div>
-								<div class="flex-grow"></div>
-								<input type="number" value="0" />
+						</i>
+						<i class="icon-copy-code clickable">
+							<div class="tooltip">
+								Copy JSON
 							</div>
-							<div class="list-item">
-								<div class="label-text">VelocityX</div>
-								<div class="flex-grow"></div>
-								<input type="number" value="0" />
+						</i>
+						<i class="icon-download clickable">
+							<div class="tooltip">
+								Download JSON
 							</div>
-							<div class="list-item">
-								<div class="label-text">VelocityY</div>
-								<div class="flex-grow"></div>
-								<input type="number" value="0" />
+						</i>
+					</div>
+					<div class="body scrollable">
+						<div class="list-list">
+							<div class="list-item list-item-active">
+								<i class="icon-arrow-down clickable"></i>
+								<input class="flex-grow" type="text" value="Animation#0" />
+								<i class="icon-copy clickable">
+									<div class="tooltip">
+										Copy
+									</div>
+								</i>
+								<i class="icon-trash clickable">
+									<div class="tooltip left">
+										Delete
+									</div>
+								</i>
 							</div>
-							<div class="list-item">
-								<div class="label-text">Frame Time</div>
-								<div class="flex-grow"></div>
-								<input type="number" value="0" />
+							<div class="list-sub-item list-sub-item-active">
+								<input class="flex-grow" type="text" value="walkFront000.png" />
+								<i class="icon-copy clickable">
+									<div class="tooltip center-left">
+										Copy
+									</div>
+								</i>
+								<i class="icon-trash clickable">
+									<div class="tooltip center-left">
+										Delete
+									</div>
+								</i>
+							</div>
+							<div class="list-sub-item">
+								<input class="flex-grow" type="text" value="walkFront000.png" />
+								<i class="icon-copy clickable">
+									<div class="tooltip center-left">
+										Copy
+									</div>
+								</i>
+								<i class="icon-trash clickable">
+									<div class="tooltip center-left">
+										Delete
+									</div>
+								</i>
+							</div>
+							<div class="list-sub-item">
+								<input class="flex-grow" type="text" value="walkFront000.png" />
+								<i class="icon-copy clickable">
+									<div class="tooltip center-left">
+										Copy
+									</div>
+								</i>
+								<i class="icon-trash clickable">
+									<div class="tooltip center-left">
+										Delete
+									</div>
+								</i>
+							</div>
+							<div class="list-sub-item">
+								<input class="flex-grow" type="text" value="walkFront000.png" />
+								<i class="icon-copy clickable">
+									<div class="tooltip center-left">
+										Copy
+									</div>
+								</i>
+								<i class="icon-trash clickable">
+									<div class="tooltip center-left">
+										Delete
+									</div>
+								</i>
+							</div>
+							<div class="list-sub-item">
+								<input class="flex-grow" type="text" value="walkFront000.png" />
+								<i class="icon-copy clickable">
+									<div class="tooltip center-left">
+										Copy
+									</div>
+								</i>
+								<i class="icon-trash clickable">
+									<div class="tooltip center-left">
+										Delete
+									</div>
+								</i>
+							</div>
+							<div class="list-sub-item">
+								<input class="flex-grow" type="text" value="walkFront000.png" />
+								<i class="icon-copy clickable">
+									<div class="tooltip center-left">
+										Copy
+									</div>
+								</i>
+								<i class="icon-trash clickable">
+									<div class="tooltip center-left">
+										Delete
+									</div>
+								</i>
+							</div>
+							<div class="list-sub-item">
+								<input class="flex-grow" type="text" value="walkFront000.png" />
+								<i class="icon-copy clickable">
+									<div class="tooltip center-left">
+										Copy
+									</div>
+								</i>
+								<i class="icon-trash clickable">
+									<div class="tooltip center-left">
+										Delete
+									</div>
+								</i>
+							</div>
+							<div class="list-sub-item">
+								<input class="flex-grow" type="text" value="walkFront000.png" />
+								<i class="icon-copy clickable">
+									<div class="tooltip center-left">
+										Copy
+									</div>
+								</i>
+								<i class="icon-trash clickable">
+									<div class="tooltip center-left">
+										Delete
+									</div>
+								</i>
+							</div>
+							<div class="list-sub-item">
+								<input class="flex-grow" type="text" value="walkFront000.png" />
+								<i class="icon-copy clickable">
+									<div class="tooltip center-left">
+										Copy
+									</div>
+								</i>
+								<i class="icon-trash clickable">
+									<div class="tooltip center-left">
+										Delete
+									</div>
+								</i>
 							</div>
 						</div>
 					</div>
-					<div id="canvas-containers">
-						<div id="frame-view" class="container canvas-view">
-							<div class="title">Frame View</div>
-							<div class="canvas-body">
-								<div style="background-color: white" class="flex-grow">
+				</div>
+				<div id="animation-view" class="container canvas-view">
+					<div class="title">Animation View</div>
+					<div class="body">
+						<div style="background-color: white; flex-grow: 1;"></div>
+						<div class="canvas-end">
+							<div class="list-item">
+								<div class="label-text">
+									<i class="icon-speed">
+										<div class="tooltip top">
+											Animation Speed
+										</div>
+									</i>
 								</div>
-								<div class="canvas-end">
-									<div class="list-item">
-										<div class="label-text">O</div>
-										<div class="label-text">Behind</div>
-										<input type="number" value="0" />
-										<div class="label-text">Ahead</div>
-										<input type="number" value="0" />
-									</div>
-									<div class="flex-grow"></div>
-									<div class="label-text">X</div>
-									<div class="label-text">+</div>
-									<div class="label-text">-</div>
+								<div class="label-text">
+									<i class="icon-backward clickable">
+										<div class="tooltip top">
+											Backward
+										</div>
+									</i>
+								</div>
+								<input type="number" value="0" />
+								<div class="label-text">
+									<i class="icon-forward clickable">
+										<div class="tooltip top">
+											Forward
+										</div>
+									</i>
 								</div>
 							</div>
-						</div>
-						<div id="animation-view" class="container canvas-view">
-							<div class="title">Animation View</div>
-							<div class="canvas-body">
-								<div style="background-color: white" class="flex-grow">
+							<div class="flex-pad"></div>
+							<i class="icon-hitbox clickable">
+								<div class="tooltip top">
+									Hitbox
 								</div>
-								<div class="canvas-end">
-									<div class="list-item">
-										<div class="label-text">Q</div>
-										<div class="label-text"><</div>
-										<input type="number" value="0" />
-										<div class="label-text">></div>
+							</i>
+							<i class="icon-move clickable">
+								<div class="tooltip top">
+									Move
+								</div>
+							</i>
+							<i class="icon-zoom-out clickable">
+								<div class="tooltip top">
+									Zoom Out
+								</div>
+							</i>
+							<i class="icon-zoom-in clickable">
+								<div class="tooltip top">
+									Zoom In
+								</div>
+							</i>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="frame-view" class="container canvas-view">
+				<div class="title">Frame View</div>
+				<div class="body">
+					<div style="background-color: white; flex-grow: 1;"></div>
+					<div class="canvas-end">
+						<div class="list-item">
+							<div class="label-text">
+								<i class="icon-onion-skin">
+									<div class="tooltip top">
+										Onion Skin
 									</div>
-									<div class="flex-grow"></div>
-									<div class="label-text">[]</div>
-									<div class="label-text">X</div>
-									<div class="label-text">+</div>
-									<div class="label-text">-</div>
+								</i>
+							</div>
+							<div class="label-text">Behind</div>
+							<input type="number" value="0" />
+							<div class="label-text">Ahead</div>
+							<input type="number" value="0" />
+						</div>
+						<div class="flex-pad"></div>
+						<i class="icon-move clickable">
+							<div class="tooltip top">
+								Move
+							</div>
+						</i>
+						<i class="icon-zoom-out clickable">
+							<div class="tooltip top">
+								Zoom Out
+							</div>
+						</i>
+						<i class="icon-zoom-in clickable">
+							<div class="tooltip top">
+								Zoom In
+							</div>
+						</i>
+					</div>
+				</div>
+			</div>
+			<div id="frame-col">
+				<div id="frame-data" class="container">
+					<div class="title">Frame Data</div>
+					<div class="body">
+						<div class="flex-dir-col">
+							<div class="list-item blue">
+								<div class="label-text">Animation Priority</div>
+								<div class="flex-pad"></div>
+								<input type="number" value="0" />
+							</div>
+							<div class="flex-dir-row">
+								<div class="flex-dir-col flex-pad">
+									<div class="list-item">
+										<div class="label-text">OffsetX</div>
+										<div class="flex-pad"></div>
+										<input type="number" value="0" />
+									</div>
+									<div class="list-item">
+										<div class="label-text">OffsetY</div>
+										<div class="flex-pad"></div>
+										<input type="number" value="0" />
+									</div>
+									<div class="list-item">
+										<div class="label-text">Frame Time</div>
+										<div class="flex-pad"></div>
+										<input type="number" value="0" />
+									</div>
+								</div>
+								<div class="flex-dir-col flex-pad">
+									<div class="list-item">
+										<div class="label-text">VelocityX</div>
+										<div class="flex-pad"></div>
+										<input type="number" value="0" />
+									</div>
+									<div class="list-item">
+										<div class="label-text">VelocityY</div>
+										<div class="flex-pad"></div>
+										<input type="number" value="0" />
+									</div>
 								</div>
 							</div>
 						</div>
@@ -140,112 +307,92 @@
 				</div>
 				<div id="hitbox-list" class="container">
 					<div class="title">Hitbox List</div>
-					<div id="hitbox-list-body" class="flex-dir-row">
-						<div id="hitbox-list-buttons">
+					<div class="body">
+						<div class="flex-dir-row">
+							<div class="button green">
+								Add Hitbox
+							</div>
 							<div class="button">
 								Add Hurtbox
 							</div>
-							<div class="button">
-								Add Hitbox
-							</div>
 						</div>
-						<div id="hitbox-list-table" class="flex-dir-col-small">
+
+						<div id="hitbox-list-table" class="flex-dir-col">
 							<div id="hitbox-list-table-header">
 								<div class="num-col"></div>
-								<div class="type-col">Type</div>
-								<div class="table-cell">OffsetX</div>
-								<div class="table-cell">OffsetY</div>
+								<div class="table-cell">X</div>
+								<div class="table-cell">Y</div>
 								<div class="table-cell">Height</div>
 								<div class="table-cell">Width</div>
-								<div class="table-cell">Priority</div>
 								<div class="table-cell">Damage</div>
 								<div class="table-cell">Hit Sun</div>
-								<div class="num-col"></div>
+								<div class="action-col"></div>
 							</div>
-							<div id="hitbox-list-table-body" class="flex-grow flex-dir-col-small">
-								<div id="hitbox-list-table-row">
-									<div class="num-col">1</div>
-									<div class="type-col">
-										<div class="select">
-											<div class="select-title">Hitbox</div>
-											<input type="checkbox" id="hitbox-select" />
-											<div class="options">
-												<div>Hitbox</div>
-												<div>Hurtbox</div>
-											</div>
+							<div id="hitbox-list-table-body" class="flex-grow flex-dir-col">
+								<div class="flex-dir-col" style="height: 0">
+									<div id="hitbox-list-table-row" class="hurtbox">
+										<div class="num-col">1</div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="action-col flex-dir-row">
+											<i class="icon-switch clickable">
+												<div class="tooltip center-far-left">
+													Change to Hitbox/Hurtbox
+												</div>
+											</i>
+											<i class="icon-cross clickable">
+												<div class="tooltip center-left">
+													Delete
+												</div>
+											</i>
 										</div>
 									</div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="num-col">x</div>
-								</div>
-								<div id="hitbox-list-table-row">
-									<div class="num-col">1</div>
-									<div class="type-col">
-										<div class="select">
-											<div class="select-title">Hitbox</div>
-											<input type="checkbox" id="hitbox-select" />
-											<div class="options">
-												<div>Hitbox</div>
-												<div>Hurtbox</div>
-											</div>
+									<div id="hitbox-list-table-row" >
+										<div class="num-col">1</div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="action-col flex-dir-row">
+											<i class="icon-switch clickable">
+												<div class="tooltip center-far-left">
+													Change to Hitbox/Hurtbox
+												</div>
+											</i>
+											<i class="icon-cross clickable">
+												<div class="tooltip center-left">
+													Delete
+												</div>
+											</i>
 										</div>
 									</div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="num-col">x</div>
-								</div>
-								<div id="hitbox-list-table-row">
-									<div class="num-col">1</div>
-									<div class="type-col">
-										<div class="select">
-											<div class="select-title">Hitbox</div>
-											<input type="checkbox" id="hitbox-select" />
-											<div class="options">
-												<div>Hitbox</div>
-												<div>Hurtbox</div>
-											</div>
+									<div id="hitbox-list-table-row" >
+										<div class="num-col">1</div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="action-col flex-dir-row">
+											<i class="icon-switch clickable">
+												<div class="tooltip center-far-left">
+													Change to Hitbox/Hurtbox
+												</div>
+											</i>
+											<i class="icon-cross clickable">
+												<div class="tooltip center-left">
+													Delete
+												</div>
+											</i>
 										</div>
 									</div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="num-col">x</div>
-								</div>
-								<div id="hitbox-list-table-row">
-									<div class="num-col">1</div>
-									<div class="type-col">
-										<div class="select">
-											<div class="select-title">Hitbox</div>
-											<input type="checkbox" id="hitbox-select" />
-											<div class="options">
-												<div>Hitbox</div>
-												<div>Hurtbox</div>
-											</div>
-										</div>
-									</div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="table-cell"><input type="number" value="0" /></div>
-									<div class="num-col">x</div>
 								</div>
 							</div>
 						</div>

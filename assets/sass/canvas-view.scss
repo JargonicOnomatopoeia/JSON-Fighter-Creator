@@ -1,30 +1,22 @@
-#canvas-containers {
-  @include flex-mixin;
-  flex-grow: 1;
-}
-
 .canvas-view {
-  @include flex-mixin;
-  row-gap: unset !important;
-  flex-basis: 50%;
-  flex-direction: column;
-
-  .canvas-body {
+  .canvas-end {
     @include flex-mixin;
-    flex-grow: 1;
-    flex-direction: column;
-    
-    .canvas-end {
-      @include flex-mixin;
-      align-items: center;
-      .list-item {
-        width: unset;
+    align-items: center;
+    .list-item {
+      width: unset;
 
-        input {
-          text-align: center;
-          width: 30px;
-        }
+      input {
+        text-align: center;
+        width: 30px;
       }
     }
   }
+}
+
+#animation-view {
+  flex-basis: 50%;
+}
+
+#frame-view {
+  flex-grow: 1;
 }
