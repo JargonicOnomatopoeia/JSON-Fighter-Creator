@@ -1,0 +1,50 @@
+
+#hitbox-list {
+  flex-grow: 1;
+  &-table {
+    flex-grow:1;
+
+    &-header {
+      display:flex;
+      @include label-text;
+    }
+
+    &-row {
+      @include item-container;
+      padding: 10px 0px;
+      column-gap: unset;
+      background: $lightGreen;
+
+      &.hurtbox {
+        background: $neonYellow !important;
+      }
+
+      .num-col {
+        @include label-text;
+        color: $darkGrey !important;
+        text-align: center;
+      }
+    }
+
+    &-body {
+      flex-grow: 1;
+      @include scrollable;
+    }
+
+    .num-col {
+      flex-basis: 7%;
+    }
+
+    .table-cell {
+      flex-basis: 14%;
+    }
+
+    .action-col {
+      flex-grow: 1;
+      color: $darkGrey !important;
+      padding-right: 8px;
+    }
+
+  }
+}
+

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-16" />
+		<title>JSON Fighter Creator | A Javascript Tool by William Starkovich | Modified By Clone1542</title>
+		<link rel='stylesheet' href='style.css' />
+		<!---<link rel="stylesheet" href="https://unpkg.com/98.css"> -->
+		<link rel="stylesheet" href="./98.css">
+		<!--- <script type="text/javascript" src="./js/jhbc.js"></script> -->
+		<script type="module" src="./js/main.js"></script>
+	</head>
+
+	<body style="background-color: #c0c0c0;">
+			<div class="grid-col-row-7 fullscreen">
+				<!-- This will show the animated sprites -->
+				<div id="json-screen" class="field-row-stacked">
+					<textarea id="text20 jsonoutput" style="height: 100%; resize: none;" placeholder="JSON Output"></textarea>
+				</div>
+				<div id="frame-data">
+					<table style="width:100%;height: 100%;text-align:center;">
+						<thead>
+							<tr>
+								<th colspan="6">Frame Data</th>
+							</tr>
+							<tr>
+								<th>Rotation</th>
+								<th>OffsetX</th>
+								<th>OffsetY</th>
+								<th>VelocityX</th>
+								<th>VelocityY</th>
+								<th>Frame Time</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr id="frame-data-list">
+								<td><input class="frame-data-input" type="number" value="0"></td>
+								<td><input class="frame-data-input" type="number" value="0"></td>
+								<td><input class="frame-data-input" type="number" value="0"></td>
+								<td><input class="frame-data-input" type="number" value="0"></td>
+								<td><input class="frame-data-input" type="number" value="0"></td>
+								<td><input class="frame-data-input" type="number" value="0"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="table-background" id="animation-list-container" style="overflow-y:scroll; height: 100%; width: 100%; background-color: white;">
+					<table id="animation-list"  style="height:fit-content; width: 100%;text-align:center;">
+						<thead>
+							<td colspan="3">Animation List</td>
+						</thead>
+					</table>
+				</div>
+				<div id="animation-options" class="grid-row-3" style="width:100%; height:100%; gap: 10px;">
+						<div style="align-content:center;">
+							<input id="image-upload" type="file" multiple="true" accept="image/png, image/jpg, image/jpeg">
+						</div>
+						
+						<div class="grid-col-2 grid-row-span-2">
+							<button id="json-clipboard">Copy JSON To Clipboard</button>
+							<button id="json-download">Download JSON File</button>
+						</div>
+				</div>
+				<!-- This will show the current frame sprite -->
+				<div id="hitbox-table">
+					<div class="table-background" style="overflow-y: scroll; height: 100%;">
+						<table style="width: 100%; text-align:center;">
+							<thead>
+								<tr>
+									<th colspan="10">Hitbox List</th>
+								</tr>
+								<tr>
+									<th>#</th>
+									<th>Type</th>
+									<th>OffsetX</th>
+									<th>OffsetY</th>
+									<th>Width</th>
+									<th>Height</th>
+									<th>Priority</th>
+									<th>Damage</th>
+									<th>Hit Stun</th>
+									<th>Close</th>
+								</tr>
+							</thead>
+							<tbody id="hitbox-list">
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div id="animation-list-buttons-container" class="grid-col-2 grid-row-2" style="height: 100%;">
+					<button id="add-new-hitbox" class="grid-row-span-2" style="width: 100%;">Add Hitbox</button>
+					<button id="copy-hitbox-list" class="grid-row-span-2" style="width: 100%;">Copy Hitbox List</button>
+					<div class="grid-row-2 grid-row-span-2" id="after-copy-hitbox-list" style="display: none; height: 100%;">
+						<button id="paste-hitbox-list" style="width: 100%;">Paste Hitbox</button>
+						<button id="cancel-copy-hitbox-list" style="width: 100%;">Cancel Copy Hitbox</button>
+					</div>
+				</div>
+
+				<div id="canvas-container">
+					<canvas class="canvas-screen" id="editor-canvas" width="363" height="217" ></canvas>
+					<canvas class="canvas-screen" id="animation-canvas" width="363" height="217" ></canvas>
+				</div>
+				<div id="canvas-properties" class="grid-col-2">
+					<table style="width: 100%;">
+						<thead>
+							<tr>
+								<th colspan="3">
+									Animation Canvas
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Animation Speed</td>
+								<td colspan="2"><input id="canvas-animation-speed" class="frame-data-input" type="number" value=12></td>
+							</tr>
+							<tr>
+								<td>Animation Screen Position</td>
+								<td><input id="canvas-animation-pos-x" class="frame-data-input" type="number" placholder="X" value=0></td>
+								<td><input id="canvas-animation-pos-y" class="frame-data-input" type="number" placeholder="Y" value=0></td>
+							</tr>
+							<tr>
+								<td>Animation Screen Scale</td>
+								<td><input id="canvas-animation-scale-x" class="frame-data-input" type="number" placholder="X" value=0></td>
+								<td><input id="canvas-animation-scale-y" class="frame-data-input" type="number" placeholder="Y" value=0></td>
+							</tr>
+							
+						</tbody>
+					</table>
+					<table style="width: 100%;">
+						<thead>
+							<tr>
+								<th colspan="3">
+									Editor Canvas
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Onion Skin </td>
+								<td><input id="canvas-onion-behind" class="frame-data-input" type="number" value=0></td>
+								<td><input id="canvas-animation-ahead" class="frame-data-input" type="number" value=0></td>
+							</tr>
+							<tr>
+								<td>Sprite Screen Position </td>
+								<td><input id="canvas-sprite-pos-x" class="frame-data-input" type="number" value=0></td>
+								<td><input id="canvas-sprite-pos-y" class="frame-data-input" type="number" value=0></td>
+							</tr>
+							<tr>
+								<td>Sprite Screen Position </td>
+								<td><input id="canvas-sprite-pos-x" class="frame-data-input" type="number" value=0></td>
+								<td><input id="canvas-sprite-pos-y" class="frame-data-input" type="number" value=0></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+	</body>
+</html>

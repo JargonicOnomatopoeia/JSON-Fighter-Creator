@@ -1,0 +1,66 @@
+body {
+  color: $neonYellow;
+  background-color: $black;
+  margin: 0px !important;
+}
+
+#app {
+  height: calc(100vh - 32px);
+  width: calc(100vw - 32px);
+  padding: 16px;
+
+  display: flex;
+  column-gap: 16px;
+  row-gap: 16px;
+}
+
+.container {
+  background: $darkGrey;
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+
+  .title {
+    font-family: $header-font-stack;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 30px;
+    letter-spacing: 0.04em;
+    margin-bottom: 16px;
+    display: flex;
+    column-gap: 8px;
+  }
+
+  .body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+  }
+}
+
+#animation-col {
+  flex-basis: 22.9%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+}
+
+#frame-col {
+  flex-basis: 35%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+}
+
+.flex-pad {
+  flex-grow:1;
+} 
+
+.list-item {
+  @include item-container;
+  border-radius: 10px;
+  background: $greenGrey;
+  width: unset;
+}

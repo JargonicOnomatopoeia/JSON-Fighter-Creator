@@ -1,0 +1,19 @@
+#animation-list {
+  flex-basis: 50%;
+
+    .list-list {
+      display: flex;
+      flex-direction: column;
+      row-gap: 8px;
+      height: 0px;
+    }
+
+    .list-item {
+      @include list-item;
+    }
+
+    .list-sub-item {
+      @include list-item;
+      margin-left: 16px;
+    }
+}

@@ -1,0 +1,22 @@
+.canvas-view {
+  .canvas-end {
+    @include flex-mixin;
+    align-items: center;
+    .list-item {
+      width: unset;
+
+      input {
+        text-align: center;
+        width: 30px;
+      }
+    }
+  }
+}
+
+#animation-view {
+  flex-basis: 50%;
+}
+
+#frame-view {
+  flex-grow: 1;
+}
