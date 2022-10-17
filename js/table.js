@@ -1,9 +1,7 @@
-import { InitializeFrameData } from "./animationlist.js";
-import { DisplayInJson } from "./JSONOutput.js";
-import { currentFrame } from "./main.js";
+import { displayInJson } from "./jsonOutput.js";
 import {FilterStringNoIndentsLines, NumberNotEmpty, SelectedTextFilter } from "./textfilter.js";
 
-export const Hitbox = {
+/*export const hitbox = {
 
     table : null,
     rows : [],
@@ -27,10 +25,10 @@ export const Hitbox = {
         }
     },
 
-    AddHitbox : () => {
+    addHitbox : () => {
         if(currentFrame != null){
-            let newDataHolder = new Hitbox(currentFrame);
-            currentFrame.AddHitbox(newDataHolder);
+            let newDataHolder = new hitbox(currentFrame);
+            currentFrame.addHitbox(newDataHolder);
             let newRow = AddNewRow(currentFrame.hitbox.length, newDataHolder, currentFrame);
             HitboxRows.rows.push(newRow);
             HitboxRows.table.appendChild(newRow);
@@ -62,7 +60,7 @@ export const Hitbox = {
             HitboxRows.copiedFrame = currentFrame;
             for(let x = 0; x < currentFrame.hitbox.length;x++){
                 
-                let dup = new Hitbox();
+                let dup = new hitbox();
                 let tempHitbox = dup.hitbox;
                 let origHitbox = currentFrame.hitboxList[x];
 
@@ -93,7 +91,7 @@ export const Hitbox = {
             while(copiedHitboxes.length > 0){
                 let hitbox = copiedHitboxes.shift();
                 hitbox.frameData = currentFrame;
-                currentFrame.AddHitbox(hitbox);
+                currentFrame.addHitbox(hitbox);
             }
 
             currentCopiedFrame = null;
@@ -108,7 +106,7 @@ export const Hitbox = {
         let copiedHitboxes = HitboxRows.copiedHitbox;
 
         while(copiedHitboxes.length > 0){
-            copiedHitboxes.pop().DeleteThis();
+            copiedHitboxes.pop().deleteThis();
         }
     }
 
@@ -156,7 +154,7 @@ export const FrameData = {
                         
                         currentFrame[primaryKey][secondaryKey] = value;
                         
-                        DisplayInJson();
+                        displayInJson();
                     });
                     y++;
                     y = y % secondaryKeys.length;
@@ -175,7 +173,7 @@ export const FrameData = {
                         }
                         
                         currentFrame[primaryKey] = value;
-                        DisplayInJson();
+                        displayInJson();
                     });
                     
                 ;break;
@@ -212,12 +210,16 @@ export const FrameData = {
             }
         }
     }
-}
+}*/
 
-export const DeleteRow = (container) => {
-    
+export const deleteRow = (container) => {
+    if(container == null){
+        return;
+    }
+
     while(container.hasChildNodes()){
         let child = container.firstChild;
+        //console.log(child);
         while(child.hasChildNodes()){
             child.removeChild(child.firstChild);
         }

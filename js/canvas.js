@@ -1,76 +1,78 @@
-export const canvasAnimator = null;
-export const canvasEditor = null;
+import * as animationList from "./animationList.js";
 
-export const CanvasInitialize = () => {
-    canvasEditor = new CanvasEditor();
-    canvasAnimator = new CanvasAnimator();
-}
+export let colorHitbox = "rgba(255, 0, 0, 0.41)";
+export let colorHurtbox = "rgba(0, 255, 34, 0.41)";
 
-class Canvas{
-    constructor(document, _width, _height){
+export let speedPan = 1;
+export let speedZoom = 0.0005;
+
+export class canvas{
+    constructor(document, _width = 0, _height = 0, _offsetx = 0, _offsety = 0){
         this.canvas = document;
-        this.context = this.canvas.context('2d');
-        this.screen = {
-            width: _width,
-            height: _height
+        this.context = this.canvas.getContext('2d');
+    }
+
+    erase = () => {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    getMousPos = (clientX, clientY) => {
+        let rect = this.canvas.getBoundingClientRect();
+
+        return {
+            x: clientX - rect.left,
+            y: clientY - rect.top
         }
-
-        this.scale = 1;
     }
 
-    Resize = () => {
-        this.canvas.width = this.canvas.width * (this.canvas.width/this.screen.width);
-        this.canvas.height = this.canvas.height * (this.canvas.height/this.screen.height);
-    }
-}
-
-class CanvasEditor{
-    constructor(){
-        let canvas = document.getElementById("editor-canvas");
-        this.canvasClass = new Canvas(canvas, 1317, 635);
-    }
-}
-
-class CanvasAnimator{
-    constructor(){
-        let canvas = document.getElementById("animation-canvas");
-        this.canvasClass = new Canvas(canvas, 1317, 635);
-        this.animationSet = null;
-        this.animationFrame = 0;
-        this.animationFrameTime = 0;
-        this.animationIndex = 0;
-        this.animationSpeed = 12;
+    displayerFrame = (frame, hasFilter = false, filterString = 'sepia(100%)') => {
+        this.context.save();
+        let cframeData = frame.frameData;
+        let cImage = middle(frame.image.width, frame.image.height);
+        let imgoffsetx = cframeData.offset.x - cImage.x;
+        let imgoffsety = cframeData.offset.y - cImage.y;
+        
+        this.context.rotate(cframeData.rotate * Math.PI / 180);
+        if(hasFilter == true){
+            this.context.filter = filterString;
+        }
+        this.context.drawImage(frame.image, imgoffsetx, imgoffsety);
+            //this.context.strokeStyle = color;
+            //this.context.strokeRect(imgoffsetx, imgoffsety, frame.image.width, frame.image.height);   
+        
+        this.context.restore();
     }
 
-    Initialize = (_animationSet) => {
-        this.animationSet = _animationSet;
-        this.animationFrame = 0;
-        this.animationFrameTime = 0;
-        this.animationFrameIndex = 0;
-    }
+    displayerHitbox = (currentHitbox, currentFrame, color, stroke = false) => {
+        let hitboxData = currentHitbox.hitbox;
+        let frameData = currentFrame.frameData;
+        let centerh = middle(hitboxData.width, hitboxData.height);
 
-    AnimationPlay = () => {
-        requestAnimationFrame(AnimationPlayer);
+        let offsetx = hitboxData.offset.x + frameData.offset.x - centerh.x;
+        let offsety = hitboxData.offset.y + frameData.offset.y - centerh.y;
 
-        if(this.animationSet != null && this.animationSet.animatonset.frameDataListClasses[this.animationFrameIndex].frametime <= this.animationFrameTime){
-            let frameData  = this.animationSet.frameDataListClasses[this.animationFrameIndex];
-            
-            frameData.Draw(this.canvas, this.context, this.canvasClass.scale);
-
-            for(let x = 0; x < frameData.hitboxListClasses.length;x++){
-                let hitbox = frameData.hitboxListClasses[x];
-                let midx = -(frameData.image.width/2);
-                let midy = -(frameData.image.height/2);
-                hitbox.Draw(this.canvas, this.context, midx, midy, this.canvasClass.scale);
-            }
-
-            if(this.animationFrame >= this.animationSpeed){
-                this.animationFrame = this.animationFrame % this.animationSpeed;
-                this.animationFrameTime = 0;
-                this.animationFrameIndex = this.animationFrameIndex % this.animationSet.frameDataListClasses.length;
-            }
+        if(stroke == false){
+            this.context.fillStyle = color;
+            this.context.fillRect(offsetx, offsety, hitboxData.width, hitboxData.height);
         }else{
-            this.animationFrameTime++;
+            this.context.strokeStyle = color;
+            this.context.strokeRect(offsetx, offsety, hitboxData.width, hitboxData.height);
         }
+        
     }
+}
+
+export const middle = (width, height) => {
+    return {
+        x: width/2,
+        y: height/2
+    }
+}
+
+export const clamp = (num, min, max) => {
+    return Math.max(min, Math.min( num, max));
+}
+
+export const isBetween = (number, min, max) => {
+    return number >= min && number <= max;
 }

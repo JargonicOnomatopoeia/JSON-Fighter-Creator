@@ -1,14 +1,10 @@
-import {BuildTreeList} from './animationlist.js'
-import { FrameData, HitboxRows } from './table.js';
-import { CopyJSONToClipboard, DisplayInJson, DownloadJSON } from './JSONOutput.js';
-import { canvasAnimator, canvasEditor, CanvasInitialize } from './canvas.js';
+import * as animationList from './animationList.js'
+import { displayInJson } from './jsonOutput.js';
+import { animationPlay , animatorInitialize }from './animator.js';
+import { showFrame , editorInitialize } from './editor.js';
 
-export const animationList = [];
-export const currentAnimation = null;
-export const currentFrame = null;
 
 window.onload = () => {
-    hitboxList = document.getElementById("hitboxes");
 
     //#region Declarations
     let imageUploader = document.getElementById("image-upload");
@@ -20,27 +16,32 @@ window.onload = () => {
     let buttonDownload = document.getElementById("json-download");
     let buttonClipboard = document.getElementById("json-clipboard");
 
-    CanvasInitialize();
-    FrameData.Initialize();
-    HitboxRows.Initialize();
+    animationList.initialize();
+    editorInitialize();
+    animatorInitialize();
+    //FrameData.Initialize();
+    //HitboxRows.Initialize();
     //#endregion
     
     imageUploader.addEventListener("change", (e) =>{
         if(window.File && window.FileReader && window.FileList && window.Blob){
-            let files = e.target.files;
-            BuildTreeList(files, currentAnimation, animationList);
-            DisplayInJson();
+            animationList.buildAnimationSprite(e.target.files);
+            displayInJson();
         }
     });
 
     buttonNewHitbox.addEventListener("click", () => {
-        HitboxRows.AddHitbox();
-        DisplayInJson();
+        if(animationList.currentFrame != null){
+            let newHitbox = animationList.currentFrame.AddNewHitbox();
+            newHitbox.addTableRow(animationList.hitboxListElem);
+            displayInJson();
+        }
+        
     });
 
-    buttonDownload.addEventListener("click", DownloadJSON);
-    buttonClipboard.addEventListener("click", CopyJSONToClipboard);
-
+    //buttonDownload.addEventListener("click", DownloadJSON);
+    //buttonClipboard.addEventListener("click", CopyJSONToClipboard);
+    /*
     buttonCopyHitbox.addEventListener("click", () => {
         let checker = HitboxRows.CopyAll();
         switch(checker){
@@ -59,7 +60,7 @@ window.onload = () => {
                 buttonCopyHitbox.hidden = false;
                 HitboxRows.Clear();
                 HitboxRows.AddRows();
-                DisplayInJson();
+                displayInJson();
                 break;
             case false:;break;
         }
@@ -70,9 +71,12 @@ window.onload = () => {
         pasteCancelContainer.style.display = "none";
         buttonCopyHitbox.hidden = false;
     });
+*/
+    requestAnimationFrame(animationPlay);
+    requestAnimationFrame(showFrame);
 
-    requestAnimationFrame(AnimationPlayer.AnimationPlay);
 }
+/*
 
 window.onresize = () => {
     ResizeCanvas();
@@ -83,4 +87,4 @@ const ResizeCanvas = () => {
     canvasEditor.Resize();
 }
 
-
+*/

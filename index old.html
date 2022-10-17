@@ -7,8 +7,6 @@
 		<!---<link rel="stylesheet" href="https://unpkg.com/98.css"> -->
 		<link rel="stylesheet" href="./98.css">
 		<!--- <script type="text/javascript" src="./js/jhbc.js"></script> -->
-		<script type="module" src="./js/animation.js"></script>
-		<script type="module" src="./js/frame.js"></script>
 		<script type="module" src="./js/main.js"></script>
 	</head>
 
@@ -63,7 +61,7 @@
 						</div>
 				</div>
 				<!-- This will show the current frame sprite -->
-				<div id="hitbox-list">
+				<div id="hitbox-table">
 					<div class="table-background" style="overflow-y: scroll; height: 100%;">
 						<table style="width: 100%; text-align:center;">
 							<thead>
@@ -75,15 +73,15 @@
 									<th>Type</th>
 									<th>OffsetX</th>
 									<th>OffsetY</th>
-									<th>Height</th>
 									<th>Width</th>
+									<th>Height</th>
 									<th>Priority</th>
 									<th>Damage</th>
 									<th>Hit Stun</th>
 									<th>Close</th>
 								</tr>
 							</thead>
-							<tbody id="hitboxes">
+							<tbody id="hitbox-list">
 
 							</tbody>
 						</table>
@@ -158,7 +156,5 @@
 					</table>
 				</div>
 			</div>
-			
-			
 	</body>
 </html>
