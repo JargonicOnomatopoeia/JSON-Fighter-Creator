@@ -1,7 +1,11 @@
 @mixin flex-mixin {
   display: flex;
   column-gap: 16px;
+}
+@mixin flex-mixin-col {
+  @include flex-mixin;
   row-gap: 8px;
+  flex-direction: column;
 }
 
 @mixin label-text {
@@ -30,16 +34,24 @@
   column-gap: 8px;
 }
 
+@mixin clickable-hover {
+  cursor: pointer;
+  opacity: 80%;
+}
+
+@mixin clickable-active {
+  opacity: 100% !important;
+  cursor: pointer;
+  color: white;
+}
+
 @mixin clickable {
   &:hover {
-    cursor: pointer;
-    opacity: 80%;
+    @include clickable-hover;
   }
   
   &:active {
-    opacity: 100%;
-    cursor: pointer;
-    color: white;
+    @include clickable-active;
   }
 
   &:has(*:hover), &:has(*:active) {
@@ -75,8 +87,7 @@
 }
 
 .flex-dir-col {
-  @include flex-mixin;
-  flex-direction: column;
+  @include flex-mixin-col;
 }
 
 .clickable {
