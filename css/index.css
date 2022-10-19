@@ -172,35 +172,40 @@ div.accordion {
   transition: max-height 1000ms;
 }
 div.accordion:has(input[type=checkbox]:checked) {
-  max-height: 50000px;
-  transition: max-height 500ms;
+  max-height: 5000px;
 }
-div.accordion > .accordion-head > i.accordion-arrow {
+div.accordion > .accordion-head {
+  display: flex;
+  column-gap: 16px;
+  row-gap: 8px;
+  flex-direction: column;
+}
+div.accordion > .accordion-head i.accordion-arrow {
   position: relative;
 }
-div.accordion > .accordion-head > i.accordion-arrow::before {
+div.accordion > .accordion-head i.accordion-arrow::before {
   transition: transform 500ms;
   transform: rotate(-90deg);
 }
-div.accordion > .accordion-head > i.accordion-arrow > input[type=checkbox] {
+div.accordion > .accordion-head i.accordion-arrow > input[type=checkbox] {
   opacity: 0;
   position: absolute;
   width: 15px;
   left: 0px;
 }
-div.accordion > .accordion-head > i.accordion-arrow > input[type=checkbox]:hover {
+div.accordion > .accordion-head i.accordion-arrow > input[type=checkbox]:hover {
   cursor: pointer;
 }
-div.accordion > .accordion-head > i.accordion-arrow:has(> input[type=checkbox]:active) {
+div.accordion > .accordion-head i.accordion-arrow:has(> input[type=checkbox]:active) {
   opacity: 100% !important;
   cursor: pointer;
   color: white;
 }
-div.accordion > .accordion-head > i.accordion-arrow:has(> input[type=checkbox]:hover) {
+div.accordion > .accordion-head i.accordion-arrow:has(> input[type=checkbox]:hover) {
   cursor: pointer;
   opacity: 80%;
 }
-div.accordion > .accordion-head > i.accordion-arrow:has(> input[type=checkbox]:checked)::before {
+div.accordion > .accordion-head i.accordion-arrow:has(> input[type=checkbox]:checked)::before {
   transform: rotate(0deg);
 }
 div.accordion > .accordion-head:has(input[type=checkbox]:checked) + .accordion-body {

@@ -5,13 +5,13 @@ div.accordion {
   transition: max-height 1000ms;
 
   &:has( input[type="checkbox"]:checked) {
-    max-height: 50000px;
-    transition: max-height 500ms;
+    max-height: 5000px;
   }
 
   > .accordion-head {
+    @include flex-mixin-col;
     
-    > i.accordion-arrow {
+    i.accordion-arrow {
       position: relative;
 
       &::before {
