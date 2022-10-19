@@ -10,4 +10,5 @@
   padding: 30px 0px;
   text-align: center;
   @include clickable;
+  @include uneditable-text;
 }

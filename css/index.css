@@ -23,6 +23,12 @@
 }
 
 .label-text {
+  cursor: default;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   font-family: "Poppins Bold", Helvetica, sans-serif;
   color: #D5EDA5;
   font-weight: 600;
@@ -135,6 +141,12 @@ input[type=number] {
   width: 100%;
   padding: 30px 0px;
   text-align: center;
+  cursor: default;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .button:hover {
   cursor: pointer;
@@ -275,6 +287,12 @@ div.accordion > .accordion-body {
 }
 #hitbox-list-table-header {
   display: flex;
+  cursor: default;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   font-family: "Poppins Bold", Helvetica, sans-serif;
   color: #D5EDA5;
   font-weight: 600;
@@ -296,6 +314,12 @@ div.accordion > .accordion-body {
   background: #D5EDA5 !important;
 }
 #hitbox-list-table-row .num-col {
+  cursor: default;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   font-family: "Poppins Bold", Helvetica, sans-serif;
   color: #D5EDA5;
   font-weight: 600;
@@ -373,6 +397,12 @@ body {
   flex-direction: column;
 }
 .container .title {
+  cursor: default;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   font-family: "Poppins Bold", Helvetica, sans-serif;
   font-weight: 700;
   font-size: 20px;

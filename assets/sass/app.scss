@@ -22,6 +22,7 @@ body {
   flex-direction: column;
 
   .title {
+    @include uneditable-text;
     font-family: $header-font-stack;
     font-weight: 700;
     font-size: 20px;
