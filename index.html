@@ -3,39 +3,36 @@
 	<head>
 		<meta charset="utf-16" />
 		<title>JSON Fighter Creator | A Javascript Tool by William Starkovich | Modified By Clone1542</title>
-		<link rel='stylesheet' href='style.css' />
 		<link rel="stylesheet" href="./css/index.css">
 		<link rel="stylesheet" href="./css/Glyphter.css">
-		<script type="module" src="./js/animation.js"></script>
-		<script type="module" src="./js/frame.js"></script>
 		<script type="module" src="./js/main.js"></script>
 	</head>
 
 	<body>
 		<div id="app" class="flex-dir-row">
 			<div id="animation-col">
-				<div id="animation-list" class="container">
+				<div id="animation-list-container" class="container">
 					<div class="title">
 						Animation List
 						<div class="flex-pad" ></div>
-						<i class="icon-add-file clickable">
+						<i id='addfile' class="icon-add-file clickable">
 							<div class="tooltip">
 								Add File
 							</div>
 						</i>
-						<i class="icon-copy-code clickable">
+						<i id='cpjson' class="icon-copy-code clickable">
 							<div class="tooltip">
 								Copy JSON
 							</div>
 						</i>
-						<i class="icon-download clickable">
+						<i id='dljson' class="icon-download clickable">
 							<div class="tooltip">
 								Download JSON
 							</div>
 						</i>
 					</div>
 					<div class="body scrollable">
-						<div class="list-list">
+						<div id="animation-list" class="list-list">
 							<div class="accordion">
 								<div class="accordion-head">
 									<div class="list-item list-item-active">
@@ -423,36 +420,36 @@
 									<div class="list-item">
 										<div class="label-text">OffsetX</div>
 										<div class="flex-pad"></div>
-										<input type="number" value="0" />
+										<input class="finput" type="number" value="0" />
 									</div>
 									<div class="list-item">
 										<div class="label-text">OffsetY</div>
 										<div class="flex-pad"></div>
-										<input type="number" value="0" />
+										<input class="finput" type="number" value="0" />
 									</div>
 									<div class="list-item">
 										<div class="label-text">Frame Time</div>
 										<div class="flex-pad"></div>
-										<input type="number" value="0" />
+										<input class="finput" type="number" value="0" />
 									</div>
 								</div>
 								<div class="flex-dir-col flex-pad">
 									<div class="list-item">
 										<div class="label-text">VelocityX</div>
 										<div class="flex-pad"></div>
-										<input type="number" value="0" />
+										<input class="finput" type="number" value="0" />
 									</div>
 									<div class="list-item">
 										<div class="label-text">VelocityY</div>
 										<div class="flex-pad"></div>
-										<input type="number" value="0" />
+										<input class="finput" type="number" value="0" />
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div id="hitbox-list" class="container">
+				<div id="hitbox-list-container" class="container">
 					<div class="title">Hitbox List</div>
 					<div class="body">
 						<div class="flex-dir-row">
@@ -472,11 +469,11 @@
 								<div class="table-cell">Height</div>
 								<div class="table-cell">Width</div>
 								<div class="table-cell">Damage</div>
-								<div class="table-cell">Hit Sun</div>
+								<div class="table-cell">Hit Stun</div>
 								<div class="action-col"></div>
 							</div>
 							<div id="hitbox-list-table-body" class="flex-grow flex-dir-col">
-								<div class="flex-dir-col" style="height: 0">
+								<div id="hitbox-list" class="flex-dir-col" style="height: 0">
 									<div id="hitbox-list-table-row" class="hurtbox">
 										<div class="num-col">1</div>
 										<div class="table-cell"><input type="number" value="0" /></div>

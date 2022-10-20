@@ -221,16 +221,16 @@ div.accordion > .accordion-body {
   transition: height 1000ms;
 }
 
-#animation-list {
+#animation-list-container {
   flex-basis: 50%;
 }
-#animation-list .list-list {
+#animation-list-container .list-list {
   display: flex;
   flex-direction: column;
   row-gap: 8px;
   height: 0px;
 }
-#animation-list .list-item {
+#animation-list-container .list-item {
   display: flex;
   align-items: center;
   color: #D5EDA5;
@@ -239,24 +239,24 @@ div.accordion > .accordion-body {
   column-gap: 8px;
   background: #6D8187;
 }
-#animation-list .list-item:hover {
+#animation-list-container .list-item:hover {
   cursor: pointer;
   opacity: 80%;
 }
-#animation-list .list-item:active {
+#animation-list-container .list-item:active {
   opacity: 100% !important;
   cursor: pointer;
   color: white;
 }
-#animation-list .list-item:has(*:hover), #animation-list .list-item:has(*:active) {
+#animation-list-container .list-item:has(*:hover), #animation-list-container .list-item:has(*:active) {
   cursor: auto !important;
   opacity: 100% !important;
   color: unset;
 }
-#animation-list .list-item-active {
+#animation-list-container .list-item-active {
   background: #8CA6AE;
 }
-#animation-list .list-sub-item {
+#animation-list-container .list-sub-item {
   display: flex;
   align-items: center;
   color: #D5EDA5;
@@ -266,25 +266,25 @@ div.accordion > .accordion-body {
   background: #6D8187;
   margin-left: 16px;
 }
-#animation-list .list-sub-item:hover {
+#animation-list-container .list-sub-item:hover {
   cursor: pointer;
   opacity: 80%;
 }
-#animation-list .list-sub-item:active {
+#animation-list-container .list-sub-item:active {
   opacity: 100% !important;
   cursor: pointer;
   color: white;
 }
-#animation-list .list-sub-item:has(*:hover), #animation-list .list-sub-item:has(*:active) {
+#animation-list-container .list-sub-item:has(*:hover), #animation-list-container .list-sub-item:has(*:active) {
   cursor: auto !important;
   opacity: 100% !important;
   color: unset;
 }
-#animation-list .list-sub-item-active {
+#animation-list-container .list-sub-item-active {
   background: #8CA6AE;
 }
 
-#hitbox-list {
+#hitbox-list-container {
   flex-grow: 1;
 }
 #hitbox-list-table {
