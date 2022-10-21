@@ -249,17 +249,17 @@ const buildFrameContainer = (frameClass) => {
         currentFrame = frameClass;
         currentAnimation = frameClass.animRef;
 
-        let x = 0;
+        let index = 0;
         let data = frameClass.frameData;
         //Functions that would add the values to the frame data panel
         const primaryCallback = (key) => {
             frameDataInputElems[x].value = data[key];
-            x++;
+            index++;
         }
 
         const secondaryCallback = (primaryKey, secondaryKey) => {
             frameDataInputElems[x].value = data[primaryKey][secondaryKey];
-            x++;
+            index++;
         }
 
         objectLooper(data, 1, Object.keys(data).length-1, primaryCallback, secondaryCallback);
