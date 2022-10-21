@@ -10,52 +10,9 @@ export class animation{
 
         this.animationData = {
             name: _animationName,
+            chain: 0,
             frameDataList: []
         }
-
-        this.tableRow = null;
-    }
-
-    addTableRow = (table) => {
-        let contentList = [];
-        let container = document.createElement('tr');
-        this.tableRow = container;
-
-        //#region 
-        let nameInput = document.createElement('input');
-        nameInput.type = 'text';
-        nameInput.value = this.animationData.name;
-        
-
-        nameInput.addEventListener('input', () => {
-            this.animationData.name = nameInput.value;
-            displayInJson();
-        });
-
-        nameInput.addEventListener('click', () => {
-            animationList.setCurrentAnim(this);
-            animator.reset();
-        });
-        //#endregion
-        contentList.push(nameInput);
-
-        //#region 
-        let deleteButton = document.createElement('button');
-        deleteButton.innerText = 'Delete';
-
-        deleteButton.addEventListener('click', () => {
-            this.deleteThis();
-        });
-        //#endregion
-        contentList.push(deleteButton);
-
-        while(contentList.length){
-            let containerC = document.createElement('td');
-            containerC.appendChild(contentList.shift());
-            container.appendChild(containerC);
-        }
-        container.firstElementChild.setAttribute('colspan', 2);
-        table.appendChild(container);
     }
 
     addFrameData = (_frameData) => {
@@ -91,7 +48,6 @@ export class animation{
         }
 
         animationList.removeFromList(this);
-        displayInJson();
         //#endregion
         
     }   
