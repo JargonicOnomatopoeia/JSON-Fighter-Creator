@@ -152,8 +152,13 @@ const buildAccordion = (animation) => {
     let itemList = buildElem('list-item');
     accHead.addEventListener('click', () => {
         currentAnimation = animation;
-        clearHitboxes();
         currentFrame = null;
+
+        animationDataInputElem.value = animation.animationData.chain;
+        for(let x = 0; x < frameDataInputElems.length;x++){
+            frameDataInputElems[x].value = 0;
+        }
+        clearHitboxes();
     });
 
     //For the toggle 
@@ -253,12 +258,12 @@ const buildFrameContainer = (frameClass) => {
         let data = frameClass.frameData;
         //Functions that would add the values to the frame data panel
         const primaryCallback = (key) => {
-            frameDataInputElems[x].value = data[key];
+            frameDataInputElems[index].value = data[key];
             index++;
         }
 
         const secondaryCallback = (primaryKey, secondaryKey) => {
-            frameDataInputElems[x].value = data[primaryKey][secondaryKey];
+            frameDataInputElems[index].value = data[primaryKey][secondaryKey];
             index++;
         }
 

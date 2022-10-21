@@ -45,7 +45,6 @@ window.onload = () => {
         if(animationList.currentFrame != null){
             let newHitbox = animationList.currentFrame.addNewHitbox();
             newHitbox.addTableRow(animationList.hitboxListElem);
-            displayInJson();
         }
         
     });
