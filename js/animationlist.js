@@ -243,6 +243,7 @@ const buildFrameContainer = (frameClass) => {
     trashHitboxes.addEventListener('click', () => {
         frameClass.deleteThis();
         frameContainer.remove();
+        clearHitboxes();
     });
 
     frameContainer.appendChild(frameInput);
@@ -283,12 +284,12 @@ const buildNumHitbox = (value, callback) => {
     inputNum.setAttribute('value', value);
     callback(inputNum);
 
-    tableCell.appendChild(tableCell);
+    tableCell.appendChild(inputNum);
 
     return tableCell;
 }
 
-const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
+export const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
     
     //#region Container
     let tableRow = document.createElement('div');
@@ -303,7 +304,7 @@ const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
     indexCol.innerHTML = index;
     tableRow.appendChild(indexCol);
     //#endregion
-    
+    //#region Input Column
     let hitboxData = hitboxClass.hitbox;
     const primaryCallback = (key) => {
         let cell = buildNumHitbox(hitboxData[key], (input) => {
@@ -329,7 +330,6 @@ const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
         tableRow.appendChild(cell);
     }
 
-    //#region Number Inputs
     objectLooper(hitboxData, 1, Object.keys(hitboxData).length, primaryCallback, secondaryCallback);
     //#endregion
 
@@ -342,10 +342,10 @@ const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
     switcheri.addEventListener('click', () => {
         if(tableRow.class == 'hurtbox'){
             hitboxClass.hitbox.type = 'hitbox'
-            tableRow.class = '';
+            tableRow.classList.toggle('hurtbox');
         }else{
             hitboxClass.hitbox.type = 'hurtbox';
-            tableRow.class = 'hurtbox'
+            tableRow.classList.toggle('hurtbox');
         }
     });
 
@@ -370,9 +370,9 @@ export const addHitbox = (isHurtbox) => {
     if(currentFrame == null){
         return;
     }
-
-    let index = currentFrame.hitboxListClasses.length-1;
-    buildHitboxRowContainer(index, currentFrame.addNewHitbox(), isHurtbox);
+    let type = (isHurtbox)? 'hurtbox':'hitbox';
+    let index = currentFrame.hitboxListClasses.length;
+    buildHitboxRowContainer(index, currentFrame.addNewHitbox(type), isHurtbox);
 }
 
 export const clearHitboxes = () => {

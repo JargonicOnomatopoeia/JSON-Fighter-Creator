@@ -35,8 +35,8 @@ export class frame{
     //#region For canvas
     
     //#endregion
-    addNewHitbox = () => {
-        let newHitbox = new hitbox(this);
+    addNewHitbox = (type) => {
+        let newHitbox = new hitbox(this, type);
         this.frameData.hitboxList.push(newHitbox.hitbox);
         this.hitboxListClasses.push(newHitbox);
 

@@ -12,6 +12,7 @@ window.onload = () => {
     //#region Declarations
     let imageUploader = document.getElementById("add-files");
     let buttonNewHitbox = document.getElementById("add-new-hitbox");
+    let buttonNewHurtbox = document.getElementById("add-new-hurtbox");
     let buttonCopyHitbox = document.getElementById("copy-hitbox-list");
     let buttonPasteHitbox = document.getElementById("paste-hitbox-list");
     let buttonCancelCopy = document.getElementById("cancel-copy-hitbox-list");
@@ -40,13 +41,13 @@ window.onload = () => {
     imageUploader.addEventListener("click", () =>{
         fileAdd.click();
     });
-
+    
     buttonNewHitbox.addEventListener("click", () => {
-        if(animationList.currentFrame != null){
-            let newHitbox = animationList.currentFrame.addNewHitbox();
-            newHitbox.addTableRow(animationList.hitboxListElem);
-        }
-        
+        animationList.addHitbox(false);
+    });
+
+    buttonNewHurtbox.addEventListener('click', () => {
+        animationList.addHitbox(true);
     });
 
     buttonDownload.addEventListener("click", downloadJSON);
