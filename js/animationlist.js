@@ -69,7 +69,7 @@ const inputNumCheck = (input, currentObject, callback) => {
 
     let isNumber = parseInt(input.value);
     
-    if(!isNaN(isNumber) && value != ""){
+    if(!isNaN(isNumber) && input.value != ""){
         callback(isNumber);
         input.value = isNumber;
         return;
@@ -82,41 +82,49 @@ const inputNumCheck = (input, currentObject, callback) => {
     }
 }
 
-const buildFrameDataInput = () => {
-    let x = 1;
-    let tempFrame = new frame();
-    let tempFrameData = tempFrame.frameData;
-    let primeObjectKeys = Object.keys(tempFrame.frameData);
-    
-    for(let y = 0;y < frameDataInputElems.length;){
-        let primeKey = primeObjectKeys[x];
-        switch(tempFrameData[primeKey] instanceof Object){
+const objectLooper = (object, start, end, primaryCallback, secondaryCallback) => {
+    let primeKeys = Object.keys(object);
+    for(let x = start; x < end; x++){
+        let primaryKey = primeKeys[x];
+        switch(object[primaryKey] instanceof Object){
             case true:
-                let secondaryKeys = Object.keys(tempFrameData[primeKey]);
-                for(let z = 0; z < secondaryKeys.length;z++){
-                    let input = frameDataInputElems[y];
-                    let secondaryKey = secondaryKeys[z];
-                    input.addEventListener("input", () => {
-                        inputNumCheck(input, currentFrame, (number) => {
-                            currentFrame.frameData[primeKey][secondaryKey] = number;
-                        });
-                    });
-                    y++;
+                let secondaryKeys = Object.keys(object[primaryKey]);
+                for(let y = 0;y < secondaryKeys.length;y++){
+                    let secondaryKey = secondaryKeys[y];
+                    secondaryCallback(primaryKey, secondaryKey);
                 }
-                x++;    
-            ;break;
+            break;
             case false:
-                let input = frameDataInputElems[y];
-                input.addEventListener('input', () => {
-                    inputNumCheck(input, currentFrame, (number) => {
-                        currentFrame.frameData[primeKey] = number;
-                    });
-                });
-                y++;
-                x++;
-            ;break;
+                primaryCallback(primaryKey);
+            break;
         }
     }
+}
+
+const buildFrameDataInput = () => {
+    let data = new frame().frameData;
+    let index = 0;
+    const primaryCallback = (key) => {
+        let frameInput = frameDataInputElems[index];
+        frameInput.addEventListener('input', () => {
+            inputNumCheck(frameInput, currentFrame, (result) => {
+                currentFrame.frameData[key] = result;
+            });
+        });
+        index++;
+    }
+
+    const secondaryCallback = (primaryKey, secondaryKey) => {
+        let frameInput = frameDataInputElems[index];
+        frameInput.addEventListener('input', () => {
+            inputNumCheck(frameInput, currentFrame, (result) => {
+                currentFrame.frameData[primaryKey][secondaryKey] = result;
+            })
+        });
+        index++;
+    }
+
+    objectLooper(data, 1, Object.keys(data).length-1, primaryCallback, secondaryCallback);
 
     animationDataInputElem.addEventListener('input', () => {
         inputNumCheck(animationDataInputElem, currentAnimation, (number) => {
@@ -240,6 +248,21 @@ const buildFrameContainer = (frameClass) => {
         clearHitboxes();
         currentFrame = frameClass;
         currentAnimation = frameClass.animRef;
+
+        let x = 0;
+        let data = frameClass.frameData;
+        //Functions that would add the values to the frame data panel
+        const primaryCallback = (key) => {
+            frameDataInputElems[x].value = data[key];
+            x++;
+        }
+
+        const secondaryCallback = (primaryKey, secondaryKey) => {
+            frameDataInputElems[x].value = data[primaryKey][secondaryKey];
+            x++;
+        }
+
+        objectLooper(data, 1, Object.keys(data).length-1, primaryCallback, secondaryCallback);
         addCurrentHitboxes();
     });
 
@@ -275,45 +298,34 @@ const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
     indexCol.innerHTML = index;
     tableRow.appendChild(indexCol);
     //#endregion
+    
+    let hitboxData = hitboxClass.hitbox;
+    const primaryCallback = (key) => {
+        let cell = buildNumHitbox(hitboxData[key], (input) => {
+            input.addEventListener('input', () => {
+                inputNumCheck(input, currentFrame, (number) => {
+                    hitboxData[key] = number;
+                });
+            });
+            hitboxClass.inputs.push(input);
+        });
+        tableRow.appendChild(cell);
+    }
+
+    const secondaryCallback = (primaryKey, secondaryKey) => {
+        let cell = buildNumHitbox(hitboxData[primaryKey][secondaryKey], (input) => {
+            input.addEventListener('input', () => {
+                inputNumCheck(input, currentFrame, (number) => {
+                    hitboxData[primaryKey][secondaryKey] = number
+                });
+            });
+            hitboxClass.inputs.push(input);
+        });
+        tableRow.appendChild(cell);
+    }
 
     //#region Number Inputs
-    let x = 1;
-    let keys = Object.keys(hitboxClass.hitbox);
-    let hitboxData = hitboxClass.hitbox;
-    for(let y = 0; y < 6;){
-        let primary = keys[x];
-        switch(hitboxData[primary] instanceof Object){
-            case true:
-                let secondary = Object.keys(hitboxData[primary]);
-                for(let z = 0; z < secondary.length;z++){
-                    let secKey = secondary[z];
-                    let cell = buildNumHitbox(hitboxClass[primary][secKey], (input) => {
-                        input.addEventListener('input', () => {
-                            inputNumCheck(input, currentFrame, (number) => {
-                                hitboxClass[primary][secKey] = number;
-                            });
-                        });
-                        hitboxClass.inputs.push(input);
-                    });
-                    tableRow.appendChild(cell);
-                    y++;
-                }
-            break;
-            case false:
-                let cell = buildNumHitbox(hitboxClass[primary], (input) => {
-                    input.addEventListener('input', () => {
-                        hitboxClass[primary] = inputNumCheck(input, currentFrame, (number) => {
-                            hitboxClass[primary] = number;
-                        });
-                    });
-                    hitboxClass.inputs.push(input);
-                });
-                tableRow.appendChild(cell);
-                y++;
-            break;
-        }
-        x++;
-    }
+    objectLooper(hitboxData, 1, Object.keys(hitboxData).length, primaryCallback, secondaryCallback);
     //#endregion
 
     //#region  Option Column
