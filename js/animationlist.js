@@ -1,6 +1,5 @@
 import { frame } from "./frameClass.js";
 import { animation } from "./animationClass.js"
-import { displayInJson } from "./jsonOutput.js";
 
 export let animationListData = [];
 export let animationListClasses = [];
@@ -62,6 +61,7 @@ export const buildAnimationSprite = (imageArray) => {
 }
 
 const inputNumCheck = (input, currentObject, callback) => {
+
     if(currentObject == null){
         input.value = 0;
         return;
@@ -75,11 +75,8 @@ const inputNumCheck = (input, currentObject, callback) => {
         return;
     }
 
-    if(value == ""){
-        callback(0);
-        input.value = 0;
-        return;
-    }
+    callback(0);
+    input.value = 0;
 }
 
 const objectLooper = (object, start, end, primaryCallback, secondaryCallback) => {
@@ -100,6 +97,39 @@ const objectLooper = (object, start, end, primaryCallback, secondaryCallback) =>
         }
     }
 }
+
+//#region Animation Inputs and Frame Inputs Modifications
+const clearFrameDataValues = () => {
+    for(let x = 0; x < frameDataInputElems.length;x++){
+        frameDataInputElems[x].value = 0;
+    }
+}
+
+const clearAnimationDataValue = () => {
+    animationDataInputElem.value = 0;
+}
+
+const addToFrameDataInputs = () => {
+    let index = 0;
+    let data = currentFrame.frameData;
+    //Functions that would add the values to the frame data panel
+    const primaryCallback = (key) => {
+        frameDataInputElems[index].value = data[key];
+        index++;
+    }
+
+    const secondaryCallback = (primaryKey, secondaryKey) => {
+        frameDataInputElems[index].value = data[primaryKey][secondaryKey];
+        index++;
+    }
+
+    objectLooper(data, 1, Object.keys(data).length-1, primaryCallback, secondaryCallback);
+}
+
+const addToAnimationDataInputs = () => {
+    animationDataInputElem.value = currentAnimation.animationData.chain;
+}
+//#endregion
 
 const buildFrameDataInput = () => {
     let data = new frame().frameData;
@@ -152,13 +182,10 @@ const buildAccordion = (animation) => {
     let itemList = buildElem('list-item');
     accHead.addEventListener('click', () => {
         currentAnimation = animation;
-        currentFrame = null;
-
-        animationDataInputElem.value = animation.animationData.chain;
-        for(let x = 0; x < frameDataInputElems.length;x++){
-            frameDataInputElems[x].value = 0;
-        }
         clearHitboxes();
+        currentFrame = null;
+        animationDataInputElem.value = animation.animationData.chain;
+        clearFrameDataValues();
     });
 
     //For the toggle 
@@ -187,6 +214,9 @@ const buildAccordion = (animation) => {
     trashTip.innerHTML = "Delete";
     trashI.appendChild(trashTip);
     trashI.addEventListener('click', () => {
+        clearAnimationDataValue();
+        clearFrameDataValues();
+        clearHitboxes();
         animation.deleteThis();
         acc.remove();
     });
@@ -242,8 +272,9 @@ const buildFrameContainer = (frameClass) => {
     trashHitboxes.appendChild(trashTip);
     trashHitboxes.addEventListener('click', () => {
         frameClass.deleteThis();
-        frameContainer.remove();
         clearHitboxes();
+        clearFrameDataValues();
+        frameContainer.remove();
     });
 
     frameContainer.appendChild(frameInput);
@@ -254,21 +285,8 @@ const buildFrameContainer = (frameClass) => {
         clearHitboxes();
         currentFrame = frameClass;
         currentAnimation = frameClass.animRef;
-
-        let index = 0;
-        let data = frameClass.frameData;
-        //Functions that would add the values to the frame data panel
-        const primaryCallback = (key) => {
-            frameDataInputElems[index].value = data[key];
-            index++;
-        }
-
-        const secondaryCallback = (primaryKey, secondaryKey) => {
-            frameDataInputElems[index].value = data[primaryKey][secondaryKey];
-            index++;
-        }
-
-        objectLooper(data, 1, Object.keys(data).length-1, primaryCallback, secondaryCallback);
+        addToFrameDataInputs();
+        addToAnimationDataInputs();
         addCurrentHitboxes();
     });
 
@@ -340,13 +358,9 @@ export const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
     switcherTip.innerHTML = "Change to Hitbox/Hurtbox";
     switcheri.appendChild(switcherTip);
     switcheri.addEventListener('click', () => {
-        if(tableRow.class == 'hurtbox'){
-            hitboxClass.hitbox.type = 'hitbox'
-            tableRow.classList.toggle('hurtbox');
-        }else{
-            hitboxClass.hitbox.type = 'hurtbox';
-            tableRow.classList.toggle('hurtbox');
-        }
+        let type = (tableRow.classList.contains('hurtbox') == true)? 'hitbox': 'hurtbox';
+        hitboxClass.hitbox.type = type;
+        tableRow.classList.toggle('hurtbox');
     });
 
     let closei = buildElem('icon-cross clickable', 'i');
