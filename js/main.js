@@ -5,10 +5,6 @@ import { showFrame , editorInitialize } from './editor.js';
 
 
 window.onload = () => {
-    
-    
-
-
     //#region Declarations
     let imageUploader = document.getElementById("add-files");
     let buttonNewHitbox = document.getElementById("add-new-hitbox");
@@ -22,7 +18,7 @@ window.onload = () => {
 
     animationList.initialize();
     //editorInitialize();
-    //animatorInitialize();
+    animatorInitialize();
     //FrameData.Initialize();
     //HitboxRows.Initialize();
     //#endregion
@@ -83,7 +79,7 @@ window.onload = () => {
         buttonCopyHitbox.hidden = false;
     });
 */
-    //requestAnimationFrame(animationPlay);
+    requestAnimationFrame(animationPlay);
     //requestAnimationFrame(showFrame);
 
 }

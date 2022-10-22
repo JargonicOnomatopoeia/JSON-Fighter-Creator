@@ -45,19 +45,24 @@ export const buildAnimationSprite = (imageArray) => {
     let animationTemp = new animation("Animation#"+animationIndex);
     addToList(animationTemp);
     animationIndex++;
-
+    
+    let promises = [];
     for(let x = 0; x < imageArray.length;x++){
         let picture = new FileReader();
-        let image = '';
-        picture.addEventListener('load', (e)=>{
-            image = e.target.result;
-        });
-        picture.readAsDataURL(imageArray[x]);
-        let frameData = new frame(animationTemp, image, imageArray[x].name);
-        animationTemp.addFrameData(frameData);
+        promises.push(new Promise ((resolve, reject) => {
+            picture.addEventListener('load', (e)=>{
+                resolve(new frame(animationTemp, e.target.result, imageArray[x].name));
+            });
+            picture.readAsDataURL(imageArray[x]);
+        }));
     }
-
-    buildAccordion(animationTemp);
+    
+    Promise.all(promises).then((frames) => {
+        frames.forEach((i) => {
+            animationTemp.addFrameData(i);
+        })
+        buildAccordion(animationTemp);
+    });
 }
 
 const inputNumCheck = (input, currentObject, callback) => {
