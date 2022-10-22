@@ -1,6 +1,4 @@
 import * as animationList from "./animationList.js";
-import * as animator from "./animator.js";
-import { displayInJson } from "./jsonOutput.js";
 import { deleteRow } from "./table.js";
 
 export class animation{
@@ -29,25 +27,23 @@ export class animation{
 
     deleteThis = () => {
         //#region DeleteRows
-
-        for(let x = 0; x < this.frameDataListClasses.length;x++){
-            deleteRow(this.frameDataListClasses[x].tableRow);
-            this.frameDataListClasses[x].tableRow = null;
-        }
-
-        if(animationList.currentAnimation == this){
-            animationList.setCurrentAnim();
-            animationList.setCurrentFrame();
-        }
-        deleteRow(this.tableRow);
+        
         //#endregion
-
+        
         //#region Delete Data
-        while(this.frameDataListClasses > 0){
+        while(this.frameDataListClasses.length > 0){
             this.deleteFrameData(this.frameDataListClasses[0]);
         }
 
         animationList.removeFromList(this);
+        
+        if(animationList.currentAnimation == this){
+            animationList.setCurrentAnim();
+            console.log(animationList.currentAnimation);
+            animationList.setCurrentFrame();
+        }
+
+        
         //#endregion
         
     }   

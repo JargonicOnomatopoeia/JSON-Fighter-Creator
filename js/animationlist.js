@@ -1,5 +1,6 @@
 import { frame } from "./frameClass.js";
 import { animation } from "./animationClass.js"
+import * as animator from "./animator.js"
 
 export let animationListData = [];
 export let animationListClasses = [];
@@ -9,7 +10,9 @@ export let currentAnimation = null;
 
 export let animationListElem;
 export let hitboxListElem;
+export let hitboxRowContainers = [];
 export let frameDataInputElems;
+let frameDataInputListeners = [];
 export let animationDataInputElem;
 
 export const initialize = () => {
@@ -36,8 +39,8 @@ export const addToList = (animation) => {
 
 export const removeFromList = (animation) => {
     let index = animationListClasses.findIndex(i => i == animation);
-    animationListData.splice(index, 1);
-    animationListClasses.splice(index, 1);
+    delete animationListData.splice(index, 1);
+    delete animationListClasses.splice(index, 1);
     animationIndex--;
 }
 
@@ -64,6 +67,20 @@ export const buildAnimationSprite = (imageArray) => {
         buildAccordion(animationTemp);
     });
 }
+
+//#region Frame Data Listener Functions
+export const removeFrameDataListeners = () => {
+    while(frameDataInputListeners.length > 0){
+        frameDataInputListeners.pop();
+    }
+}
+
+export const triggerFrameDataListeners = () => {
+    frameDataInputListeners.forEach(i => {
+        i();
+    })
+}
+//#endregion
 
 const inputNumCheck = (input, currentObject, callback) => {
 
@@ -180,13 +197,16 @@ const buildElem = (className, type='div') =>{
 
 // Container for the Animation List
 const buildAccordion = (animation) => {
+    let hoverOnSecondayButton = false;
     let acc = buildElem('accordion');
     
     //#region Accordion Head
     let accHead = buildElem('accordion-head');
     let itemList = buildElem('list-item');
     accHead.addEventListener('click', () => {
+        if(hoverOnSecondayButton) return;
         currentAnimation = animation;
+        animator.reset();
         clearHitboxes();
         currentFrame = null;
         animationDataInputElem.value = animation.animationData.chain;
@@ -219,11 +239,21 @@ const buildAccordion = (animation) => {
     trashTip.innerHTML = "Delete";
     trashI.appendChild(trashTip);
     trashI.addEventListener('click', () => {
+        if(!hoverOnSecondayButton) return;
         clearAnimationDataValue();
         clearFrameDataValues();
         clearHitboxes();
+        removeFrameDataListeners();
         animation.deleteThis();
         acc.remove();
+    });
+
+    trashI.addEventListener('mouseenter', () =>{
+        hoverOnSecondayButton = true;
+    });
+
+    trashI.addEventListener('mouseout', () => {
+        hoverOnSecondayButton = false;
     });
 
     //put them all together
@@ -280,6 +310,8 @@ const buildFrameContainer = (frameClass) => {
         clearHitboxes();
         clearFrameDataValues();
         frameContainer.remove();
+        removeFrameDataListeners();
+        animator.reset();
     });
 
     frameContainer.appendChild(frameInput);
@@ -293,6 +325,27 @@ const buildFrameContainer = (frameClass) => {
         addToFrameDataInputs();
         addToAnimationDataInputs();
         addCurrentHitboxes();
+        removeFrameDataListeners();
+        animator.reset();
+
+        let index = 0;
+        const primaryCallback = (key) => {
+            let frameDataInput = frameDataInputElems[index];
+            frameDataInputListeners.push(() => {
+                frameDataInput.value = frameClass.frameData[key];
+            });
+            index++;
+        }
+
+        const secondaryCallback = (primaryKey, secondaryKey) => {
+            let frameDataInput = frameDataInputElems[index];
+            frameDataInputListeners.push(() => {
+                frameDataInput.value = frameClass.frameData[primaryKey][secondaryKey];
+            })
+            index++;
+        }
+
+        objectLooper(frameClass, 1, Object.keys(frameClass.frameData).length-1, primaryCallback, secondaryCallback);
     });
 
     return frameContainer;
@@ -313,7 +366,7 @@ const buildNumHitbox = (value, callback) => {
 }
 
 export const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
-    
+
     //#region Container
     let tableRow = document.createElement('div');
     tableRow.id = "hitbox-list-table-row";
@@ -328,7 +381,7 @@ export const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
     tableRow.appendChild(indexCol);
     //#endregion
     //#region Input Column
-    let hitboxData = hitboxClass.hitbox;
+    let hitboxData = hitboxClass.hitboxData;
     const primaryCallback = (key) => {
         let cell = buildNumHitbox(hitboxData[key], (input) => {
             input.addEventListener('input', () => {
@@ -336,7 +389,9 @@ export const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
                     hitboxData[key] = number;
                 });
             });
-            hitboxClass.inputs.push(input);
+            hitboxClass.registerListener(() => {
+                input.value = hitboxData[key];
+            });
         });
         tableRow.appendChild(cell);
     }
@@ -348,7 +403,9 @@ export const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
                     hitboxData[primaryKey][secondaryKey] = number
                 });
             });
-            hitboxClass.inputs.push(input);
+            hitboxClass.registerListener(() => {
+                input.value = hitboxData[primaryKey][secondaryKey];
+            });
         });
         tableRow.appendChild(cell);
     }
@@ -363,8 +420,7 @@ export const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
     switcherTip.innerHTML = "Change to Hitbox/Hurtbox";
     switcheri.appendChild(switcherTip);
     switcheri.addEventListener('click', () => {
-        let type = (tableRow.classList.contains('hurtbox') == true)? 'hitbox': 'hurtbox';
-        hitboxClass.hitbox.type = type;
+        hitboxData.type  = (tableRow.classList.contains('hurtbox') == true)? 'hitbox': 'hurtbox';
         tableRow.classList.toggle('hurtbox');
     });
 
@@ -373,6 +429,7 @@ export const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
     closeTip.innerHTML = "Delete";
     closei.appendChild(closeTip);
     closei.addEventListener('click', () => {
+        hitboxClass.removeListeners();
         hitboxClass.deleteThis();
         tableRow.remove();
     });
@@ -401,7 +458,7 @@ export const clearHitboxes = () => {
 
     let hitboxClasses = currentFrame.hitboxListClasses;
     hitboxClasses.forEach(i => () => {
-        i.inputs = null;
+        i.removeListeners();
     })
 
     while(hitboxListElem.children.length > 0){
@@ -417,7 +474,7 @@ const addCurrentHitboxes = () => {
     let hitboxClasses = currentFrame.hitboxListClasses;
     for(let x = 0; x < hitboxClasses.length;x++){
         let hitboxClass = hitboxClasses[x];
-        buildHitboxRowContainer(x, hitboxClass, hitboxClass.hitbox.type == 'hurtbox');
+        buildHitboxRowContainer(x, hitboxClass, hitboxClass.hitboxData.type == 'hurtbox');
     }
 }
 //#endregion

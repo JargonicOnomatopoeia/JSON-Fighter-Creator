@@ -1,7 +1,7 @@
 import * as animationList from './animationList.js'
 import { displayInJson , downloadJSON, copyJSONToClipboard} from './jsonOutput.js';
-import { animationPlay , animatorInitialize }from './animator.js';
-import { showFrame , editorInitialize } from './editor.js';
+import * as animator from './animator.js';
+import * as editor from './editor.js';
 
 
 window.onload = () => {
@@ -17,8 +17,8 @@ window.onload = () => {
     let buttonClipboard = document.getElementById("dl-json");
 
     animationList.initialize();
-    //editorInitialize();
-    animatorInitialize();
+    //editor.initialize();
+    animator.initialize();
     //FrameData.Initialize();
     //HitboxRows.Initialize();
     //#endregion
@@ -79,19 +79,12 @@ window.onload = () => {
         buttonCopyHitbox.hidden = false;
     });
 */
-    requestAnimationFrame(animationPlay);
+    requestAnimationFrame(animator.animationPlay);
     //requestAnimationFrame(showFrame);
 
 }
-/*
 
 window.onresize = () => {
-    ResizeCanvas();
+    animator.canvasClass.resize();
 }
 
-const ResizeCanvas = () => {
-    canvasAnimator.Resize();
-    canvasEditor.Resize();
-}
-
-*/

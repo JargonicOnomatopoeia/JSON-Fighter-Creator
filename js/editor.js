@@ -50,7 +50,7 @@ let resizeArea = {
 
 let mousedown = false;
 
-export const editorInitialize = () =>{
+export const initialize = () =>{
     canvas = document.getElementById("editor-canvas");
     canvasClass = new canvasUtil.canvas(canvas);
     canvas.addEventListener("mousedown",(e) => {
@@ -155,7 +155,7 @@ export const editorInitialize = () =>{
             }
 
             if(toMove == true){
-                let frameData = animationList.currentFrame.frameData;
+                let frameData = animationList.currentFrame.frameRef;
                 frameData.offset.x += Math.round(((current.x - start.x)/  scale) *  decimal)/ decimal;
                 frameData.offset.y += Math.round(((current.y - start.y)/  scale) *  decimal)/ decimal;
 

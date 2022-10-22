@@ -28,6 +28,22 @@ export class frame{
         }
     }
 
+    getLeft = (scale = 1, pan = 0) => {
+        return this.frameData.offset.x - (this.image.width/2) * scale + pan;
+    }
+
+    getTop = (scale = 1, pan = 0) => {
+        return this.frameData.offset.y - (this.image.height/2) * scale + pan;
+    }
+
+    getRight = (scale = 1, pan = 0) => {
+        return this.frameData.offset.x + (this.image.width/2) * scale + pan;
+    }
+
+    getBottom = (scale = 1, pan = 0) => {
+        return this.frameData.offset.y + (this.image.height/2) * scale + pan;
+    }
+
     addHitbox = (_hitbox) => {
         this.hitboxListClasses.push(_hitbox);
         this.frameData.hitboxList.push(_hitbox.hitbox);
@@ -77,7 +93,7 @@ export class frame{
                         let secondaryKeys = Object.keys(tempHitbox[primeKey]);
                         for(let z = 0; z < secondaryKeys.length;z++){
                             let secondaryKey = secondaryKeys[z];
-                            tempHitbox.hitbox[primeKey][secondaryKey] = hitbox[primeKey][secondaryKey];
+                            tempHitbox.hitboxData[primeKey][secondaryKey] = hitbox[primeKey][secondaryKey];
                             
                         }
                     ;break;
@@ -95,11 +111,13 @@ export class frame{
 
     pasteHitbox = (hitboxListCopy) => {
 
-        hitboxListCopy.foreach(i => () => {
+        hitboxListCopy.foreach(i => {
             i.frameData = this;
-            this.frameData.hitboxList.push(i.hitbox);
+            this.frameData.hitboxList.push(i.hitboxData);
         });
 
-        this.hitboxListClasses = this.hitboxListClasses.concat(hitboxListCopy);
+        this.hitboxListClasses.push(...hitboxListCopy);
     }
+
+    
 }

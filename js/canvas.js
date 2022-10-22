@@ -7,8 +7,10 @@ export let speedPan = 1;
 export let speedZoom = 0.0005;
 
 export class canvas{
-    constructor(document, _width = 0, _height = 0, _offsetx = 0, _offsety = 0){
+    constructor(document){
         this.canvas = document;
+        this.parent = document.parentElement;
+        this.resize();
         this.context = this.canvas.getContext('2d');
     }
 
@@ -27,38 +29,27 @@ export class canvas{
 
     displayerFrame = (frame, hasFilter = false, filterString = 'sepia(100%)') => {
         this.context.save();
-        let cframeData = frame.frameData;
-        let cImage = middle(frame.image.width, frame.image.height);
-        let imgoffsetx = cframeData.offset.x - cImage.x;
-        let imgoffsety = cframeData.offset.y - cImage.y;
-        
-        this.context.rotate(cframeData.rotate * Math.PI / 180);
         if(hasFilter == true){
             this.context.filter = filterString;
         }
-        this.context.drawImage(frame.image, imgoffsetx, imgoffsety);
-            //this.context.strokeStyle = color;
-            //this.context.strokeRect(imgoffsetx, imgoffsety, frame.image.width, frame.image.height);   
-        
+        this.context.drawImage(frame.image, frame.getLeft(), frame.getTop());   
         this.context.restore();
     }
 
-    displayerHitbox = (currentHitbox, currentFrame, color, stroke = false) => {
-        let hitboxData = currentHitbox.hitbox;
-        let frameData = currentFrame.frameData;
-        let centerh = middle(hitboxData.width, hitboxData.height);
-
-        let offsetx = hitboxData.offset.x + frameData.offset.x - centerh.x;
-        let offsety = hitboxData.offset.y + frameData.offset.y - centerh.y;
-
+    displayerHitbox = (currentHitbox, color, stroke = false) => {
+        let hitboxData = currentHitbox.hitboxData;
         if(stroke == false){
             this.context.fillStyle = color;
-            this.context.fillRect(offsetx, offsety, hitboxData.width, hitboxData.height);
+            this.context.fillRect(currentHitbox.getLeft(), currentHitbox.getTop(), hitboxData.width, hitboxData.height);
         }else{
             this.context.strokeStyle = color;
-            this.context.strokeRect(offsetx, offsety, hitboxData.width, hitboxData.height);
+            this.context.strokeRect(currentHitbox.getLeft(), currentHitbox.getTop(), hitboxData.width, hitboxData.height);
         }
-        
+    }
+
+    resize = () => {
+        this.canvas.width = this.parent.getBoundingClientRect().width;
+        this.canvas.height = this.parent.getBoundingClientRect().height;
     }
 }
 

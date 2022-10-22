@@ -1,9 +1,9 @@
-import * as animationList from "./animationList.js";
+import { currentAnimation } from "./animationList.js";
 import * as canvasUtil from "./canvas.js"
 
 let canvas;
 let showHitboxes = true;
-let canvasClass;
+export let canvasClass;
 let frame = 0;
 let frametime = 0;
 let index = 0;
@@ -18,11 +18,11 @@ let pan = {
 
 //#region  Mouse Reactions
 let startPan;
-export const animatorInitialize = () => {
+export const initialize = () => {
     canvas = document.getElementById("animation-canvas");
     canvasClass = new canvasUtil.canvas(canvas);
     canvas.addEventListener("mousedown", (e) => {
-        if(animationList.currentAnimation == null){
+        if(currentAnimation == null){
             return; 
         }
         toPan = true;
@@ -49,7 +49,7 @@ export const animatorInitialize = () => {
     })
 
     canvas.addEventListener("wheel", (e) => {
-        if(animationList.currentAnimation == null){
+        if(currentAnimation == null){
             return;
         }
         scale -= canvasUtil.speedZoom * e.deltaY;
@@ -67,15 +67,11 @@ export const reset = () => {
 export const animationPlay = () => {
     requestAnimationFrame(animationPlay);
     canvasClass.erase();
-    let animation = animationList.currentAnimation;
-
-    if(animation == null){
-        return;
-    }
-    
+    let animation = currentAnimation;
+    if(currentAnimation == null) return; 
     let frameClass = animation.frameDataListClasses[index];
-
-    if(frameClass.frameData.frametime <= frametime){
+    console.log("working!");
+    if(frameClass != null && frameClass.frameData.frametime <= frametime){
         let centerCan = canvasUtil.middle(canvasClass.canvas.width, canvasClass.canvas.height);
         let context = canvasClass.context;
         context.save();
@@ -84,8 +80,8 @@ export const animationPlay = () => {
         canvasClass.displayerFrame(frameClass);
         let hitboxClasses = frameClass.hitboxListClasses;
         for(let x = 0;showHitboxes !=  false && x < hitboxClasses.length;x++){
-            let hitboxData = hitboxClasses[x].hitbox;
-            canvasClass.displayerHitbox(hitboxClasses[x], frameClass, (hitboxData.type == 'hitbox')? canvasUtil.colorHitbox: canvasUtil.colorHurtbox);
+            let hitboxData = hitboxClasses[x].hitboxData;
+            canvasClass.displayerHitbox(hitboxClasses[x], (hitboxData.type == 'hitbox')? canvasUtil.colorHitbox: canvasUtil.colorHurtbox);
         }
         context.restore();
 
@@ -99,5 +95,6 @@ export const animationPlay = () => {
     }else{
         frametime++;
     }
+
 }
 
