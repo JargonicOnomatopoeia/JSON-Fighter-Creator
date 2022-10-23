@@ -70,7 +70,6 @@ export const animationPlay = () => {
     let animation = currentAnimation;
     if(currentAnimation == null) return; 
     let frameClass = animation.frameDataListClasses[index];
-    console.log("working!");
     if(frameClass != null && frameClass.frameData.frametime <= frametime){
         let centerCan = canvasUtil.middle(canvasClass.canvas.width, canvasClass.canvas.height);
         let context = canvasClass.context;

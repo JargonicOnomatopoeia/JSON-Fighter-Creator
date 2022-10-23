@@ -19,19 +19,19 @@ export class hitbox{
     }
 
     getLeft = (scale = 1, pan = 0) => {
-        return this.hitboxData.offset.x + this.frameData.offset.x - ((this.hitboxData.width/2) * scale) + pan;
+        return (this.hitboxData.offset.x + this.frameData.offset.x - (this.hitboxData.width/2)) * scale + pan;
     }
 
     getTop = (scale = 1, pan = 0) => {
-        return this.hitboxData.offset.y + this.frameData.offset.y - ((this.hitboxData.height/2) * scale) + pan;
+        return (this.hitboxData.offset.y + this.frameData.offset.y - (this.hitboxData.height/2)) * scale + pan;
     }
 
     getRight = (scale = 1, pan = 0) => {
-        return this.hitboxData.offset.x + this.frameData.offset.x + ((this.hitboxData.width/2) * scale) + pan;
+        return (this.hitboxData.offset.x + this.frameData.offset.x + (this.hitboxData.width/2)) * scale + pan;
     }
 
     getBottom = (scale = 1, pan = 0) => {
-        return this.hitboxData.offset.y + this.frameData.offset.y + ((this.hitboxData.height/2) * scale) + pan;
+        return (this.hitboxData.offset.y + this.frameData.offset.y + (this.hitboxData.height/2)) * scale + pan;
     }
 
     registerListener = (listener) => {
@@ -45,7 +45,7 @@ export class hitbox{
     }
 
     triggerListeners = () => {
-        this.listeners.forEach((i) => {
+        this.listeners.forEach(i => {
             i();
         });
     }

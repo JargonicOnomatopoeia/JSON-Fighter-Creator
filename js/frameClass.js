@@ -29,19 +29,19 @@ export class frame{
     }
 
     getLeft = (scale = 1, pan = 0) => {
-        return this.frameData.offset.x - (this.image.width/2) * scale + pan;
+        return (this.frameData.offset.x - (this.image.width/2)) * scale + pan;
     }
 
     getTop = (scale = 1, pan = 0) => {
-        return this.frameData.offset.y - (this.image.height/2) * scale + pan;
+        return (this.frameData.offset.y - (this.image.height/2)) * scale + pan;
     }
 
     getRight = (scale = 1, pan = 0) => {
-        return this.frameData.offset.x + (this.image.width/2) * scale + pan;
+        return (this.frameData.offset.x + (this.image.width/2)) * scale + pan;
     }
 
     getBottom = (scale = 1, pan = 0) => {
-        return this.frameData.offset.y + (this.image.height/2) * scale + pan;
+        return (this.frameData.offset.y + (this.image.height/2)) * scale + pan;
     }
 
     addHitbox = (_hitbox) => {

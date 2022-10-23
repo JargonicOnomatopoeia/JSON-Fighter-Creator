@@ -17,7 +17,7 @@ window.onload = () => {
     let buttonClipboard = document.getElementById("dl-json");
 
     animationList.initialize();
-    //editor.initialize();
+    editor.initialize();
     animator.initialize();
     //FrameData.Initialize();
     //HitboxRows.Initialize();
@@ -80,11 +80,11 @@ window.onload = () => {
     });
 */
     requestAnimationFrame(animator.animationPlay);
-    //requestAnimationFrame(showFrame);
+    requestAnimationFrame(editor.showFrame);
 
 }
 
 window.onresize = () => {
-    animator.canvasClass.resize();
+    //animator.canvasClass.resize();
 }
 
