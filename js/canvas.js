@@ -6,12 +6,76 @@ export let colorHurtbox = "rgba(0, 255, 34, 0.41)";
 export let speedPan = 1;
 export let speedZoom = 0.0005;
 
+export let zoomMin = 0.1;
+export let zoomMax = 2;
+
 export class canvas{
     constructor(document){
+        this.optionZoom = true;
+        this.optionPan = false;
+        this.pan = {
+            x: 0,
+            y: 0
+        }
+        this.start = {
+            x: 0,
+            y: 0
+        }
+        this.zoom = 1;
+
+        
         this.canvas = document;
         this.parent = document.parentElement;
         this.resize();
         this.context = this.canvas.getContext('2d');
+    }
+
+    panTrigger = () => {
+        this.context.translate(this.canvas.width/2 + this.pan.x, this.canvas.height/2 + this.pan.y);
+    }
+
+    panMouse = (currentPos) => {
+        this.pan.x += (currentPos.x - this.start.x) * speedPan;
+        this.pan.y += (currentPos.y - this.start.y) * speedPan;
+        this.start = {...currentPos};
+    }
+
+    panOption = (mode) => {
+        this.optionPan = mode;
+    }
+    //#region  Zoom
+    zoomTrigger = () => {
+        this.context.scale(this.zoom, this.zoom);
+    }
+    
+    zoomOption = (mode) => {
+        this.optionZoom = mode;
+    }
+
+    zoomRefresh = () => {
+        this.zoom = 1;
+    }
+
+    zoomInTrigger = () => {
+        this.zoom = clamp(this.zoom+0.1, zoomMin, zoomMax);
+    }
+
+    zoomOutTrigger = () => {
+        this.zoom = clamp(this.zoom-0.1, zoomMin, zoomMax);
+    }
+
+    zoomDynamic = (value) => {
+        let zoomVal = speedZoom * value;
+        this.zoom = clamp(this.zoom-zoomVal, zoomMin, zoomMax);
+    }
+
+    zoomScale = () => {
+        this.context.scale(this.zoom, this.zoom);
+    }
+    //#endregion
+
+    mousePosStart = (clientX, clientY) => {
+        this.start = {...this.getMousPos(clientX, clientY)};
     }
 
     erase = () => {

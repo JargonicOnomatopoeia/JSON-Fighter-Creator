@@ -1,7 +1,6 @@
 import * as animationList from "./animationList.js";
 import * as canvasUtil from "./canvas.js"
 
-let canvas;
 let canvasClass;
 
 let oSkinOpacityBack = 0.3;
@@ -15,7 +14,6 @@ let onionSkinFront = 2;
 
 let decimal = 1000
 let highlight = -1;
-let scale = 1;
 
 let highlightHitbox = "rgba(164, 59, 235, 0.78)";
 let highlightHurtbox = "rgba(59, 67, 234, 0.78)";
@@ -23,17 +21,6 @@ let highlightHurtbox = "rgba(59, 67, 234, 0.78)";
 let editHitbox = true;
 let highlightImage = false;
 let toMove = false;
-
-let toPan = false;
-let pan = {
-    x: 0,
-    y: 0
-}
-
-let start = {
-    x: 0,
-    y: 0
-}
 
 let toResize = false;
 let resizeProp = {
@@ -50,51 +37,48 @@ let resizeArea = {
 let mousedown = false;
 
 export const initialize = () =>{
-    canvas = document.getElementById("editor-canvas");
+    let canvas = document.getElementById("editor-canvas");
     canvasClass = new canvasUtil.canvas(canvas);
     canvas.addEventListener("mousedown",(e) => {
         e.preventDefault();  
-        if(animationList.currentFrame == null){
-            return;
-        }
+        if(animationList.currentFrame == null) return;
         
         if(editHitbox == true){  
-            
             let hitboxes = animationList.currentFrame.hitboxListClasses;
             if( highlight < hitboxes.length){
                 toMove =  HitboxBoundChecker(e.clientX, e.clientY, hitboxes[highlight]);
                 toResize =  HitboxResizeChecker(e.clientX, e.clientY, hitboxes[highlight]);
             }
-            console.log(toMove);
-            console.log(toResize);
-            toPan = !toMove && !toResize;
+            canvasClass.panOption(!toMove && !toResize);
         }else{
             toMove = FrameBoundChecker(e.clientX, e.clientY, animationList.currentFrame);
-            toPan = !toMove;
+            canvasClass.panOption(!toMove);
         }
 
-        if(toMove == true || toResize == true || toPan == true){
-            let current =  canvasClass.getMousPos(e.clientX, e.clientY);
-            start = current;
+        if(toMove == true || toResize == true || canvasClass.optionPan == true){
+            canvasClass.mousePosStart(e.clientX, e.clientY);
         }
 
         mousedown = true;
     });
 
     canvas.addEventListener("mousemove", (e) =>{
-        e.preventDefault();
-        if(animationList.currentFrame == null){
-            return;
+        const roundNum = (c, s) => {
+            return Math.round(((c - s)/  canvasClass.zoom) *  decimal)/ decimal;
         }
+
+        e.preventDefault();
+        if(animationList.currentFrame == null) return;
         let current =  canvasClass.getMousPos(e.clientX, e.clientY);
-        if( editHitbox == true){
+        console.log(current);
+
+        if(editHitbox == true){
             let hitboxes = animationList.currentFrame.hitboxListClasses;
             if(mousedown == false){
                 let x = 0;
                 for(; x < hitboxes.length &&  HitboxBoundChecker(e.clientX, e.clientY, hitboxes[x]) != true 
                 &&  HitboxResizeChecker(e.clientX, e.clientY, hitboxes[x]) != true;x++){}
                 highlight = x;
-                console.log(x);
                 return;
             }
             
@@ -103,20 +87,19 @@ export const initialize = () =>{
             if(toMove || toResize){
                 hitbox = hitboxes[highlight];
                 hitboxData = hitbox.hitboxData;
-                //start = current;
             }
-            
+
             if(toMove == true){
-                hitboxData.offset.x += Math.round(((current.x - start.x)/  scale) *  decimal)/ decimal;
-                hitboxData.offset.y += Math.round(((current.y - start.y)/  scale) *  decimal)/ decimal;
-                //console.log(Math.round(((current.x - start.x)/  scale) *  decimal) /  decimal);
+                hitboxData.offset.x += roundNum(current.x, canvasClass.start.x);
+                hitboxData.offset.y += roundNum(current.y, canvasClass.start.y);
                 hitbox.triggerListeners();
-                start = current;
+                canvasClass.start.x = current.x;
+                canvasClass.start.y = current.y;
             }
 
             if(toResize == true){
-                let resultX = Math.round(((current.x - start.x)/  scale) *  decimal) /  decimal;
-                let resultY = Math.round(((current.y - start.y)/  scale) *  decimal) /  decimal;
+                let resultX = roundNum(current.x, canvasClass.start.x);
+                let resultY = roundNum(current.y, canvasClass.start.y);
                 if( resizeArea.left == true){
                     hitboxData.offset.x += resultX/2;
                     hitboxData.width -= resultX;
@@ -136,55 +119,51 @@ export const initialize = () =>{
                     hitboxData.offset.y += resultY/2;
                     hitboxData.height += resultY;
                 }
-                
                 hitbox.triggerListeners();
-                console.log(resizeArea);
-                start = current;
+                canvasClass.start.x = current.x;
+                canvasClass.start.y = current.y;
             }
             
         }else{
             if(mousedown == false){
-                highlightImage =  highlightImage =  FrameBoundChecker(e.clientX, e.clientY, animationList.currentFrame);
+                highlightImage =  FrameBoundChecker(e.clientX, e.clientY, animationList.currentFrame);
             }
 
             if(toMove == true){
                 let frameData = animationList.currentFrame.frameRef;
-                frameData.offset.x += Math.round(((current.x - start.x)/  scale) *  decimal)/ decimal;
-                frameData.offset.y += Math.round(((current.y - start.y)/  scale) *  decimal)/ decimal;
+                frameData.offset.x += roundNum(current.x, canvasClass.start.x);
+                frameData.offset.y += roundNum(current.y, canvasClass.start.y);
                 animationList.triggerFrameDataListeners();
-                start = current;
+                canvasClass.start = {...current};
             }
         }
         
-        if(toPan == true){
-            pan.x += current.x - start.x;
-            pan.y += current.y - start.y;
-            start = current;
+        if(canvasClass.optionPan == true){
+            canvasClass.panMouse(current);
         }
     });
 
-    canvas.addEventListener("mouseup", () =>{
+    const reset = () => {
         toMove = false;
         toResize = false;
-        toPan = false;
+        canvasClass.panOption(false);
         mousedown = false;
         highlight = -1;
+    }
+
+    canvas.addEventListener("mouseup", () =>{
+        reset();
     });
 
     canvas.addEventListener("mouseout", () => {
-        toMove = false;
-        toResize = false;
-        toPan = false;
-        mousedown = false;
-        highlight = -1;
+        reset();
     });
 
     canvas.addEventListener("wheel", (e) => {
         if(animationList.currentFrame == null){
             return;
         }
-        scale -= canvasUtil.speedZoom * e.deltaY;
-        scale = canvasUtil.clamp( scale, 0.1, 2);
+        canvasClass.zoomDynamic(e.deltaY);
     });
 }
 
@@ -210,11 +189,10 @@ export const showFrame = () => {
         context.globalAlpha = 1;
     }
 
-    let centerCan = canvasUtil.middle( canvasClass.canvas.width,  canvasClass.canvas.height);
     let context =  canvasClass.context;
     context.save();
-    context.translate(centerCan.x +  pan.x, centerCan.y +  pan.y);
-    context.scale(scale, scale);
+    canvasClass.panTrigger();
+    canvasClass.zoomTrigger();
 
 
     onionSkin(onionSkinMin, frameIndex,  oSkinOpacityBack, "hue-rotate("+hueOSkinBack+"deg)");
@@ -236,11 +214,11 @@ const FrameBoundChecker = (clientX , clientY, frame) => {
     let mousePos =  canvasClass.getMousPos(clientX, clientY);
     let centerCan = canvasUtil.middle(canvasClass.canvas.width, canvasClass.canvas.height);
 
-    let left = centerCan.x + frame.getLeft(scale, pan.x);
-    let top = centerCan.y + frame.getTop(scale, pan.y);
+    let left = centerCan.x + frame.getLeft(canvasClass.zoom, canvasClass.pan.x);
+    let top = centerCan.y + frame.getTop(canvasClass.zoom, canvasClass.pan.y);
 
-    let right = centerCan.x + frame.getRight(scale, pan.x);
-    let bottom = centerCan.y + frame.getBottom(scale, pan.y);
+    let right = centerCan.x + frame.getRight(canvasClass.zoom, canvasClass.pan.x);
+    let bottom = centerCan.y + frame.getBottom(canvasClass.zoom, canvasClass.pan.y);
 
     return  canvasUtil.isBetween(mousePos.x, left, right) &&  canvasUtil.isBetween(mousePos.y, top, bottom);
 }
@@ -249,13 +227,13 @@ const HitboxBoundChecker = (clientX, clientY, hitbox) => {
     let mousePos =  canvasClass.getMousPos(clientX, clientY);
     let centerCan = canvasUtil.middle(canvasClass.canvas.width, canvasClass.canvas.height);
 
-    //let scalemin =  resizeProp.min *  scale;
+    //let scalemin =  resizeProp.min *  canvasClass.zoom;
 
-    let left = centerCan.x + hitbox.getLeft(scale, pan.x) + resizeProp.min;
-    let top = centerCan.y + hitbox.getTop(scale, pan.y) + resizeProp.min;
+    let left = centerCan.x + hitbox.getLeft(canvasClass.zoom, canvasClass.pan.x) + resizeProp.min;
+    let top = centerCan.y + hitbox.getTop(canvasClass.zoom, canvasClass.pan.y) + resizeProp.min;
 
-    let right = centerCan.x + hitbox.getRight(scale, pan.x) - resizeProp.min;
-    let bottom = centerCan.y + hitbox.getBottom(scale, pan.y) - resizeProp.min;
+    let right = centerCan.x + hitbox.getRight(canvasClass.zoom, canvasClass.pan.x) - resizeProp.min;
+    let bottom = centerCan.y + hitbox.getBottom(canvasClass.zoom, canvasClass.pan.y) - resizeProp.min;
 
     return  canvasUtil.isBetween(mousePos.x, left, right) &&  canvasUtil.isBetween(mousePos.y, top, bottom);
 }
@@ -264,11 +242,11 @@ const HitboxResizeChecker = (clientX, clientY, hitbox) => {
     let mousePos =  canvasClass.getMousPos(clientX, clientY);
     let centerCan = canvasUtil.middle(canvasClass.canvas.width, canvasClass.canvas.height);
 
-    let leftCoord = centerCan.x + hitbox.getLeft(scale, pan.x);
-    let topCoord = centerCan.y + hitbox.getTop(scale, pan.y);
+    let leftCoord = centerCan.x + hitbox.getLeft(canvasClass.zoom, canvasClass.pan.x);
+    let topCoord = centerCan.y + hitbox.getTop(canvasClass.zoom, canvasClass.pan.y);
 
-    //let scaleMin =  resizeProp.min *  scale;
-    //let scaleMax =  resizeProp.max *  scale;
+    //let scaleMin =  resizeProp.min *  canvasClass.zoom;
+    //let scaleMax =  resizeProp.max *  canvasClass.zoom;
 
     let leftMin = leftCoord + resizeProp.min ;
     let leftMax = leftCoord - resizeProp.max;
@@ -276,8 +254,8 @@ const HitboxResizeChecker = (clientX, clientY, hitbox) => {
     let topMin = topCoord + resizeProp.min;
     let topMax = topCoord - resizeProp.max;
 
-    let rightCoord = centerCan.x + hitbox.getRight(scale, pan.x);
-    let bottomCoord = centerCan.y + hitbox.getBottom(scale, pan.y);
+    let rightCoord = centerCan.x + hitbox.getRight(canvasClass.zoom, canvasClass.pan.x);
+    let bottomCoord = centerCan.y + hitbox.getBottom(canvasClass.zoom, canvasClass.pan.y);
 
     let rightMin = rightCoord - resizeProp.min;
     let rightMax = rightCoord + resizeProp.max;

@@ -3,18 +3,11 @@ import * as canvasUtil from "./canvas.js"
 
 let canvas;
 let showHitboxes = true;
-export let canvasClass;
+let canvasClass;
 let frame = 0;
 let frametime = 0;
 let index = 0;
 let speed = 12;
-let scale = 1;
-
-let toPan = false;
-let pan = {
-    x: 0,
-    y: 0
-}
 
 //#region  Mouse Reactions
 let startPan;
@@ -25,35 +18,31 @@ export const initialize = () => {
         if(currentAnimation == null){
             return; 
         }
-        toPan = true;
-        startPan = canvasClass.getMousPos(e.clientX, e.clientY)
+        canvasClass.panOption(true);
+        canvasClass.mousePosStart(e.clientX, e.clientY);
     });
 
     canvas.addEventListener("mousemove", (e) => {
         e.preventDefault();
-        if(toPan){
+        if(canvasClass.optionPan == true){
             let current = canvasClass.getMousPos(e.clientX, e.clientY);
-            pan.x += current.x - startPan.x;
-            pan.y += current.y - startPan.y;
-
-            startPan = current;
+            canvasClass.panMouse(current);
         }
     });
 
     canvas.addEventListener("mouseup", () => {
-        toPan = false;
+        canvasClass.panOption(false);
     })
 
     canvas.addEventListener("mouseout", () => {
-        toPan = false;
+        canvasClass.panOption(false);
     })
 
     canvas.addEventListener("wheel", (e) => {
         if(currentAnimation == null){
             return;
         }
-        scale -= canvasUtil.speedZoom * e.deltaY;
-        scale = canvasUtil.clamp(scale, 0.1, 2);
+        canvasClass.zoomDynamic(e.deltaY);
     });
 }
 //#endregion
@@ -70,12 +59,11 @@ export const animationPlay = () => {
     let animation = currentAnimation;
     if(currentAnimation == null) return; 
     let frameClass = animation.frameDataListClasses[index];
-    if(frameClass != null && frameClass.frameData.frametime <= frametime){
-        let centerCan = canvasUtil.middle(canvasClass.canvas.width, canvasClass.canvas.height);
+    if(frameClass.frameData.frametime <= frametime){
         let context = canvasClass.context;
         context.save();
-        context.translate(centerCan.x + pan.x, centerCan.y + pan.y);
-        context.scale(scale, scale);
+        canvasClass.panTrigger();
+        canvasClass.zoomTrigger();
         canvasClass.displayerFrame(frameClass);
         let hitboxClasses = frameClass.hitboxListClasses;
         for(let x = 0;showHitboxes !=  false && x < hitboxClasses.length;x++){
