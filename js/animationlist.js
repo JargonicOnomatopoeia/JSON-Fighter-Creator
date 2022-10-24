@@ -74,8 +74,9 @@ export const buildAnimationSprite = (imageArray) => {
                     newFrame.resetFrame(animationTemp, e.target.result, imageArray[x].name);
                 }else{
                     newFrame = new frame(animationTemp, e.target.result, imageArray[x].name);
-                    newFrame.setCoords();
                     newFrame.element = buildFrameContainer(newFrame);
+                    //newFrame.setCoords();
+                    //console.log(newFrame.image.width+" "+newFrame.image.height);
                 }
                 resolve(newFrame);
             });

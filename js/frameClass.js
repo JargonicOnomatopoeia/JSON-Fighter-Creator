@@ -8,8 +8,9 @@ export class frame{
     constructor(_animRef = null, _imageSource = "", _frameName=""){
         
         this.animRef = _animRef
+        
         this.image = new Image();
-        this.image.src = _imageSource
+        this.image.src = _imageSource;
 
         this.hitboxListClasses = [];
         
@@ -17,7 +18,7 @@ export class frame{
             name: _frameName,
             offset:{
                 x: 0,
-                y: 0,
+                y: 0
             },
             velocity: {
                 x: 0,
@@ -65,19 +66,19 @@ export class frame{
     }
 
     setLeft = () => {
-        this.frameData.coords.left = (this.frameData.offset.x - (this.image.width/2));
+        this.frameData.coords.left = this.frameData.offset.x - this.image.width/2;
     }
 
     setTop = () => {
-        this.frameData.coords.top = (this.frameData.offset.y - (this.image.height/2));
+        this.frameData.coords.top = this.frameData.offset.y - this.image.height/2;
     }
 
     setRight = () =>{
-        this.frameData.coords.right = (this.frameData.offset.x + (this.image.width/2));
+        this.frameData.coords.right = this.frameData.offset.x + this.image.width/2;
     }
 
     setBottom = () => {
-        this.frameData.coords.bottom - (this.frameData.offset.y + (this.image.height/2));
+        this.frameData.coords.bottom = this.frameData.offset.y + this.image.height/2;
     }
     //#endregion
     //#region get
