@@ -93,13 +93,6 @@ export const buildAnimationSprite = (imageArray) => {
     });
 }
 
-//#region Frame Data Listener Functions
-export const removeFrameDataListeners = () => {
-    while(frameDataInputListeners.length > 0){
-        frameDataInputListeners.pop();
-    }
-}
-
 export const triggerFrameDataListeners = () => {
     frameDataInputListeners.forEach(i => {
         i();
