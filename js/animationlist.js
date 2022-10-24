@@ -182,20 +182,11 @@ const buildFrameDataInput = () => {
     let data = new frame().frameData;
     let index = 0;
 
-    const setAllCoords = () => {
-        currentFrame.setCoords();
-        let hitboxClasses = currentFrame.hitboxListClasses;
-        for(let x = 0; x < hitboxClasses.length;x++){
-            hitboxClasses[x].setCoords();
-        }
-    }
-
     const primaryCallback = (key) => {
         let frameInput = frameDataInputElems[index];
         frameInput.addEventListener('input', () => {
             inputNumCheck(frameInput, currentFrame, (result) => {
                 currentFrame.frameData[key] = result;
-                setAllCoords();
             });
         });
         index++;
@@ -206,7 +197,6 @@ const buildFrameDataInput = () => {
         frameInput.addEventListener('input', () => {
             inputNumCheck(frameInput, currentFrame, (result) => {
                 currentFrame.frameData[primaryKey][secondaryKey] = result;
-                setAllCoords();
             }); 
         });
         index++;
@@ -393,7 +383,6 @@ const buildFrameContainer = (frameClass) => {
         animator.reset();
     });
 
-    frameClass.listeners.push(frameClass.setCoords);
     objectLooper(frameClass, 1, Object.keys(frameClass.frameData).length-2, primaryCallback, secondaryCallback);
 
     return frameContainer;
@@ -439,7 +428,6 @@ export const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
                 inputNumCheck(input, currentFrame, (number) => {
                     hitboxData[key] = number;
                 });
-                hitboxClass.setCoords();
             });
             hitboxClass.registerListener(() => {
                 input.value = hitboxData[key];
@@ -457,7 +445,6 @@ export const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
                 inputNumCheck(input, currentFrame, (number) => {
                     hitboxData[primaryKey][secondaryKey] = number
                 });
-                hitboxClass.setCoords();
             });
             hitboxClass.registerListener(() => {
                 input.value = hitboxData[primaryKey][secondaryKey];
@@ -466,8 +453,6 @@ export const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
         
         tableRow.appendChild(cell);
     }
-
-    hitboxClass.registerListener(hitboxClass.setCoords);
 
     objectLooper(hitboxData, 1, Object.keys(hitboxData).length-1, primaryCallback, secondaryCallback);
     //#endregion

@@ -59,6 +59,13 @@ export const animationPlay = () => {
     let animation = currentAnimation;
     if(currentAnimation == null) return; 
     let frameClass = animation.frameDataListClasses[index];
+    let hitboxClasses = frameClass.hitboxListClasses;
+    
+    frameClass.setCoords();
+
+    for(let x = 0; x < hitboxClasses.length;x++){
+        hitboxClasses.setCoords();
+    }
 
     if(frameClass.frameData.frametime <= frametime){
         let context = canvasClass.context;
@@ -66,7 +73,7 @@ export const animationPlay = () => {
         canvasClass.panTrigger();
         canvasClass.zoomTrigger();
         canvasClass.displayerFrame(frameClass);
-        let hitboxClasses = frameClass.hitboxListClasses;
+
         for(let x = 0;showHitboxes !=  false && x < hitboxClasses.length;x++){
             let hitboxData = hitboxClasses[x].hitboxData;
             canvasClass.displayerHitbox(hitboxClasses[x], (hitboxData.type == 'hitbox')? canvasUtil.colorHitbox: canvasUtil.colorHurtbox);
