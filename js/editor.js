@@ -70,7 +70,7 @@ export const initialize = () =>{
         e.preventDefault();
         if(animationList.currentFrame == null) return;
         let current =  canvasClass.getMousPos(e.clientX, e.clientY);
-        console.log(current);
+        //console.log(current);
 
         if(editHitbox == true){
             let hitboxes = animationList.currentFrame.hitboxListClasses;
@@ -174,7 +174,6 @@ export const showFrame = () => {
     let frame  = animationList.currentFrame;
 
     if(frame == null) return;
-
     let frameClasses = animationList.currentAnimation.frameDataListClasses;
     let frameIndex = frameClasses.findIndex(i => i == frame);
 
@@ -200,14 +199,15 @@ export const showFrame = () => {
     onionSkin(frameIndex+1, onionSkinMax,  oSkinOpacityFront, "hue-rotate("+hueOSkinFront+"deg)");
 
     let hitboxes = frame.hitboxListClasses;
-        for(let x = 0; x < hitboxes.length ;x++){
-            let hitboxData = hitboxes[x].hitboxData;
-            switch( highlight == x){
-                case true: canvasClass.displayerHitbox(hitboxes[x], (hitboxData.type == 'hitbox')?  highlightHitbox:  highlightHurtbox, toResize);break;
-                case false:  canvasClass.displayerHitbox(hitboxes[x], (hitboxData.type == 'hitbox')? canvasUtil.colorHitbox: canvasUtil.colorHurtbox);break;
-            }
+    for(let x = 0; x < hitboxes.length ;x++){
+        let hitboxData = hitboxes[x].hitboxData;
+        switch( highlight == x){
+            case true: canvasClass.displayerHitbox(hitboxes[x], (hitboxData.type == 'hitbox')?  highlightHitbox:  highlightHurtbox, toResize);break;
+            case false:  canvasClass.displayerHitbox(hitboxes[x], (hitboxData.type == 'hitbox')? canvasUtil.colorHitbox: canvasUtil.colorHurtbox);break;
         }
-        context.restore();
+    }
+
+    context.restore();
 }
 
 const FrameBoundChecker = (clientX , clientY, frame) => {

@@ -59,6 +59,7 @@ export const animationPlay = () => {
     let animation = currentAnimation;
     if(currentAnimation == null) return; 
     let frameClass = animation.frameDataListClasses[index];
+
     if(frameClass.frameData.frametime <= frametime){
         let context = canvasClass.context;
         context.save();

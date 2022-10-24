@@ -1,5 +1,4 @@
 import * as animationList from "./animationList.js";
-import { deleteRow } from "./table.js";
 
 export class animation{
     constructor(_animationName = ""){
@@ -11,6 +10,18 @@ export class animation{
             chain: 0,
             frameDataList: []
         }
+
+        this.hoverListener;
+        this.accordionElement;
+        this.inputElement;
+        this.accordionBodyElement;
+    }
+
+    resetAnim = (_animationName) => {
+        this.animationData.name = _animationName;
+        this.animationData.chain = 0;
+        this.inputElement.value = _animationName;
+        this.hoverListener();
     }
 
     addFrameData = (_frameData) => {
@@ -21,30 +32,20 @@ export class animation{
     //#region Delete Region
     deleteFrameData = (_frameData) => {
         let index = this.frameDataListClasses.findIndex(i => i == _frameData);
-        delete this.animationData.frameDataList.splice(index, 1);
-        delete this.frameDataListClasses.splice(index, 1);
+        this.frameDataListClasses[index].parentElement.remove();
+        this.animationData.frameDataList.splice(index, 1);
+        animationList.garbageFrames.push(this.frameDataListClasses.splice(index, 1));
     }
 
     deleteThis = () => {
-        //#region DeleteRows
-        
-        //#endregion
-        
-        //#region Delete Data
         while(this.frameDataListClasses.length > 0){
-            this.deleteFrameData(this.frameDataListClasses[0]);
+            this.frameDataListClasses[0].deleteThis();
         }
-
-        animationList.removeFromList(this);
-        
         if(animationList.currentAnimation == this){
             animationList.setCurrentAnim();
-            console.log(animationList.currentAnimation);
             animationList.setCurrentFrame();
         }
-
-        
-        //#endregion
+        animationList.removeFromList(this);
         
     }   
     //#endregion
