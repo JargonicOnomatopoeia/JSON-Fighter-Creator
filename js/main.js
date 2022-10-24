@@ -1,7 +1,8 @@
 import * as animationList from './animationList.js'
-import { displayInJson , downloadJSON, copyJSONToClipboard} from './jsonOutput.js';
+import { downloadJSON, copyJSONToClipboard} from './jsonOutput.js';
 import * as animator from './animator.js';
 import * as editor from './editor.js';
+import { clamp } from './canvas.js';
 
 
 window.onload = () => {
@@ -15,13 +16,13 @@ window.onload = () => {
     let pasteCancelContainer = document.getElementById("after-copy-hitbox-list");
     let buttonDownload = document.getElementById("cp-json");
     let buttonClipboard = document.getElementById("dl-json");
-
+    
     animationList.initialize();
     editor.initialize();
     animator.initialize();
     //FrameData.Initialize();
     //HitboxRows.Initialize();
-    //#endregion
+    
 
     //Hidden File Uploader;
     let fileAdd = document.createElement('input');
@@ -48,6 +49,48 @@ window.onload = () => {
 
     buttonDownload.addEventListener("click", downloadJSON);
     buttonClipboard.addEventListener("click", copyJSONToClipboard);
+    //#endregion
+    //#region Elements for Animator View
+    let buttonSpeedFast = document.getElementById('animation-fast-speed');
+    let buttonSpeedSlow = document.getElementById('animation-slow-speed');
+    let inputSpeedCounter = document.getElementById('speed-counter');
+    let hitboxToggle = document.getElementById('animation-hitbox-toggle');
+    let animPanToggle = document.getElementById('animation-pan-toggle');
+    let animZoomIn = document.getElementById('animation-zoom-in');
+    let animZoomOut = document.getElementById('animation-zoom-out');
+    
+    //RefreshZoomButton
+    buttonSpeedSlow.addEventListener('click', () => {
+        animator.decreaseSpeed();
+        inputSpeedCounter.value = animator.speed;
+    });
+
+    buttonSpeedFast.addEventListener('click', () => {
+        animator.increaseSpeed();
+        inputSpeedCounter.value = animator.speed;
+    });
+
+    inputSpeedCounter.value = animator.speed;
+    inputSpeedCounter.addEventListener('input', () => {
+        let currentAnimation = animationList.currentAnimation;
+        animationList.inputNumCheck(inputSpeedCounter, currentAnimation, (result) => {
+            animator.dynamicSpeed(result);
+            inputSpeedCounter.value = animator.speed;
+        });
+    });
+
+    hitboxToggle.addEventListener('click', animator.toggleHitboxDisplay);
+
+    animPanToggle.addEventListener('click', () => {
+        animator.canvasClass.panOption(!animator.canvasClass.optionPan);
+    });
+
+    animZoomIn.addEventListener('click', animator.canvasClass.zoomInTrigger);
+    animZoomOut.addEventListener('click', animator.canvasClass.zoomOutTrigger);
+    //#endregion
+
+    //#region Elements For Frame View
+    //#endregion
     /*
     buttonCopyHitbox.addEventListener("click", () => {
         let checker = HitboxRows.CopyAll();

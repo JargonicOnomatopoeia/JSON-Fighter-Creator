@@ -12,7 +12,10 @@ export let zoomMax = 2;
 export class canvas{
     constructor(document){
         this.optionZoom = true;
-        this.optionPan = false;
+
+        this.optionPan = true;
+        this.toPan = false;
+
         this.pan = {
             x: 0,
             y: 0
@@ -23,7 +26,6 @@ export class canvas{
         }
         this.zoom = 1;
 
-        
         this.canvas = document;
         this.parent = document.parentElement;
         this.resize();
@@ -42,6 +44,11 @@ export class canvas{
 
     panOption = (mode) => {
         this.optionPan = mode;
+    }
+
+    panRefresh = () => {
+        this.pan.x = 0;
+        this.pan.y = 0;
     }
     //#region  Zoom
     zoomTrigger = () => {

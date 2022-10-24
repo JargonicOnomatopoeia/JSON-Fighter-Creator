@@ -94,13 +94,11 @@ export const buildAnimationSprite = (imageArray) => {
 }
 
 export const triggerFrameDataListeners = () => {
-    frameDataInputListeners.forEach(i => {
-        i();
-    })
+    frameDataInputListeners.forEach(i => i());
 }
 //#endregion
 
-const inputNumCheck = (input, currentObject, callback) => {
+export const inputNumCheck = (input, currentObject, callback) => {
 
     if(currentObject == null){
         input.value = 0;
