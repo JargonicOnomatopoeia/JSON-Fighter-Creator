@@ -6,7 +6,7 @@ export const displayInJson = () =>{
 }
 
 export const downloadJSON = () => {
-    let string = JSON.stringify(GetData());
+    let string = JSON.stringify(animationListData);
 
     let tempLink = document.createElement("a");
     tempLink.download = "JSON-Fighter-Creater.json";
@@ -23,6 +23,6 @@ export const downloadJSON = () => {
 
 export const copyJSONToClipboard = () => {
     if(navigator.clipboard){
-        navigator.clipboard.writeText(JSON.stringify(GetData()));
+        navigator.clipboard.writeText(JSON.stringify(animationListData));
     }
 }

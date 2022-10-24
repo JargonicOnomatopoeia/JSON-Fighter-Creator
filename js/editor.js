@@ -1,7 +1,7 @@
 import * as animationList from "./animationList.js";
 import * as canvasUtil from "./canvas.js"
 
-let canvasClass;
+export let canvasClass;
 
 let oSkinOpacityBack = 0.3;
 let hueOSkinBack = 90;
@@ -9,8 +9,8 @@ let hueOSkinBack = 90;
 let oSkinOpacityFront = 0.3;
 let hueOSkinFront = 200;
 
-let onionSkinBack = 2;
-let onionSkinFront = 2;
+export let onionSkinBack = 0;
+export let onionSkinFront = 0;
 
 let decimal = 1000
 let highlight = -1;
@@ -36,6 +36,14 @@ let resizeArea = {
 
 let mousedown = false;
 
+export const modifySkinBehind = (number) => {
+    onionSkinBack = Math.floor(number);
+}
+
+export const modifySkinAhead = (number) => {
+    onionSkinFront = Math.floor(number);
+}
+
 export const initialize = () =>{
     let canvas = document.getElementById("editor-canvas");
     canvasClass = new canvasUtil.canvas(canvas);
@@ -49,13 +57,13 @@ export const initialize = () =>{
                 toMove =  HitboxBoundChecker(e.clientX, e.clientY, hitboxes[highlight]);
                 toResize =  HitboxResizeChecker(e.clientX, e.clientY, hitboxes[highlight]);
             }
-            canvasClass.panOption(!toMove && !toResize);
+            canvasClass.toPan = !toMove && !toResize;
         }else{
             toMove = FrameBoundChecker(e.clientX, e.clientY, animationList.currentFrame);
-            canvasClass.panOption(!toMove);
+            canvasClass.toPan = !toMove;
         }
 
-        if(toMove == true || toResize == true || canvasClass.optionPan == true){
+        if(toMove == true || toResize == true || canvasClass.toPan == true){
             canvasClass.mousePosStart(e.clientX, e.clientY);
         }
 
@@ -138,7 +146,7 @@ export const initialize = () =>{
             }
         }
         
-        if(canvasClass.optionPan == true){
+        if(canvasClass.optionPan == true && canvasClass.toPan == true){
             canvasClass.panMouse(current);
         }
     });
@@ -146,7 +154,7 @@ export const initialize = () =>{
     const reset = () => {
         toMove = false;
         toResize = false;
-        canvasClass.panOption(false);
+        canvasClass.toPan = false;
         mousedown = false;
         highlight = -1;
     }
@@ -192,7 +200,6 @@ export const showFrame = () => {
     context.save();
     canvasClass.panTrigger();
     canvasClass.zoomTrigger();
-
 
     onionSkin(onionSkinMin, frameIndex,  oSkinOpacityBack, "hue-rotate("+hueOSkinBack+"deg)");
     canvasClass.displayerFrame(frame,  highlightImage, 'brightness(150%)');

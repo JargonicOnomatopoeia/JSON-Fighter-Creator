@@ -2,7 +2,6 @@ import * as animationList from './animationList.js'
 import { downloadJSON, copyJSONToClipboard} from './jsonOutput.js';
 import * as animator from './animator.js';
 import * as editor from './editor.js';
-import { clamp } from './canvas.js';
 
 
 window.onload = () => {
@@ -10,12 +9,8 @@ window.onload = () => {
     let imageUploader = document.getElementById("add-files");
     let buttonNewHitbox = document.getElementById("add-new-hitbox");
     let buttonNewHurtbox = document.getElementById("add-new-hurtbox");
-    let buttonCopyHitbox = document.getElementById("copy-hitbox-list");
-    let buttonPasteHitbox = document.getElementById("paste-hitbox-list");
-    let buttonCancelCopy = document.getElementById("cancel-copy-hitbox-list");
-    let pasteCancelContainer = document.getElementById("after-copy-hitbox-list");
-    let buttonDownload = document.getElementById("cp-json");
-    let buttonClipboard = document.getElementById("dl-json");
+    let buttonClipboard = document.getElementById("cp-json");
+    let buttonDownload = document.getElementById("dl-json");
     
     animationList.initialize();
     editor.initialize();
@@ -23,7 +18,6 @@ window.onload = () => {
     //FrameData.Initialize();
     //HitboxRows.Initialize();
     
-
     //Hidden File Uploader;
     let fileAdd = document.createElement('input');
     fileAdd.type = 'file';
@@ -88,8 +82,37 @@ window.onload = () => {
     animZoomIn.addEventListener('click', animator.canvasClass.zoomInTrigger);
     animZoomOut.addEventListener('click', animator.canvasClass.zoomOutTrigger);
     //#endregion
-
     //#region Elements For Frame View
+    let inputOskinBehind = document.getElementById('frame-view-oskin-behind');
+    let inputOskinAhead = document.getElementById('frame-view-oskin-after');
+    let frameViewPanToggle = document.getElementById('frame-view-pan-toggle');
+    let frameViewZoomOut = document.getElementById('frame-view-zoom-out');
+    let frameViewZoomIn = document.getElementById('frame-view-zoom-in');
+
+    inputOskinBehind.value = editor.onionSkinBack;
+    inputOskinBehind.addEventListener('input', () => {
+        let frame = animationList.currentFrame;
+        animationList.inputNumCheck(inputOskinBehind, frame, (result) => {
+            editor.modifySkinBehind(result);
+            inputOskinBehind.value = editor.onionSkinBack;
+        });
+    });
+
+    inputOskinAhead.value = editor.onionSkinFront;
+    inputOskinAhead.addEventListener('input', () => {
+        let frame = animationList.currentFrame;
+        animationList.inputNumCheck(inputOskinAhead, frame, (result) => {
+            editor.modifySkinAhead(result);
+            inputOskinAhead.value = editor.onionSkinFront;
+        });
+    });
+
+    frameViewPanToggle.addEventListener('click', () => {
+        editor.canvasClass.panOption(!editor.canvasClass.optionPan);
+    });
+
+    frameViewZoomOut.addEventListener('click', editor.canvasClass.zoomOutTrigger);
+    frameViewZoomIn.addEventListener('click', editor.canvasClass.zoomInTrigger);
     //#endregion
     /*
     buttonCopyHitbox.addEventListener("click", () => {
