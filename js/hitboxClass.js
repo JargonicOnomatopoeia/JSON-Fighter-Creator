@@ -24,6 +24,7 @@ export class hitbox{
         this.listeners = [];
         this.parentElement;
         this.indexElement;
+        this.setCoords();
     }
 
     resetHitbox = (_frameRef, _hitboxType) => {
@@ -41,33 +42,17 @@ export class hitbox{
     }
 
     setCoords = () => {
-        this.setLeft();
-        this.setRight();
-        this.setTop();
-        this.setBottom();
-    }
+        let coords = this.hitboxData.coords;
+        let hoffset = this.hitboxData.offset;
+        let foffset = this.frameData.offset;
 
-    //#region Setters
-    setLeft = () => {
-        this.hitboxData.coords.left = this.hitboxData.offset.x + this.frameData.offset.x - (this.hitboxData.width/2);
+        coords.left = hoffset.x + foffset.x - (this.hitboxData.width/2);
+        coords.top = hoffset.y + foffset.y - (this.hitboxData.height/2);
+        coords.right = hoffset.x + foffset.x + (this.hitboxData.width/2);
+        coords.bottom = hoffset.y + foffset.y + (this.hitboxData.height/2);
     }
-
-    setTop = () => {
-        this.hitboxData.coords.top = this.hitboxData.offset.y + this.frameData.offset.y - (this.hitboxData.height/2);
-    }
-
-    setRight = () => {
-        this.hitboxData.coords.right = this.hitboxData.offset.x + this.frameData.offset.x + (this.hitboxData.width/2);
-    }
-
-    setBottom = () => {
-        this.hitboxData.coords.bottom = this.hitboxData.offset.y + this.frameData.offset.y + (this.hitboxData.height/2);
-    }
-    //#endregion
 
     //#region getter
-
-
     getLeft = (scale = 1, pan = 0) => {
         return this.hitboxData.coords.left * scale + pan;
     }

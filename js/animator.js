@@ -60,13 +60,7 @@ export const animationPlay = () => {
     if(currentAnimation == null) return; 
     let frameClass = animation.frameDataListClasses[index];
     let hitboxClasses = frameClass.hitboxListClasses;
-    
     frameClass.setCoords();
-
-    for(let x = 0; x < hitboxClasses.length;x++){
-        hitboxClasses[x].setCoords();
-    }
-
     if(frameClass.frameData.frametime <= frametime){
         let context = canvasClass.context;
         context.save();

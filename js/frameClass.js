@@ -8,7 +8,7 @@ export class frame{
     constructor(_animRef = null, _imageSource = "", _frameName=""){
         
         this.animRef = _animRef
-        
+
         this.image = new Image();
         this.image.src = _imageSource;
 
@@ -54,31 +54,22 @@ export class frame{
 
         this.inputElement.value = _frameName;
         this.hoverListener();
-        this.triggerListeners();
     }
 
     //#region set
     setCoords = () => {
-        this.setLeft();
-        this.setRight();
-        this.setTop();
-        this.setBottom();
+        let coords = this.frameData.coords;
+        let offset = this.frameData.offset;
+        coords.left = offset.x - this.image.width/2;
+        coords.top = offset.y - this.image.height/2;
+        coords.right = offset.x + this.image.width/2;
+        coords.bottom = offset.y + this.image.height/2;
     }
 
-    setLeft = () => {
-        this.frameData.coords.left = this.frameData.offset.x - this.image.width/2;
-    }
-
-    setTop = () => {
-        this.frameData.coords.top = this.frameData.offset.y - this.image.height/2;
-    }
-
-    setRight = () =>{
-        this.frameData.coords.right = this.frameData.offset.x + this.image.width/2;
-    }
-
-    setBottom = () => {
-        this.frameData.coords.bottom = this.frameData.offset.y + this.image.height/2;
+    setHitboxCoords = () => {
+        for(let x = 0; x < this.hitboxListClasses.length;x++){
+            this.hitboxListClasses[x].setCoords();
+        }
     }
     //#endregion
     //#region get

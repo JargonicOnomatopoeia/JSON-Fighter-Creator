@@ -12,6 +12,8 @@ export class animation{
         }
 
         this.hoverListener;
+        this.listener;
+
         this.accordionElement;
         this.inputElement;
         this.accordionBodyElement;
@@ -49,4 +51,8 @@ export class animation{
         
     }   
     //#endregion
+
+    triggerListener = () => {
+        this.listener();
+    }
 }

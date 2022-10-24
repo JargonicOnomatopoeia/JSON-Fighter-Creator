@@ -156,26 +156,6 @@ const clearAnimationDataValue = () => {
     animationDataInputElem.value = 0;
 }
 
-const addToFrameDataInputs = () => {
-    let index = 0;
-    let data = currentFrame.frameData;
-    //Functions that would add the values to the frame data panel
-    const primaryCallback = (key) => {
-        frameDataInputElems[index].value = data[key];
-        index++;
-    }
-
-    const secondaryCallback = (primaryKey, secondaryKey) => {
-        frameDataInputElems[index].value = data[primaryKey][secondaryKey];
-        index++;
-    }
-
-    objectLooper(data, 1, Object.keys(data).length-2, primaryCallback, secondaryCallback);
-}
-
-const addToAnimationDataInputs = () => {
-    animationDataInputElem.value = currentAnimation.animationData.chain;
-}
 //#endregion
 
 const buildFrameDataInput = () => {
@@ -187,6 +167,8 @@ const buildFrameDataInput = () => {
         frameInput.addEventListener('input', () => {
             inputNumCheck(frameInput, currentFrame, (result) => {
                 currentFrame.frameData[key] = result;
+                currentFrame.setCoords();
+                currentFrame.setHitboxCoords();
             });
         });
         index++;
@@ -197,6 +179,8 @@ const buildFrameDataInput = () => {
         frameInput.addEventListener('input', () => {
             inputNumCheck(frameInput, currentFrame, (result) => {
                 currentFrame.frameData[primaryKey][secondaryKey] = result;
+                currentFrame.setCoords();
+                currentFrame.setHitboxCoords();
             }); 
         });
         index++;
@@ -226,6 +210,9 @@ const buildAccordion = (animation) => {
     let hoverOnSecondayButton = false;
     let acc = buildElem('accordion');
     animation.accordionElement = acc;
+    animation.listener = () => {
+        animationDataInputElem.value = animation.animationData.chain;
+    }
 
     let resetHover = () => {
         hoverOnSecondayButton = false;
@@ -237,6 +224,7 @@ const buildAccordion = (animation) => {
     accHead.addEventListener('click', () => {
         if(hoverOnSecondayButton) return;
         setCurrentAnim(animation);
+        animation.triggerListener();
         animator.reset();
         clearHitboxes();
         setCurrentFrame();
@@ -368,22 +356,23 @@ const buildFrameContainer = (frameClass) => {
         let frameDataInput = frameDataInputElems[index];
         frameClass.listeners.push(() => {
             frameDataInput.value = frameClass.frameData[primaryKey][secondaryKey];
-        })
+        });
         index++;
     }
 
+    
+    objectLooper(frameClass.frameData, 1, Object.keys(frameClass.frameData).length-2, primaryCallback, secondaryCallback);
+    
     frameContainer.addEventListener('click', () => {
         if(hoverOnSecondayButton == true) return; 
         clearHitboxes();
         setCurrentAnim(frameClass.animRef);
         setCurrentFrame(frameClass);
-        addToFrameDataInputs();
-        addToAnimationDataInputs();
+        frameClass.triggerListeners();
+        frameClass.animRef.triggerListener();
         addCurrentHitboxes();
         animator.reset();
     });
-
-    objectLooper(frameClass, 1, Object.keys(frameClass.frameData).length-2, primaryCallback, secondaryCallback);
 
     return frameContainer;
 }
@@ -427,6 +416,7 @@ export const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
             input.addEventListener('input', () => {
                 inputNumCheck(input, currentFrame, (number) => {
                     hitboxData[key] = number;
+                    hitboxClass.setCoords();
                 });
             });
             hitboxClass.registerListener(() => {
@@ -443,7 +433,9 @@ export const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
             //inputc = input;
             input.addEventListener('input', () => {
                 inputNumCheck(input, currentFrame, (number) => {
-                    hitboxData[primaryKey][secondaryKey] = number
+                    hitboxData[primaryKey][secondaryKey] = number;
+                    hitboxClass.setCoords();
+
                 });
             });
             hitboxClass.registerListener(() => {
@@ -454,6 +446,7 @@ export const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
         tableRow.appendChild(cell);
     }
 
+    hitboxClass.registerListener(hitboxClass.setCoords);
     objectLooper(hitboxData, 1, Object.keys(hitboxData).length-1, primaryCallback, secondaryCallback);
     //#endregion
 
