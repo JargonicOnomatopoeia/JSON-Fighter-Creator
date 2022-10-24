@@ -214,6 +214,9 @@ const buildAccordion = (animation) => {
     let itemList = buildElem('list-item');
     accHead.addEventListener('click', () => {
         if(hoverOnSecondayButton) return;
+        if(currentAnimation != null) currentAnimation.headElement.classList.toggle('list-item-active');
+        if(currentFrame != null) currentFrame.parentElement.classList.toggle('list-sub-item-active');
+        animation.headElement.classList.toggle('list-item-active');
         setCurrentAnim(animation);
         animation.triggerListener();
         animator.reset();
@@ -222,6 +225,7 @@ const buildAccordion = (animation) => {
         animationDataInputElem.value = animation.animationData.chain;
         clearFrameDataValues();
     });
+    animation.headElement = itemList;
 
     //For the toggle 
     let arrow = buildElem('icon-arrow-down accordion-arrow', 'i');
@@ -356,6 +360,8 @@ const buildFrameContainer = (frameClass) => {
     
     frameContainer.addEventListener('click', () => {
         if(hoverOnSecondayButton == true) return; 
+        if(currentFrame != null) currentFrame.parentElement.classList.toggle('list-sub-item-active');
+        frameContainer.classList.toggle('list-sub-item-active');
         clearHitboxes();
         setCurrentAnim(frameClass.animRef);
         setCurrentFrame(frameClass);

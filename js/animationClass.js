@@ -15,6 +15,7 @@ export class animation{
         this.listener;
 
         this.accordionElement;
+        this.headElement;
         this.inputElement;
         this.accordionBodyElement;
     }
