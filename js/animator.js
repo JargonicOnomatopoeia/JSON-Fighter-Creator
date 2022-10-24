@@ -64,7 +64,7 @@ export const animationPlay = () => {
     frameClass.setCoords();
 
     for(let x = 0; x < hitboxClasses.length;x++){
-        hitboxClasses.setCoords();
+        hitboxClasses[x].setCoords();
     }
 
     if(frameClass.frameData.frametime <= frametime){
