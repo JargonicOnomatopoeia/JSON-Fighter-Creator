@@ -20,8 +20,8 @@ export let garbageFrames = [];
 export let garbageAnimations = [];
 
 export const initialize = () => {
-    animationListElem = document.getElementById('animation-list');
-    hitboxListElem = document.getElementById('hitbox-list');
+    animationListElem = document.getElementById('animation-list-container');
+    hitboxListElem = document.getElementById('hitbox-list-container');
     frameDataInputElems.push(...document.getElementsByClassName('finput'));
     frameDataInputElems.push(...document.getElementsByClassName('finput2'));
     animationDataInputElem = document.getElementsByClassName('ainput')[0];
@@ -66,7 +66,7 @@ export const buildAnimationSprite = (imageArray) => {
     let promises = [];
     for(let x = 0; x < imageArray.length;x++){
         let picture = new FileReader();
-        promises.push(new Promise ((resolve, reject) => {
+        promises.push(new Promise ((resolve) => {
             picture.addEventListener('load', (e)=>{
                 let newFrame;
                 if(garbageFrames.length > 0){

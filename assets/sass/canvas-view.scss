@@ -1,8 +1,4 @@
 .canvas-view {
-  canvas {
-    height: 0;
-    flex-grow: 1;
-  }
 
   .canvas-end {
     @include flex-mixin;

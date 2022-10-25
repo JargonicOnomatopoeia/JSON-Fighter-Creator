@@ -401,10 +401,6 @@ div.accordion > .accordion-body {
   padding-right: 8px;
 }
 
-.canvas-view canvas {
-  height: 0;
-  flex-grow: 1;
-}
 .canvas-view .canvas-end {
   display: flex;
   column-gap: 16px;

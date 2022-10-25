@@ -46,8 +46,7 @@ export const modifySkinAhead = (number) => {
 
 export const initialize = () =>{
     let canvas = document.getElementById("editor-canvas");
-    canvasClass = new canvasUtil.canvas(canvas, 1, 1);
-    //setTimeout(canvasClass.resize, 1);
+    canvasClass = new canvasUtil.canvas(canvas);
     canvas.addEventListener("mousedown",(e) => {
         e.preventDefault();  
         if(animationList.currentFrame == null) return;

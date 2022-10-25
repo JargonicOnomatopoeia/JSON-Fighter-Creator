@@ -20,7 +20,7 @@ let speedMax = 60;
 let startPan;
 export const initialize = () => {
     canvas = document.getElementById("animation-canvas");
-    canvasClass = new canvasUtil.canvas(canvas, 1, 1);
+    canvasClass = new canvasUtil.canvas(canvas);
     canvas.addEventListener("mousedown", (e) => {
         if(currentAnimation == null) return; 
         canvasClass.toPan = true;
