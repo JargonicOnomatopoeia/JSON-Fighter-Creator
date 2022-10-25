@@ -44,6 +44,7 @@ window.onload = () => {
     buttonDownload.addEventListener("click", downloadJSON);
     buttonClipboard.addEventListener("click", copyJSONToClipboard);
     //#endregion
+   
     //#region Elements for Animator View
     let buttonSpeedFast = document.getElementById('animation-fast-speed');
     let buttonSpeedSlow = document.getElementById('animation-slow-speed');
@@ -82,6 +83,7 @@ window.onload = () => {
     animZoomIn.addEventListener('click', animator.canvasClass.zoomInTrigger);
     animZoomOut.addEventListener('click', animator.canvasClass.zoomOutTrigger);
     //#endregion
+    
     //#region Elements For Frame View
     let inputOskinBehind = document.getElementById('frame-view-oskin-behind');
     let inputOskinAhead = document.getElementById('frame-view-oskin-after');
@@ -114,43 +116,13 @@ window.onload = () => {
     frameViewZoomOut.addEventListener('click', editor.canvasClass.zoomOutTrigger);
     frameViewZoomIn.addEventListener('click', editor.canvasClass.zoomInTrigger);
     //#endregion
-    /*
-    buttonCopyHitbox.addEventListener("click", () => {
-        let checker = HitboxRows.CopyAll();
-        switch(checker){
-            case true:
-                buttonCopyHitbox.hidden = true;
-                pasteCancelContainer.style.display = "grid";
-                break;
-            case false:;break;
-        }
-    });
-    buttonPasteHitbox.addEventListener("click", () => {
-        let checker = HitboxRows.PasteAll();
-        switch(checker){
-            case true:
-                pasteCancelContainer.style.display = "none";
-                buttonCopyHitbox.hidden = false;
-                HitboxRows.Clear();
-                HitboxRows.AddRows();
-                displayInJson();
-                break;
-            case false:;break;
-        }
-    });
 
-    buttonCancelCopy.addEventListener("click", () => {
-        HitboxRows.CancelCopy();
-        pasteCancelContainer.style.display = "none";
-        buttonCopyHitbox.hidden = false;
-    });
-*/
     requestAnimationFrame(animator.animationPlay);
     requestAnimationFrame(editor.showFrame);
 
 }
 
 window.onresize = () => {
-    //animator.canvasClass.resize();
+    
 }
 
