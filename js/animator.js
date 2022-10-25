@@ -87,26 +87,23 @@ export const animationPlay = () => {
     let frameClass = animation.frameDataListClasses[index];
     let hitboxClasses = frameClass.hitboxListClasses;
     frameClass.setCoords();
-    if(frameClass.frameData.frametime <= ++frametime){
-        let context = canvasClass.context;
-        context.save();
-        canvasClass.panTrigger();
-        canvasClass.zoomTrigger();
-        canvasClass.displayerFrame(frameClass);
+    let context = canvasClass.context;
+    context.save();
+    canvasClass.panTrigger();
+    canvasClass.zoomTrigger();
+    canvasClass.displayerFrame(frameClass);
 
-        for(let x = 0;showHitboxes !=  false && x < hitboxClasses.length;x++){
-            let hitboxData = hitboxClasses[x].hitboxData;
-            canvasClass.displayerHitbox(hitboxClasses[x], (hitboxData.type == 'hitbox')? canvasUtil.colorHitbox: canvasUtil.colorHurtbox);
-        }
-        context.restore();
-
-        timeNow = Date.now();
-        if(timeNow - timeAgo > framesInASecond/speed){
-            timeAgo = timeNow;
-            frametime = 0;
-            index = ++index % animation.frameDataListClasses.length;   
-        }
+    for(let x = 0;showHitboxes !=  false && x < hitboxClasses.length;x++){
+        let hitboxData = hitboxClasses[x].hitboxData;
+        canvasClass.displayerHitbox(hitboxClasses[x], (hitboxData.type == 'hitbox')? canvasUtil.colorHitbox: canvasUtil.colorHurtbox);
     }
+    context.restore();
 
+    timeNow = Date.now();
+    if(timeNow - timeAgo > framesInASecond/speed && frameClass.frameData.frametime <= ++frametime){
+        timeAgo = timeNow;
+        frametime = 0;
+        index = ++index % animation.frameDataListClasses.length;   
+    }
 }
 
