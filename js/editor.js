@@ -46,7 +46,7 @@ export const modifySkinAhead = (number) => {
 
 export const initialize = () =>{
     let canvas = document.getElementById("editor-canvas");
-    canvasClass = new canvasUtil.canvas(canvas, .25, .52);
+    canvasClass = new canvasUtil.canvas(canvas, 1, 1);
     //setTimeout(canvasClass.resize, 1);
     canvas.addEventListener("mousedown",(e) => {
         e.preventDefault();  
@@ -221,7 +221,7 @@ export const showFrame = () => {
 const FrameBoundChecker = (clientX , clientY, frame) => {
     let mousePos =  canvasClass.getMousPos(clientX, clientY);
     let centerCan = canvasUtil.middle(canvasClass.canvas.width, canvasClass.canvas.height);
-
+    
     let left = centerCan.x + frame.getLeft(canvasClass.zoom, canvasClass.pan.x);
     let top = centerCan.y + frame.getTop(canvasClass.zoom, canvasClass.pan.y);
 
@@ -233,8 +233,10 @@ const FrameBoundChecker = (clientX , clientY, frame) => {
 
 const HitboxBoundChecker = (clientX, clientY, hitbox) => {
     let mousePos =  canvasClass.getMousPos(clientX, clientY);
-    let centerCan = canvasUtil.middle(canvasClass.canvas.width, canvasClass.canvas.height);
-
+    let canvas = canvasClass.canvas.getBoundingClientRect();
+    let centerCan = canvasUtil.middle(canvas.width, canvas.height);
+    //console.log(canvasClass.canvas.width+" "+canvasClass.canvas.height);
+    //sconsole.log(mousePos);
     //let scalemin =  resizeProp.min *  canvasClass.zoom;
 
     let left = centerCan.x + hitbox.getLeft(canvasClass.zoom, canvasClass.pan.x) + resizeProp.min;
@@ -248,7 +250,8 @@ const HitboxBoundChecker = (clientX, clientY, hitbox) => {
 
 const HitboxResizeChecker = (clientX, clientY, hitbox) => {
     let mousePos =  canvasClass.getMousPos(clientX, clientY);
-    let centerCan = canvasUtil.middle(canvasClass.canvas.width, canvasClass.canvas.height);
+    let canvas = canvasClass.canvas.getBoundingClientRect();
+    let centerCan = canvasUtil.middle(canvas.width, canvas.height);
 
     let leftCoord = centerCan.x + hitbox.getLeft(canvasClass.zoom, canvasClass.pan.x);
     let topCoord = centerCan.y + hitbox.getTop(canvasClass.zoom, canvasClass.pan.y);

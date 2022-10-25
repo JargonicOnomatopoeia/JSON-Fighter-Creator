@@ -13,9 +13,8 @@ let prevWidth = 0;
 let prevHeight = 0;
 
 export class canvas{
-    constructor(document, widthPercent, heightPercent){
-        this.widthPercent = widthPercent;
-        this.heightPercent = heightPercent;
+    constructor(document){
+        
         this.optionZoom = true;
 
         this.optionPan = true;
@@ -125,8 +124,11 @@ export class canvas{
     }
 
     resize = () => {
-        this.canvas.width = innerWidth * this.widthPercent;
-        this.canvas.height = innerHeight * this.heightPercent;
+        this.canvas.width = 100;
+        this.canvas.height = 100;
+
+        this.canvas.width = this.parent.clientWidth;
+        this.canvas.height = this.parent.clientHeight;
     }
 }
 
