@@ -12,32 +12,13 @@ div.accordion {
     @include flex-mixin-col;
     
     i.accordion-arrow {
-      position: relative;
+      @include icon-toggle;
 
       &::before {
         transition: transform 500ms;
         transform: rotate(-90deg);
       }
   
-      > input[type="checkbox"] {
-        opacity: 0;
-        position:absolute;
-        width: 15px;
-        left: 0px;
-  
-        &:hover {
-          cursor: pointer;
-        }
-      }
-  
-      &:has(> input[type="checkbox"]:active) {
-        @include clickable-active;
-      }
-  
-      &:has(> input[type="checkbox"]:hover) {
-        @include clickable-hover;
-      }
-
       &:has(> input[type="checkbox"]:checked)::before {
         transform: rotate(0deg);
       }

@@ -4,14 +4,14 @@
 		<meta charset="utf-16" />
 		<title>JSON Fighter Creator | A Javascript Tool by William Starkovich | Modified By Clone1542</title>
 		<link rel="stylesheet" href="./css/index.css">
-		<link rel="stylesheet" href="./css/Glyphter.css">
+		<link rel="stylesheet" href="./css/fighter-creator-icons.css">
 		<script type="module" src="./js/main.js"></script>
 	</head>
 
 	<body>
 		<div id="app" class="flex-dir-row">
 			<div id="animation-col">
-				<div id="animation-list-container" class="container">
+				<div id="animation-list" class="container">
 					<div class="title">
 						Animation List
 						<div class="flex-pad" ></div>
@@ -32,7 +32,7 @@
 						</i>
 					</div>
 					<div class="body scrollable">
-						<div id="animation-list" class="list-list">
+						<div id="animation-list-container" class="list-list">
 						</div>
 					</div>
 				</div>
@@ -44,7 +44,7 @@
 							<div class="list-item">
 								<div class="label-text">
 									<i class="icon-speed">
-										<div class="tooltip top">
+										<div class="tooltip top-right">
 											Animation Speed
 										</div>
 									</i>
@@ -66,11 +66,19 @@
 								</div>
 							</div>
 							<div class="flex-pad"></div>
-							<i id='animation-hitbox-toggle' class="icon-hitbox clickable">
-								<div class="tooltip top">
-									Hitbox
-								</div>
-							</i>
+							<div class="toggle-icon">
+								<input type="checkbox" class="toggle-icon-checkbox" />
+								<i id='animation-hitbox-toggle' class="icon-show-hitbox">
+									<div class="tooltip top">
+										Show Hitbox
+									</div>
+								</i>
+								<i id='animation-hitbox-toggle' class="icon-hide-hitbox">
+									<div class="tooltip top">
+										Hide Hitbox
+									</div>
+								</i>
+							</div>
 							<i id='animation-pan-toggle' class="icon-move clickable">
 								<div class="tooltip top">
 									Pan Toggle
@@ -93,7 +101,7 @@
 			<div id="frame-view" class="container canvas-view">
 				<div class="title">Frame View</div>
 				<div class="body">
-					<canvas  id="editor-canvas" style="background-color:white;"></canvas>
+					<canvas id="editor-canvas" style="background-color:white;"></canvas>
 					<div class="canvas-end">
 						<div class="list-item">
 							<div class="label-text">
@@ -171,7 +179,7 @@
 						</div>
 					</div>
 				</div>
-				<div id="hitbox-list-container" class="container">
+				<div id="hitbox-list" class="container">
 					<div class="title">Hitbox List</div>
 					<div class="body">
 						<div class="flex-dir-row">
@@ -195,7 +203,7 @@
 								<div class="action-col"></div>
 							</div>
 							<div id="hitbox-list-table-body" class="flex-grow flex-dir-col">
-								<div id="hitbox-list" class="flex-dir-col" style="height: 0">
+								<div id="hitbox-list-container" class="flex-dir-col" style="height: 0">
 									
 								</div>
 							</div>

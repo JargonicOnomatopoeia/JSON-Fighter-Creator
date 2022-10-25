@@ -2,18 +2,17 @@
   display:none;
 }
 
-*:has(> .tooltip):hover {
+*:has(> .tooltip):hover, input[type="checkbox"]:hover ~ *:has(> .tooltip) {
   position: relative; 
 
   .tooltip {
-    z-index: 999px;
     position: absolute;
-    display: block;
+    display: inline;
     background-color: $black;
     color: $neonYellow;
     padding: 10px;
     border-radius: 6px;
-    left: -100%;
+    right: 150%;
     font-family: $font-stack;
     font-weight: 400;
     font-size: 12px;
@@ -21,21 +20,17 @@
     line-height: 12px;
     text-align: center;
     white-space: nowrap;
+    @include uneditable-text;
 
     &.top {
       top: -200%;
+      right: 0% !important;
     }
 
-    &.left {
-      left: -200% !important;
-    }
-    &.center-far-left {
-      left: -1000% !important;
-      top: -50% !important;
-    }
-    &.center-left {
-      left: -400% !important;
-      top: -50% !important;
+    &.top-right {
+      top: -200%;
+      left: 100% !important;
+      right: unset !important;
     }
   }
 }

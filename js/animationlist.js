@@ -302,7 +302,7 @@ const buildFrameContainer = (frameClass) => {
 
     //Copy Hitboxes
     let copyHitboxes = buildElem('icon-copy clickable', 'i');
-    let copyTip = buildElem('tooltip center-left');
+    let copyTip = buildElem('tooltip');
     copyTip.innerHTML = 'Copy Hitboxes';
     copyHitboxes.appendChild(copyTip);
     copyHitboxes.addEventListener('click', () => {
@@ -311,7 +311,7 @@ const buildFrameContainer = (frameClass) => {
 
     //Delete Frame
     let trashHitboxes = buildElem('icon-trash clickable', 'i');
-    let trashTip = buildElem('tooltip center-left');
+    let trashTip = buildElem('tooltip');
     trashTip.innerHTML = 'Delete';
     trashHitboxes.appendChild(trashTip);
     trashHitboxes.addEventListener('click', () => {
@@ -450,7 +450,7 @@ export const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
     //#region  Option Column
     let optionCol = buildElem('action-col flex-dir-row');
     let switcheri = buildElem('icon-switch clickable', 'i');
-    let switcherTip = buildElem('tooltip center-far-left');
+    let switcherTip = buildElem('tooltip');
     switcherTip.innerHTML = "Change to Hitbox/Hurtbox";
     switcheri.appendChild(switcherTip);
     switcheri.addEventListener('click', () => {
@@ -459,7 +459,7 @@ export const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
     });
 
     let closei = buildElem('icon-cross clickable', 'i');
-    let closeTip = buildElem('tooltip center-left');
+    let closeTip = buildElem('tooltip');
     closeTip.innerHTML = "Delete";
     closei.appendChild(closeTip);
     closei.addEventListener('click', () => {

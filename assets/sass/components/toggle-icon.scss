@@ -1,0 +1,43 @@
+// sample usage
+
+// <div class="toggle-icon">
+//   <input type="checkbox" class="toggle-icon-checkbox" />
+//   <i id='animation-hitbox-toggle' class="icon-show-hitbox">
+//     <div class="tooltip top">
+//       Show Hitbox
+//     </div>
+//   </i>
+//   <i id='animation-hitbox-toggle' class="icon-hide-hitbox">
+//     <div class="tooltip top">
+//       Hide Hitbox
+//     </div>
+//   </i>
+// </div>
+
+
+.toggle-icon {
+  // position: relative;
+  @include icon-toggle;
+
+  &-checkbox {
+    & ~ i:last-of-type {
+      display:none;
+    }
+
+    & ~ i:first-of-type {
+      display:unset;
+    }
+
+    &:checked ~ i:first-of-type {
+      display:none;
+    }
+
+    &:checked ~ i:last-of-type {
+      display:unset;
+    }
+  }
+
+  & > i {
+    @include clickable;
+  }
+}
