@@ -9,8 +9,13 @@ export let speedZoom = 0.0005;
 export let zoomMin = 0.1;
 export let zoomMax = 2;
 
+let prevWidth = 0;
+let prevHeight = 0;
+
 export class canvas{
-    constructor(document){
+    constructor(document, widthPercent, heightPercent){
+        this.widthPercent = widthPercent;
+        this.heightPercent = heightPercent;
         this.optionZoom = true;
 
         this.optionPan = true;
@@ -28,8 +33,9 @@ export class canvas{
 
         this.canvas = document;
         this.parent = document.parentElement;
-        this.resize();
+
         this.context = this.canvas.getContext('2d');
+        this.resize();
     }
 
     panTrigger = () => {
@@ -119,8 +125,8 @@ export class canvas{
     }
 
     resize = () => {
-        this.canvas.width = this.parent.getBoundingClientRect().width;
-        this.canvas.height = this.parent.getBoundingClientRect().height;
+        this.canvas.width = innerWidth * this.widthPercent;
+        this.canvas.height = innerHeight * this.heightPercent;
     }
 }
 

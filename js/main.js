@@ -123,6 +123,7 @@ window.onload = () => {
 }
 
 window.onresize = () => {
-    
+    editor.canvasClass.resize();
+    animator.canvasClass.resize();
 }
 
