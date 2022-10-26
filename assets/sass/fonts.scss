@@ -1,12 +1,12 @@
 @font-face {
   font-family: 'Josefin Sans';
-  src: url('/assets/fonts/JosefinSans-Regular.ttf') format('truetype');
+  src: url('../assets/fonts/JosefinSans-Regular.ttf') format('truetype');
 }
 $JosefinSans:'Josefin Sans';
 
 @font-face {
   font-family: 'Poppins Bold';
-  src: url('/assets/fonts/Poppins-Bold.ttf') format('truetype');
+  src: url('../assets/fonts/Poppins-Bold.ttf') format('truetype');
 }
 $Poppins: 'Poppins Bold';
 

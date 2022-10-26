@@ -5,10 +5,10 @@ function createWindow () {
         width: 1280,
         height: 720,
         autoHideMenuBar:true,
-        skipTaskbar:true,
+        skipTaskbar:false,
         webPreferences: {
         nodeIntegration: true
-        }
+        },
     });
     win.loadFile('index.html');
 }

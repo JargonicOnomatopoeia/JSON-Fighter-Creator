@@ -1,10 +1,10 @@
 @font-face {
   font-family: "Josefin Sans";
-  src: url("/assets/fonts/JosefinSans-Regular.ttf") format("truetype");
+  src: url("../assets/fonts/JosefinSans-Regular.ttf") format("truetype");
 }
 @font-face {
   font-family: "Poppins Bold";
-  src: url("/assets/fonts/Poppins-Bold.ttf") format("truetype");
+  src: url("../assets/fonts/Poppins-Bold.ttf") format("truetype");
 }
 .green {
   background: #9FCB8A !important;
