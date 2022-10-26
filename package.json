@@ -1,7 +1,7 @@
 {
   "name": "src",
   "version": "1.0.0",
-  "description": "JSON Fighter Creator\r soon...",
+  "description": "JSON Fighter Creator",
   "main": "app.js",
   "scripts": {
     "start": "electron ."
@@ -20,5 +20,4 @@
   "devDependencies": {
     "electron": "^21.2.0"
   }
-
 }
