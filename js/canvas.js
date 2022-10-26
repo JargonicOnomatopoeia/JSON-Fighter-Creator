@@ -1,4 +1,4 @@
-import * as animationList from "./animationList.js";
+import * as animationList from "./animationlist.js";
 
 export let colorHitbox = "rgba(255, 0, 0, 0.41)";
 export let colorHurtbox = "rgba(0, 255, 34, 0.41)";

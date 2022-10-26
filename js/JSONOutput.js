@@ -1,4 +1,4 @@
-import { animationListData } from "./animationList.js";
+import { animationListData } from "./animationlist.js";
 
 export const displayInJson = () =>{
     let outputScreen = document.getElementById("text20 jsonoutput");

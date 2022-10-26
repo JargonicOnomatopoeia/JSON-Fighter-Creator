@@ -1,4 +1,4 @@
-import { currentAnimation } from "./animationList.js";
+import { currentAnimation } from "./animationlist.js";
 import * as canvasUtil from "./canvas.js"
 
 let canvas;

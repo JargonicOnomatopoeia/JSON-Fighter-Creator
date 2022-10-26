@@ -1,0 +1,24 @@
+{
+  "name": "src",
+  "version": "1.0.0",
+  "description": "JSON Fighter Creator\r soon...",
+  "main": "app.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JargonicOnomatopoeia/JSON-Fighter-Creator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JargonicOnomatopoeia/JSON-Fighter-Creator/issues"
+  },
+  "homepage": "https://github.com/JargonicOnomatopoeia/JSON-Fighter-Creator#readme",
+  "devDependencies": {
+    "electron": "^21.2.0"
+  }
+
+}

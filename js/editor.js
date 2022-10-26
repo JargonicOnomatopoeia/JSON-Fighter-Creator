@@ -1,4 +1,4 @@
-import * as animationList from "./animationList.js";
+import * as animationList from "./animationlist.js";
 import * as canvasUtil from "./canvas.js"
 
 export let canvasClass;

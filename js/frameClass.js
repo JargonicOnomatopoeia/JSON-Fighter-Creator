@@ -2,7 +2,7 @@ import { displayInJson } from "./jsonOutput.js";
 import { deleteRow } from "./table.js";
 import { hitbox } from "./hitboxClass.js";
 import * as animator from "./animator.js";
-import * as animationList from "./animationList.js";
+import * as animationList from "./animationlist.js";
 
 export class frame{
     constructor(_animRef = null, _imageSource = "", _frameName=""){

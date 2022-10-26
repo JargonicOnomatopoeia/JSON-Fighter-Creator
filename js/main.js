@@ -1,7 +1,8 @@
-import * as animationList from './animationList.js'
+import * as animationList from './animationlist.js'
 import { downloadJSON, copyJSONToClipboard} from './jsonOutput.js';
 import * as animator from './animator.js';
 import * as editor from './editor.js';
+
 
 
 window.onload = () => {
@@ -117,8 +118,10 @@ window.onload = () => {
     frameViewZoomIn.addEventListener('click', editor.canvasClass.zoomInTrigger);
     //#endregion
 
+    //#region Start Canvas
     requestAnimationFrame(animator.animationPlay);
     requestAnimationFrame(editor.showFrame);
+    //#endregion
 
 }
 
