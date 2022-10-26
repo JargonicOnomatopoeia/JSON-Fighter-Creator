@@ -68,7 +68,7 @@
 								</div>
 							</div>
 							<div class="flex-pad"></div>
-							<div class="toggle-icon" id='animation-hitbox-toggle'>
+							<div class="toggle-icon" id='animation-hitbox-display-toggle'>
 								<input type="checkbox" class="toggle-icon-checkbox" />
 								<i class="icon-show-hitbox">
 									<div class="tooltip top">
@@ -136,36 +136,49 @@
 							<div class="label-text">Behind</div>
 							<input id='frame-view-oskin-behind' type="number" value="0" />
 							<div class="label-text">Ahead</div>
-							<input id='frame-view-oskin-after' type="number" value="0" />
+							<input id='frame-view-oskin-ahead' type="number" value="0" />
 						</div>
-						<div class="flex-pad"></div>
+						<!--<div class="flex-pad"></div>-->
+						<div class="toggle-icon" id='frame-view-hitbox-display-toggle'>
+							<input type="checkbox" class="toggle-icon-checkbox" checked=true/>
+							<i class="icon-hide-hitbox">
+								<div class="tooltip top">
+									Hide Hitbox
+								</div>
+							</i>
+							<i class="icon-show-hitbox">
+								<div class="tooltip top">
+									Show Hitbox
+								</div>
+							</i>
+						</div>
 						<div class="toggle-icon">
-							<input type="checkbox" class="toggle-icon-checkbox" />
+							<input id='frame-view-control-toggle' type="checkbox" checked=true class="toggle-icon-checkbox" />
 							<i class="icon-move-image">
 								<div class="tooltip top">
-									Panning Sprite
+									Control Sprite
 								</div>
 							</i>
 							<i class="icon-move-hitbox">
 								<div class="tooltip top">
-									Panning Hitbox
+									Control Hitboxes
 								</div>
 							</i>
 						</div>
-						<div class="toggle-icon" id='frame-view-pan-toggle'>
-							<input type="checkbox" class="toggle-icon-checkbox" />
-							<i class="icon-move">
-								<div class="tooltip top">
-									Panning Enabled
-								</div>
-							</i>
+						<div class="toggle-icon">
+							<input id='frame-view-pan-toggle' type="checkbox" checked=true class="toggle-icon-checkbox" />
 							<i class="icon-move-off">
 								<div class="tooltip top">
-									Panning Disabled
+									Panning Disbled
+								</div>
+							</i>
+							<i class="icon-move">
+								<div class="tooltip top">
+									Panning Enable
 								</div>
 							</i>
 						</div>
-						<i class="icon-reset-move clickable">
+						<i id='frame-view-pan-reset' class="icon-reset-move clickable">
 							<div class="tooltip top">
 								Reset Panning
 							</div>
@@ -180,7 +193,7 @@
 								Zoom In
 							</div>
 						</i>
-						<i class="icon-reset-zoom clickable">
+						<i id='frame-view-zoom-reset' class="icon-reset-zoom clickable">
 							<div class="tooltip top">
 								Reset Zoom
 							</div>

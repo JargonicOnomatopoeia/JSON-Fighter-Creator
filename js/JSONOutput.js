@@ -5,20 +5,15 @@ export const displayInJson = () =>{
     outputScreen.value = JSON.stringify(animationListData);
 }
 
-export const downloadJSON = () => {
+export const createJSON = () => {
     let string = JSON.stringify(animationListData);
-
-    let tempLink = document.createElement("a");
-    tempLink.download = "JSON-Fighter-Creater.json";
 
     let text = new Blob(
         [string], {
             type: "text/plain"
         });
 
-    tempLink.href = window.URL.createObjectURL(text);
-    tempLink.click();  
-    delete tempLink.remove();  
+    return window.URL.createObjectURL(text);  
 }
 
 export const copyJSONToClipboard = () => {

@@ -79,16 +79,19 @@ export const reset = () => {
 let timeNow;
 let timeAgo = Date.now();
 let framesInASecond = 1000;
+
 export const animationPlay = () => {
     requestAnimationFrame(animationPlay);
     canvasClass.erase();
-    let animation = currentAnimation;
+    
     if(currentAnimation == null) return; 
-    let frameClass = animation.frameDataListClasses[index];
+    
+    let frameClass = currentAnimation.frameDataListClasses[index];
     let hitboxClasses = frameClass.hitboxListClasses;
-    frameClass.setCoords();
     let context = canvasClass.context;
+
     context.save();
+    frameClass.setCoords();
     canvasClass.panTrigger();
     canvasClass.zoomTrigger();
     canvasClass.displayerFrame(frameClass);
@@ -103,7 +106,7 @@ export const animationPlay = () => {
     if(timeNow - timeAgo > framesInASecond/speed && frameClass.frameData.frametime <= ++frametime){
         timeAgo = timeNow;
         frametime = 0;
-        index = ++index % animation.frameDataListClasses.length;   
+        index = ++index % currentAnimation.frameDataListClasses.length;   
     }
 }
 

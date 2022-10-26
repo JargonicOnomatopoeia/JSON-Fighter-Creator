@@ -82,7 +82,7 @@ export class frame{
     }
 
     getRight = (scale = 1, pan = 0) => {
-        return this.frameData.coords.top  * scale + pan;
+        return this.frameData.coords.right  * scale + pan;
     }
 
     getBottom = (scale = 1, pan = 0) => {

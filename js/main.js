@@ -1,5 +1,5 @@
 import * as animationList from './animationlist.js'
-import { downloadJSON, copyJSONToClipboard} from './jsonOutput.js';
+import { createJSON, copyJSONToClipboard} from './jsonOutput.js';
 import * as animator from './animator.js';
 import * as editor from './editor.js';
 
@@ -42,7 +42,13 @@ window.onload = () => {
         animationList.addHitbox(true);
     });
 
-    buttonDownload.addEventListener("click", downloadJSON);
+    let linkDownload = document.createElement('a');
+    linkDownload.download = "JSON-Fighter-Creater.json";
+    buttonDownload.addEventListener("click", () => {
+        linkDownload.href = createJSON();
+        linkDownload.click();
+    });
+
     buttonClipboard.addEventListener("click", copyJSONToClipboard);
     //#endregion
    
@@ -50,7 +56,7 @@ window.onload = () => {
     let buttonSpeedFast = document.getElementById('animation-fast-speed');
     let buttonSpeedSlow = document.getElementById('animation-slow-speed');
     let inputSpeedCounter = document.getElementById('speed-counter');
-    let hitboxToggle = document.getElementById('animation-hitbox-toggle');
+    let hitboxToggle = document.getElementById('animation-hitbox-display-toggle');
     let animPanToggle = document.getElementById('animation-pan-toggle');
     let animZoomIn = document.getElementById('animation-zoom-in');
     let animZoomOut = document.getElementById('animation-zoom-out');
@@ -87,10 +93,14 @@ window.onload = () => {
     
     //#region Elements For Frame View
     let inputOskinBehind = document.getElementById('frame-view-oskin-behind');
-    let inputOskinAhead = document.getElementById('frame-view-oskin-after');
+    let inputOskinAhead = document.getElementById('frame-view-oskin-ahead');
     let frameViewPanToggle = document.getElementById('frame-view-pan-toggle');
     let frameViewZoomOut = document.getElementById('frame-view-zoom-out');
     let frameViewZoomIn = document.getElementById('frame-view-zoom-in');
+    let frameViewPanReset = document.getElementById('frame-view-pan-reset');
+    let frameViewZoomReset = document.getElementById('frame-view-zoom-reset');
+    let frameViewControlToggle = document.getElementById('frame-view-control-toggle');
+    let frameViewHitboxDisplayToggle = document.getElementById('frame-view-hitbox-display-toggle');
 
     inputOskinBehind.value = editor.onionSkinBack;
     inputOskinBehind.addEventListener('input', () => {
@@ -111,11 +121,21 @@ window.onload = () => {
     });
 
     frameViewPanToggle.addEventListener('click', () => {
-        editor.canvasClass.panOption(!editor.canvasClass.optionPan);
+        editor.canvasClass.panOption(frameViewPanToggle.checked);
     });
 
     frameViewZoomOut.addEventListener('click', editor.canvasClass.zoomOutTrigger);
     frameViewZoomIn.addEventListener('click', editor.canvasClass.zoomInTrigger);
+    frameViewPanReset.addEventListener('click', editor.canvasClass.panRefresh);
+    frameViewZoomReset.addEventListener('click', editor.canvasClass.zoomRefresh);
+    
+    frameViewControlToggle.addEventListener('click', () => {
+        editor.modifyHitboxController(frameViewControlToggle.checked);
+    });
+
+    frameViewHitboxDisplayToggle.addEventListener('click', () => {
+
+    });
     //#endregion
 
     //#region Start Canvas

@@ -18,7 +18,7 @@ let highlight = -1;
 let highlightHitbox = "rgba(164, 59, 235, 0.78)";
 let highlightHurtbox = "rgba(59, 67, 234, 0.78)";
 
-let editHitbox = true;
+let controlHitboxes = true;
 let highlightImage = false;
 let toMove = false;
 
@@ -44,6 +44,10 @@ export const modifySkinAhead = (number) => {
     onionSkinFront = Math.floor(number);
 }
 
+export const modifyHitboxController = (binary) => {
+    controlHitboxes = binary
+}
+
 export const initialize = () =>{
     let canvas = document.getElementById("editor-canvas");
     canvasClass = new canvasUtil.canvas(canvas);
@@ -51,7 +55,7 @@ export const initialize = () =>{
         e.preventDefault();  
         if(animationList.currentFrame == null) return;
         
-        if(editHitbox == true){  
+        if(controlHitboxes == true){  
             let hitboxes = animationList.currentFrame.hitboxListClasses;
             if( highlight < hitboxes.length){
                 toMove =  HitboxBoundChecker(e.clientX, e.clientY, hitboxes[highlight]);
@@ -60,6 +64,7 @@ export const initialize = () =>{
             canvasClass.toPan = !toMove && !toResize;
         }else{
             toMove = FrameBoundChecker(e.clientX, e.clientY, animationList.currentFrame);
+            console.log(toMove);
             canvasClass.toPan = !toMove;
         }
 
@@ -80,7 +85,7 @@ export const initialize = () =>{
         let current =  canvasClass.getMousPos(e.clientX, e.clientY);
         //console.log(current);
 
-        if(editHitbox == true){
+        if(controlHitboxes == true){
             let hitboxes = animationList.currentFrame.hitboxListClasses;
             if(mousedown == false){
                 let x = 0;
@@ -136,13 +141,15 @@ export const initialize = () =>{
             if(mousedown == false){
                 highlightImage =  FrameBoundChecker(e.clientX, e.clientY, animationList.currentFrame);
             }
-
+            console.log(highlightImage);
             if(toMove == true){
-                let frameData = animationList.currentFrame.frameRef;
+                //console.log('something');
+                let frameData = animationList.currentFrame.frameData;
                 frameData.offset.x += roundNum(current.x, canvasClass.start.x);
                 frameData.offset.y += roundNum(current.y, canvasClass.start.y);
                 animationList.triggerFrameDataListeners();
-                canvasClass.start = {...current};
+                canvasClass.start.x = current.x;
+                canvasClass.start.y = current.y;
             }
         }
         
@@ -219,11 +226,12 @@ export const showFrame = () => {
 
 const FrameBoundChecker = (clientX , clientY, frame) => {
     let mousePos =  canvasClass.getMousPos(clientX, clientY);
-    let centerCan = canvasUtil.middle(canvasClass.canvas.width, canvasClass.canvas.height);
+    let canvas = canvasClass.canvas.getBoundingClientRect();
+    let centerCan = canvasUtil.middle(canvas.width, canvas.height);
     
     let left = centerCan.x + frame.getLeft(canvasClass.zoom, canvasClass.pan.x);
     let top = centerCan.y + frame.getTop(canvasClass.zoom, canvasClass.pan.y);
-
+    
     let right = centerCan.x + frame.getRight(canvasClass.zoom, canvasClass.pan.x);
     let bottom = centerCan.y + frame.getBottom(canvasClass.zoom, canvasClass.pan.y);
 
