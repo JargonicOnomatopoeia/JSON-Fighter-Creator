@@ -41,6 +41,12 @@
   column-gap: 16px;
 }
 
+.flex-dir-row-reverse {
+  display: flex;
+  column-gap: 16px;
+  flex-direction: row-reverse;
+}
+
 .flex-dir-col {
   display: flex;
   column-gap: 16px;
@@ -48,16 +54,16 @@
   flex-direction: column;
 }
 
-.clickable:hover {
+.clickable:not(.disabled):hover {
   cursor: pointer;
   opacity: 80%;
 }
-.clickable:active {
+.clickable:not(.disabled):active {
   opacity: 100% !important;
   cursor: pointer;
   color: white;
 }
-.clickable:has(*:hover), .clickable:has(*:active) {
+.clickable:not(.disabled):has(*:hover), .clickable:not(.disabled):has(*:active) {
   cursor: auto !important;
   opacity: 100% !important;
   color: unset;
@@ -67,10 +73,10 @@
   display: none;
 }
 
-*:has(> .tooltip):hover, input[type=checkbox]:hover ~ *:has(> .tooltip) {
+*:not(.disabled):has(> .tooltip):hover, input[type=checkbox]:not(.disabled):hover ~ *:has(> .tooltip) {
   position: relative;
 }
-*:has(> .tooltip):hover .tooltip, input[type=checkbox]:hover ~ *:has(> .tooltip) .tooltip {
+*:not(.disabled):has(> .tooltip):hover .tooltip, input[type=checkbox]:not(.disabled):hover ~ *:has(> .tooltip) .tooltip {
   position: absolute;
   display: inline;
   background-color: #020202;
@@ -92,11 +98,11 @@
   -ms-user-select: none;
   user-select: none;
 }
-*:has(> .tooltip):hover .tooltip.top, input[type=checkbox]:hover ~ *:has(> .tooltip) .tooltip.top {
+*:not(.disabled):has(> .tooltip):hover .tooltip.top, input[type=checkbox]:not(.disabled):hover ~ *:has(> .tooltip) .tooltip.top {
   top: -200%;
   right: 0% !important;
 }
-*:has(> .tooltip):hover .tooltip.top-right, input[type=checkbox]:hover ~ *:has(> .tooltip) .tooltip.top-right {
+*:not(.disabled):has(> .tooltip):hover .tooltip.top-right, input[type=checkbox]:not(.disabled):hover ~ *:has(> .tooltip) .tooltip.top-right {
   top: -200%;
   left: 100% !important;
   right: unset !important;
@@ -148,16 +154,16 @@ input[type=number] {
   -ms-user-select: none;
   user-select: none;
 }
-.button:hover {
+.button:not(.disabled):hover {
   cursor: pointer;
   opacity: 80%;
 }
-.button:active {
+.button:not(.disabled):active {
   opacity: 100% !important;
   cursor: pointer;
   color: white;
 }
-.button:has(*:hover), .button:has(*:active) {
+.button:not(.disabled):has(*:hover), .button:not(.disabled):has(*:active) {
   cursor: auto !important;
   opacity: 100% !important;
   color: unset;
@@ -189,15 +195,15 @@ div.accordion > .accordion-head i.accordion-arrow > input[type=checkbox] {
   position: absolute;
   left: 0px;
 }
-div.accordion > .accordion-head i.accordion-arrow > input[type=checkbox]:hover {
+div.accordion > .accordion-head i.accordion-arrow > input[type=checkbox]:not(.disabled):hover {
   cursor: pointer;
 }
-div.accordion > .accordion-head i.accordion-arrow:has(> input[type=checkbox]:active) {
+div.accordion > .accordion-head i.accordion-arrow:not(.disabled):has(> input[type=checkbox]:active) {
   opacity: 100% !important;
   cursor: pointer;
   color: white;
 }
-div.accordion > .accordion-head i.accordion-arrow:has(> input[type=checkbox]:hover) {
+div.accordion > .accordion-head i.accordion-arrow:not(.disabled):has(> input[type=checkbox]:hover) {
   cursor: pointer;
   opacity: 80%;
 }
@@ -230,15 +236,15 @@ div.accordion > .accordion-body {
   position: absolute;
   left: 0px;
 }
-.toggle-icon > input[type=checkbox]:hover {
+.toggle-icon > input[type=checkbox]:not(.disabled):hover {
   cursor: pointer;
 }
-.toggle-icon:has(> input[type=checkbox]:active) {
+.toggle-icon:not(.disabled):has(> input[type=checkbox]:active) {
   opacity: 100% !important;
   cursor: pointer;
   color: white;
 }
-.toggle-icon:has(> input[type=checkbox]:hover) {
+.toggle-icon:not(.disabled):has(> input[type=checkbox]:hover) {
   cursor: pointer;
   opacity: 80%;
 }
@@ -254,16 +260,16 @@ div.accordion > .accordion-body {
 .toggle-icon-checkbox:checked ~ i:last-of-type {
   display: unset;
 }
-.toggle-icon > i:hover {
+.toggle-icon > i:not(.disabled):hover {
   cursor: pointer;
   opacity: 80%;
 }
-.toggle-icon > i:active {
+.toggle-icon > i:not(.disabled):active {
   opacity: 100% !important;
   cursor: pointer;
   color: white;
 }
-.toggle-icon > i:has(*:hover), .toggle-icon > i:has(*:active) {
+.toggle-icon > i:not(.disabled):has(*:hover), .toggle-icon > i:not(.disabled):has(*:active) {
   cursor: auto !important;
   opacity: 100% !important;
   color: unset;
@@ -287,16 +293,16 @@ div.accordion > .accordion-body {
   column-gap: 8px;
   background: #6D8187;
 }
-#animation-list .list-item:hover {
+#animation-list .list-item:not(.disabled):hover {
   cursor: pointer;
   opacity: 80%;
 }
-#animation-list .list-item:active {
+#animation-list .list-item:not(.disabled):active {
   opacity: 100% !important;
   cursor: pointer;
   color: white;
 }
-#animation-list .list-item:has(*:hover), #animation-list .list-item:has(*:active) {
+#animation-list .list-item:not(.disabled):has(*:hover), #animation-list .list-item:not(.disabled):has(*:active) {
   cursor: auto !important;
   opacity: 100% !important;
   color: unset;
@@ -314,16 +320,16 @@ div.accordion > .accordion-body {
   background: #6D8187;
   margin-left: 16px;
 }
-#animation-list .list-sub-item:hover {
+#animation-list .list-sub-item:not(.disabled):hover {
   cursor: pointer;
   opacity: 80%;
 }
-#animation-list .list-sub-item:active {
+#animation-list .list-sub-item:not(.disabled):active {
   opacity: 100% !important;
   cursor: pointer;
   color: white;
 }
-#animation-list .list-sub-item:has(*:hover), #animation-list .list-sub-item:has(*:active) {
+#animation-list .list-sub-item:not(.disabled):has(*:hover), #animation-list .list-sub-item:not(.disabled):has(*:active) {
   cursor: auto !important;
   opacity: 100% !important;
   color: unset;
@@ -379,7 +385,6 @@ div.accordion > .accordion-body {
   font-size: 14px;
   line-height: 21px;
   color: #21232D !important;
-  text-align: center;
 }
 #hitbox-list-table-body {
   flex-grow: 1;
@@ -390,15 +395,17 @@ div.accordion > .accordion-body {
   display: none;
 }
 #hitbox-list-table .num-col {
-  flex-basis: 7%;
+  flex-basis: 8%;
+  text-align: left;
+  padding-left: 10px;
 }
 #hitbox-list-table .table-cell {
-  flex-basis: 14%;
+  flex-basis: 13%;
 }
 #hitbox-list-table .action-col {
-  flex-grow: 1;
+  flex-basis: 14%;
   color: #21232D !important;
-  padding-right: 8px;
+  padding-right: 10px;
 }
 
 .canvas-view .canvas-end {
@@ -500,6 +507,10 @@ body {
   border-radius: 10px;
   background: #749386;
   width: unset;
+}
+
+.disabled {
+  opacity: 0.5 !important;
 }
 
 /*# sourceMappingURL=index.css.map */

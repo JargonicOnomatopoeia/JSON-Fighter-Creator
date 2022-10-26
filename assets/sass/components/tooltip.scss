@@ -2,7 +2,7 @@
   display:none;
 }
 
-*:has(> .tooltip):hover, input[type="checkbox"]:hover ~ *:has(> .tooltip) {
+*:not(.disabled):has(> .tooltip):hover, input[type="checkbox"]:not(.disabled):hover ~ *:has(> .tooltip) {
   position: relative; 
 
   .tooltip {

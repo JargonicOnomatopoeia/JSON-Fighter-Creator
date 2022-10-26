@@ -448,7 +448,7 @@ export const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
     //#endregion
 
     //#region  Option Column
-    let optionCol = buildElem('action-col flex-dir-row');
+    let optionCol = buildElem('action-col flex-dir-row-reverse');
     let switcheri = buildElem('icon-switch clickable', 'i');
     let switcherTip = buildElem('tooltip');
     switcherTip.innerHTML = "Change to Hitbox/Hurtbox";
@@ -466,8 +466,8 @@ export const buildHitboxRowContainer = (index, hitboxClass, isHurtbox) => {
         hitboxClass.deleteThis();
     });
 
-    optionCol.appendChild(switcheri);
     optionCol.appendChild(closei);
+    optionCol.appendChild(switcheri);
     tableRow.appendChild(optionCol);
     //#endregion
 

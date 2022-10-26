@@ -20,12 +20,12 @@
 								Add File
 							</div>
 						</i>
-						<i id='cp-json' class="icon-copy-code clickable">
+						<i id='cp-json' class="icon-copy-code clickable disabled">
 							<div class="tooltip">
 								Copy JSON
 							</div>
 						</i>
-						<i id='dl-json' class="icon-download clickable">
+						<i id='dl-json' class="icon-download clickable disabled">
 							<div class="tooltip">
 								Download JSON
 							</div>
@@ -68,22 +68,35 @@
 								</div>
 							</div>
 							<div class="flex-pad"></div>
-							<div class="toggle-icon">
+							<div class="toggle-icon" id='animation-hitbox-toggle'>
 								<input type="checkbox" class="toggle-icon-checkbox" />
-								<i id='animation-hitbox-toggle' class="icon-show-hitbox">
+								<i class="icon-show-hitbox">
 									<div class="tooltip top">
 										Show Hitbox
 									</div>
 								</i>
-								<i id='animation-hitbox-toggle' class="icon-hide-hitbox">
+								<i class="icon-hide-hitbox">
 									<div class="tooltip top">
 										Hide Hitbox
 									</div>
 								</i>
 							</div>
-							<i id='animation-pan-toggle' class="icon-move clickable">
+							<div class="toggle-icon" id='animation-pan-toggle'>
+								<input type="checkbox" class="toggle-icon-checkbox" />
+								<i class="icon-move">
+									<div class="tooltip top">
+										Panning Enabled
+									</div>
+								</i>
+								<i class="icon-move-off">
+									<div class="tooltip top">
+										Panning Disabled
+									</div>
+								</i>
+							</div>
+							<i class="icon-reset-move clickable">
 								<div class="tooltip top">
-									Pan Toggle
+									Reset Panning
 								</div>
 							</i>
 							<i id='animation-zoom-in' class="icon-zoom-out clickable">
@@ -94,6 +107,11 @@
 							<i id='animation-zoom-out' class="icon-zoom-in clickable">
 								<div class="tooltip top">
 									Zoom In
+								</div>
+							</i>
+							<i class="icon-reset-zoom clickable">
+								<div class="tooltip top">
+									Reset Zoom
 								</div>
 							</i>
 						</div>
@@ -121,9 +139,35 @@
 							<input id='frame-view-oskin-after' type="number" value="0" />
 						</div>
 						<div class="flex-pad"></div>
-						<i id='frame-view-pan-toggle' class="icon-move clickable">
+						<div class="toggle-icon">
+							<input type="checkbox" class="toggle-icon-checkbox" />
+							<i class="icon-move-image">
+								<div class="tooltip top">
+									Panning Sprite
+								</div>
+							</i>
+							<i class="icon-move-hitbox">
+								<div class="tooltip top">
+									Panning Hitbox
+								</div>
+							</i>
+						</div>
+						<div class="toggle-icon" id='frame-view-pan-toggle'>
+							<input type="checkbox" class="toggle-icon-checkbox" />
+							<i class="icon-move">
+								<div class="tooltip top">
+									Panning Enabled
+								</div>
+							</i>
+							<i class="icon-move-off">
+								<div class="tooltip top">
+									Panning Disabled
+								</div>
+							</i>
+						</div>
+						<i class="icon-reset-move clickable">
 							<div class="tooltip top">
-								Pan Toggle
+								Reset Panning
 							</div>
 						</i>
 						<i id='frame-view-zoom-out' class="icon-zoom-out clickable">
@@ -134,6 +178,11 @@
 						<i id='frame-view-zoom-in' class="icon-zoom-in clickable">
 							<div class="tooltip top">
 								Zoom In
+							</div>
+						</i>
+						<i class="icon-reset-zoom clickable">
+							<div class="tooltip top">
+								Reset Zoom
 							</div>
 						</i>
 					</div>
@@ -202,13 +251,34 @@
 								<div class="table-cell">Y</div>
 								<div class="table-cell">Width</div>
 								<div class="table-cell">Height</div>
-								<div class="table-cell">Damage</div>
+								<div class="table-cell">Dmg</div>
 								<div class="table-cell">Hit Stun</div>
 								<div class="action-col"></div>
 							</div>
 							<div id="hitbox-list-table-body" class="flex-grow flex-dir-col">
 								<div id="hitbox-list-container" class="flex-dir-col" style="height: 0">
-									
+									<div id="hitbox-list-table-row" class="hurtbox">
+										<div class="num-col">1</div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="table-cell"><input type="number" value="0" /></div>
+										<div class="action-col flex-dir-row-reverse">
+											<i class="icon-cross clickable">
+												<div class="tooltip">
+													Delete
+												</div>
+											</i>
+											<i class="icon-switch clickable">
+												<div class="tooltip">
+													Change to Hitbox/Hurtbox
+												</div>
+											</i>
+											
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>

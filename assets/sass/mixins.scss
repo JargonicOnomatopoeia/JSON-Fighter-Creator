@@ -56,15 +56,15 @@
 }
 
 @mixin clickable {
-  &:hover {
+  &:not(.disabled):hover {
     @include clickable-hover;
   }
   
-  &:active {
+  &:not(.disabled):active {
     @include clickable-active;
   }
 
-  &:has(*:hover), &:has(*:active) {
+  &:not(.disabled):has(*:hover), &:not(.disabled):has(*:active) {
     cursor: auto !important;
     opacity: 100% !important;
     color: unset;
@@ -81,16 +81,16 @@
     position:absolute;
     left: 0px;
 
-    &:hover {
+    &:not(.disabled):hover {
       cursor: pointer;
     }
   }
 
-  &:has(> input[type="checkbox"]:active) {
+  &:not(.disabled):has(> input[type="checkbox"]:active) {
     @include clickable-active;
   }
 
-  &:has(> input[type="checkbox"]:hover) {
+  &:not(.disabled):has(> input[type="checkbox"]:hover) {
     @include clickable-hover;
   }
 }
@@ -117,6 +117,11 @@
 
 .flex-dir-row {
   @include flex-mixin;
+}
+
+.flex-dir-row-reverse {
+  @include flex-mixin;
+  flex-direction: row-reverse;
 }
 
 .flex-dir-col {
