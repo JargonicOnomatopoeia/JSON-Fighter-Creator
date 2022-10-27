@@ -86,6 +86,7 @@ export const buildAnimationSprite = (imageArray) => {
     
     Promise.all(promises).then((frames) => {
         for(let x = 0; x < frames.length;x++){
+            frames[x].setCoords();
             animationTemp.addFrameData(frames[x]);
             animationTemp.accordionBodyElement.appendChild(frames[x].parentElement);
         }
@@ -362,6 +363,8 @@ const buildFrameContainer = (frameClass) => {
         if(hoverOnSecondayButton == true) return; 
         if(currentFrame != null) currentFrame.parentElement.classList.toggle('list-sub-item-active');
         frameContainer.classList.toggle('list-sub-item-active');
+        currentAnimation.headElement.classList.toggle('list-item-active');
+        frameClass.animRef.headElement.classList.toggle('list-item-active');
         clearHitboxes();
         setCurrentAnim(frameClass.animRef);
         setCurrentFrame(frameClass);

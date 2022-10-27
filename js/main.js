@@ -1,5 +1,5 @@
 import * as animationList from './animationlist.js'
-import { createJSON, copyJSONToClipboard} from './jsonOutput.js';
+import { createJSON, copyJSONToClipboard} from './output.js';
 import * as animator from './animator.js';
 import * as editor from './editor.js';
 
@@ -81,7 +81,9 @@ window.onload = () => {
         });
     });
 
-    hitboxToggle.addEventListener('click', animator.toggleHitboxDisplay);
+    hitboxToggle.addEventListener('click', () => {
+        animator.canvasClass.modifyHitboxDisplayer(hitboxToggle.checked);
+    });
 
     animPanToggle.addEventListener('click', () => {
         animator.canvasClass.panOption(!animator.canvasClass.optionPan);
@@ -130,11 +132,21 @@ window.onload = () => {
     frameViewZoomReset.addEventListener('click', editor.canvasClass.zoomRefresh);
     
     frameViewControlToggle.addEventListener('click', () => {
-        editor.modifyHitboxController(frameViewControlToggle.checked);
+        if(frameViewHitboxDisplayToggle.checked == true){
+            editor.modifyHitboxController(frameViewControlToggle.checked);
+        } 
+        editor.modifySpriteController(!frameViewControlToggle.checked);
     });
 
     frameViewHitboxDisplayToggle.addEventListener('click', () => {
-
+        editor.canvasClass.modifyHitboxDisplayer(frameViewHitboxDisplayToggle.checked);
+        if(frameViewHitboxDisplayToggle.checked == true){
+            editor.modifyHitboxController(frameViewControlToggle.checked);
+        }else{
+            editor.modifyHitboxController(false);
+        }
+        
+        editor.modifySpriteController(!frameViewControlToggle.checked);
     });
     //#endregion
 

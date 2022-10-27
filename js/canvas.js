@@ -1,5 +1,3 @@
-import * as animationList from "./animationlist.js";
-
 export let colorHitbox = "rgba(255, 0, 0, 0.41)";
 export let colorHurtbox = "rgba(0, 255, 34, 0.41)";
 
@@ -14,7 +12,7 @@ let prevHeight = 0;
 
 export class canvas{
     constructor(document){
-        
+        this.hitboxDisplay = true;
         this.optionZoom = true;
 
         this.optionPan = true;
@@ -37,6 +35,10 @@ export class canvas{
         this.resize();
     }
 
+    modifyHitboxDisplayer = (mode) => {
+        this.hitboxDisplay = mode;
+    }
+    //#region Pan
     panTrigger = () => {
         this.context.translate(this.canvas.width/2 + this.pan.x, this.canvas.height/2 + this.pan.y);
     }
@@ -55,6 +57,7 @@ export class canvas{
         this.pan.x = 0;
         this.pan.y = 0;
     }
+    //#endregion
     //#region  Zoom
     zoomTrigger = () => {
         this.context.scale(this.zoom, this.zoom);

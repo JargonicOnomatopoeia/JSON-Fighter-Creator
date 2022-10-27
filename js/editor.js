@@ -19,6 +19,7 @@ let highlightHitbox = "rgba(164, 59, 235, 0.78)";
 let highlightHurtbox = "rgba(59, 67, 234, 0.78)";
 
 let controlHitboxes = true;
+let controlSprite = false;
 let highlightImage = false;
 let toMove = false;
 
@@ -34,6 +35,18 @@ let resizeArea = {
     bottom: false
 }
 
+let mouseDictionary = {
+    lefttop: "nw-resize",
+    leftbottom: "sw-resize",
+    righttop: "ne-resize",
+    rightbottom: "se-resize",
+    left: "w-resize",
+    right: "e-resize",
+    top: "n-resize",
+    bottom: "s-resize"
+}
+
+
 let mousedown = false;
 
 export const modifySkinBehind = (number) => {
@@ -48,31 +61,35 @@ export const modifyHitboxController = (binary) => {
     controlHitboxes = binary
 }
 
+export const modifySpriteController = (binary) => {
+    controlSprite = binary;
+}
+
 export const initialize = () =>{
+
     let canvas = document.getElementById("editor-canvas");
     canvasClass = new canvasUtil.canvas(canvas);
     canvas.addEventListener("mousedown",(e) => {
         e.preventDefault();  
         if(animationList.currentFrame == null) return;
-        
-        if(controlHitboxes == true){  
-            let hitboxes = animationList.currentFrame.hitboxListClasses;
-            if( highlight < hitboxes.length){
-                toMove =  HitboxBoundChecker(e.clientX, e.clientY, hitboxes[highlight]);
-                toResize =  HitboxResizeChecker(e.clientX, e.clientY, hitboxes[highlight]);
-            }
+        mousedown = true;
+        if(controlHitboxes == true){ 
             canvasClass.toPan = !toMove && !toResize;
-        }else{
+        }
+
+        if(controlSprite == true){
             toMove = FrameBoundChecker(e.clientX, e.clientY, animationList.currentFrame);
-            console.log(toMove);
             canvasClass.toPan = !toMove;
         }
 
-        if(toMove == true || toResize == true || canvasClass.toPan == true){
-            canvasClass.mousePosStart(e.clientX, e.clientY);
+        if(controlSprite == false && controlHitboxes == false){
+            canvasClass.toPan = true;   
         }
 
-        mousedown = true;
+        //if(toMove == true || toResize == true || canvasClass.toPan == true){
+        canvasClass.mousePosStart(e.clientX, e.clientY);
+        //return;
+        //}
     });
 
     canvas.addEventListener("mousemove", (e) =>{
@@ -85,13 +102,41 @@ export const initialize = () =>{
         let current =  canvasClass.getMousPos(e.clientX, e.clientY);
         //console.log(current);
 
+        if(canvasClass.optionPan == true && canvasClass.toPan == true){
+            document.body.style.cursor = "move";
+            canvasClass.panMouse(current);
+            return;
+        }
+
         if(controlHitboxes == true){
             let hitboxes = animationList.currentFrame.hitboxListClasses;
             if(mousedown == false){
                 let x = 0;
-                for(; x < hitboxes.length &&  HitboxBoundChecker(e.clientX, e.clientY, hitboxes[x]) != true 
-                &&  HitboxResizeChecker(e.clientX, e.clientY, hitboxes[x]) != true;x++){}
+                for(; x < hitboxes.length &&  HitboxBoundChecker(e.clientX, e.clientY, hitboxes[x]) != true && 
+                HitboxResizeChecker(e.clientX, e.clientY, hitboxes[x]) != true;x++){}
                 highlight = x;
+                if(x < hitboxes.length){
+                    toMove = HitboxBoundChecker(e.clientX, e.clientY, hitboxes[x]);
+                    toResize = HitboxResizeChecker(e.clientX, e.clientY, hitboxes[x]);
+
+                    if(toResize == true){
+                        let resizeTrue = '';
+                        Object.keys(resizeArea).forEach((i) => {
+                            if(resizeArea[i] == true){
+                                resizeTrue += i;
+                            }
+                        });
+                        document.body.style.cursor = mouseDictionary[resizeTrue];
+                    }
+
+                    if(toMove == true){
+                        document.body.style.cursor = "move";
+                    }
+                    return;
+                }
+                toMove = false;
+                toResize = false;
+                document.body.style.cursor = "default";
                 return;
             }
             
@@ -136,29 +181,38 @@ export const initialize = () =>{
                 canvasClass.start.x = current.x;
                 canvasClass.start.y = current.y;
             }
-            
-        }else{
+
+            return;
+        }
+        if(controlSprite == true){
             if(mousedown == false){
                 highlightImage =  FrameBoundChecker(e.clientX, e.clientY, animationList.currentFrame);
             }
-            console.log(highlightImage);
+
+            if(highlightImage == true){
+                document.body.style.cursor = "move";
+            }else{
+                document.body.style.cursor = "default";
+            }
+
             if(toMove == true){
-                //console.log('something');
                 let frameData = animationList.currentFrame.frameData;
+                let currentFrame = animationList.currentFrame;
                 frameData.offset.x += roundNum(current.x, canvasClass.start.x);
                 frameData.offset.y += roundNum(current.y, canvasClass.start.y);
+                currentFrame.setHitboxCoords();
+                currentFrame.setCoords();
                 animationList.triggerFrameDataListeners();
                 canvasClass.start.x = current.x;
                 canvasClass.start.y = current.y;
             }
-        }
-        
-        if(canvasClass.optionPan == true && canvasClass.toPan == true){
-            canvasClass.panMouse(current);
+
+            return;
         }
     });
 
     const reset = () => {
+        //document.body.style.cursor = "default";
         toMove = false;
         toResize = false;
         canvasClass.toPan = false;
@@ -213,7 +267,7 @@ export const showFrame = () => {
     onionSkin(frameIndex+1, onionSkinMax,  oSkinOpacityFront, "hue-rotate("+hueOSkinFront+"deg)");
 
     let hitboxes = frame.hitboxListClasses;
-    for(let x = 0; x < hitboxes.length ;x++){
+    for(let x = 0; canvasClass.hitboxDisplay == true && x < hitboxes.length ;x++){
         let hitboxData = hitboxes[x].hitboxData;
         switch( highlight == x){
             case true: canvasClass.displayerHitbox(hitboxes[x], (hitboxData.type == 'hitbox')?  highlightHitbox:  highlightHurtbox, toResize);break;

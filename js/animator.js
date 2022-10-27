@@ -9,7 +9,6 @@ let frametime = 0;
 let index = 0;
 
 export let canvasClass;
-let showHitboxes = true;
 
 //Animation Speed
 export let speed = 12;
@@ -65,10 +64,6 @@ export const dynamicSpeed = (value) => {
     speed = canvasUtil.clamp(speed, speedMin, canvasUtil.speedPan);
 }
 
-export const toggleHitboxDisplay = () => {
-    showHitboxes = !showHitboxes;
-}
-
 export const reset = () => {
     timeAgo = Date.now();
     frame = 0;
@@ -91,12 +86,12 @@ export const animationPlay = () => {
     let context = canvasClass.context;
 
     context.save();
-    frameClass.setCoords();
+    //frameClass.setCoords();
     canvasClass.panTrigger();
     canvasClass.zoomTrigger();
     canvasClass.displayerFrame(frameClass);
 
-    for(let x = 0;showHitboxes !=  false && x < hitboxClasses.length;x++){
+    for(let x = 0;canvasClass.hitboxDisplay == true && x < hitboxClasses.length;x++){
         let hitboxData = hitboxClasses[x].hitboxData;
         canvasClass.displayerHitbox(hitboxClasses[x], (hitboxData.type == 'hitbox')? canvasUtil.colorHitbox: canvasUtil.colorHurtbox);
     }
