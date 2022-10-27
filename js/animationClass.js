@@ -16,14 +16,17 @@ export class animation{
 
         this.accordionElement;
         this.headElement;
+        this.dropdownElement;
         this.inputElement;
         this.accordionBodyElement;
     }
 
     resetAnim = (_animationName) => {
+        this.headElement.classList.remove('list-item-active');
         this.animationData.name = _animationName;
         this.animationData.chain = 0;
         this.inputElement.value = _animationName;
+        this.dropdownElement.checked = false;
         this.hoverListener();
     }
 

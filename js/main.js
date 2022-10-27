@@ -3,15 +3,27 @@ import { createJSON, copyJSONToClipboard} from './output.js';
 import * as animator from './animator.js';
 import * as editor from './editor.js';
 
+export let buttonClipboard;
+export let buttonDownload;
 
+export const enableJSONButtons = () => {
+    if(animationList.animationListClasses.length != 0) return;
+    buttonClipboard.classList.remove('disabled');
+    buttonDownload.classList.remove('disabled');
+}
+
+export const disableJSONButtons = () => {
+    buttonClipboard.classList.add('disabled');
+    buttonDownload.classList.add('disabled');
+}
 
 window.onload = () => {
     //#region Declarations
     let imageUploader = document.getElementById("add-files");
     let buttonNewHitbox = document.getElementById("add-new-hitbox");
     let buttonNewHurtbox = document.getElementById("add-new-hurtbox");
-    let buttonClipboard = document.getElementById("cp-json");
-    let buttonDownload = document.getElementById("dl-json");
+    buttonClipboard = document.getElementById("cp-json");
+    buttonDownload = document.getElementById("dl-json");
     
     animationList.initialize();
     editor.initialize();
@@ -19,7 +31,7 @@ window.onload = () => {
     //FrameData.Initialize();
     //HitboxRows.Initialize();
     
-    //Hidden File Uploader;
+    //#region Hidden File Uploader;
     let fileAdd = document.createElement('input');
     fileAdd.type = 'file';
     fileAdd.multiple = 'true';
@@ -27,9 +39,11 @@ window.onload = () => {
     fileAdd.addEventListener('change', (e) => {
         if(window.File && window.FileReader && window.FileList && window.Blob){
             animationList.buildAnimationSprite(e.target.files);
+            enableJSONButtons();
         }
     });
-    
+    //#endregion
+
     imageUploader.addEventListener("click", () =>{
         fileAdd.click();
     });
@@ -45,11 +59,15 @@ window.onload = () => {
     let linkDownload = document.createElement('a');
     linkDownload.download = "JSON-Fighter-Creater.json";
     buttonDownload.addEventListener("click", () => {
+        if(animationList.animationListClasses.length <= 0) return;
         linkDownload.href = createJSON();
         linkDownload.click();
     });
 
-    buttonClipboard.addEventListener("click", copyJSONToClipboard);
+    buttonClipboard.addEventListener("click", () => {
+        if(animationList.animationListClasses.length <= 0) return;
+        copyJSONToClipboard
+    });
     //#endregion
    
     //#region Elements for Animator View

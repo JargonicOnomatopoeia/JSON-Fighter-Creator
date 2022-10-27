@@ -1,6 +1,7 @@
 import { frame } from "./frameClass.js";
 import { animation } from "./animationClass.js"
 import * as animator from "./animator.js"
+import { buttonClipboard, buttonDownload, disableJSONButtons, enableJSONButtons } from "./main.js";
 
 export let animationListData = [];
 export let animationListClasses = [];
@@ -215,9 +216,16 @@ const buildAccordion = (animation) => {
     let itemList = buildElem('list-item');
     accHead.addEventListener('click', () => {
         if(hoverOnSecondayButton) return;
-        if(currentAnimation != null) currentAnimation.headElement.classList.toggle('list-item-active');
-        if(currentFrame != null) currentFrame.parentElement.classList.toggle('list-sub-item-active');
-        animation.headElement.classList.toggle('list-item-active');
+        if(currentAnimation == null){
+            animation.headElement.classList.toggle('list-item-active');
+        }
+        if(currentAnimation != null && currentAnimation != animation){
+            currentAnimation.headElement.classList.toggle('list-item-active');
+            itemList.classList.toggle('list-item-active');
+        }
+        if(currentFrame != null){
+            currentFrame.parentElement.classList.toggle('list-sub-item-active');
+        }
         setCurrentAnim(animation);
         animation.triggerListener();
         animator.reset();
@@ -233,6 +241,7 @@ const buildAccordion = (animation) => {
     let checkbox = document.createElement('input');
     checkbox.setAttribute('type', 'checkbox');
     arrow.appendChild(checkbox);
+    animation.dropdownElement = checkbox;
 
     //Name of the animation goes here
     let animInput = buildElem('flex-grow', 'input');
@@ -261,6 +270,7 @@ const buildAccordion = (animation) => {
         clearFrameDataValues();
         clearHitboxes();
         acc.remove();
+        disableJSONButtons();
     });
 
     trashI.addEventListener('mouseenter', () =>{
@@ -311,16 +321,22 @@ const buildFrameContainer = (frameClass) => {
     });
 
     //Delete Frame
-    let trashHitboxes = buildElem('icon-trash clickable', 'i');
+    let trashFrames = buildElem('icon-trash clickable', 'i');
     let trashTip = buildElem('tooltip');
     trashTip.innerHTML = 'Delete';
-    trashHitboxes.appendChild(trashTip);
-    trashHitboxes.addEventListener('click', () => {
-        frameClass.deleteThis();
+    trashFrames.appendChild(trashTip);
+    trashFrames.addEventListener('click', () => {
+        let animation = frameClass.animRef;
+        if(animation.frameDataListClasses.length == 1){
+            animation.deleteThis();
+        }else{
+            frameClass.deleteThis();
+        }
         clearHitboxes();
         clearFrameDataValues();
         frameContainer.remove();
         animator.reset();
+        disableJSONButtons();
     });
 
     const resetHover = () => {
@@ -329,15 +345,15 @@ const buildFrameContainer = (frameClass) => {
 
     frameClass.hoverListener = resetHover;
 
-    trashHitboxes.addEventListener('mouseenter', () => {
+    trashFrames.addEventListener('mouseenter', () => {
         hoverOnSecondayButton = true;
     });
 
-    trashHitboxes.addEventListener('mouseout', resetHover);
+    trashFrames.addEventListener('mouseout', resetHover);
 
     frameContainer.appendChild(frameInput);
     frameContainer.appendChild(copyHitboxes);
-    frameContainer.appendChild(trashHitboxes);
+    frameContainer.appendChild(trashFrames);
 
     let index = 0;
     const primaryCallback = (key) => {
@@ -361,10 +377,17 @@ const buildFrameContainer = (frameClass) => {
     
     frameContainer.addEventListener('click', () => {
         if(hoverOnSecondayButton == true) return; 
-        if(currentFrame != null) currentFrame.parentElement.classList.toggle('list-sub-item-active');
-        frameContainer.classList.toggle('list-sub-item-active');
-        currentAnimation.headElement.classList.toggle('list-item-active');
-        frameClass.animRef.headElement.classList.toggle('list-item-active');
+        if(currentFrame == null){
+            frameContainer.classList.toggle('list-sub-item-active');
+        }
+        if(currentFrame != null && currentFrame != frameClass){
+            currentFrame.parentElement.classList.toggle('list-sub-item-active');
+            frameContainer.classList.toggle('list-sub-item-active');
+        }
+        if(currentAnimation != frameClass.animRef){
+            frameClass.animRef.headElement.classList.toggle('list-item-active');
+            currentAnimation.headElement.classList.toggle('list-item-active');
+        }
         clearHitboxes();
         setCurrentAnim(frameClass.animRef);
         setCurrentFrame(frameClass);

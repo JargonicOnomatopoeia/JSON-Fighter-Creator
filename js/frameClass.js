@@ -39,6 +39,7 @@ export class frame{
     }
 
     resetFrame = (_animRef, _imageSrc, _frameName) => {
+        this.parentElement.classList.remove('list-sub-item-active');
         let frameData = this.frameData;
         this.animRef = _animRef;
         this.image.src = _imageSrc;
