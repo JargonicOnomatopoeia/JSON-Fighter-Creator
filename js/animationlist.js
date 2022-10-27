@@ -203,6 +203,8 @@ const buildElem = (className, type='div') =>{
     return elem;
 }
 
+let isCopying = false;
+
 // Container for the Animation List
 const buildAccordion = (animation) => {
     let hoverOnSecondayButton = false;
@@ -221,6 +223,7 @@ const buildAccordion = (animation) => {
     let itemList = buildElem('list-item');
     accHead.addEventListener('click', () => {
         if(hoverOnSecondayButton) return;
+        if (isCopying) return;
         if(currentAnimation == null){
             animation.headElement.classList.toggle('list-item-active');
         }
@@ -245,6 +248,7 @@ const buildAccordion = (animation) => {
     let arrow = buildElem('icon-arrow-down accordion-arrow', 'i');
     let checkbox = document.createElement('input');
     checkbox.setAttribute('type', 'checkbox');
+    checkbox.setAttribute('class', 'accordion-checkbox');
     arrow.appendChild(checkbox);
     animation.dropdownElement = checkbox;
 
@@ -258,13 +262,44 @@ const buildAccordion = (animation) => {
     animation.inputElement = animInput;
 
     //Copy Animation???
-    let copyI = buildElem('icon-copy clickable', 'i');
+    let toggleCopyBody = buildElem('toggle-icon list-item-copy');
+    let toggleCopy = document.createElement('input');
+    toggleCopy.setAttribute('type', 'checkbox');
+    toggleCopy.setAttribute('class', 'toggle-icon-checkbox');
+    toggleCopy.addEventListener("change", (val) => {
+        isCopying = val.target.checked
+        Array.from(document.getElementsByClassName('list-sub-item')).forEach(item => {
+            item.classList.toggle('disabled');
+        });
+
+        // disable functions
+    })
+    toggleCopyBody.appendChild(toggleCopy);
+
+    let copyI = buildElem('icon-copy', 'i');
     let copyTip = buildElem('tooltip');
     copyTip.innerHTML = "Copy";
     copyI.appendChild(copyTip);
 
+    let cancelCopyI = buildElem('icon-cancel-copy', 'i');
+    let cancelCopyTip = buildElem('tooltip');
+    cancelCopyTip.innerHTML = "Cancel Copy";
+    cancelCopyI.appendChild(cancelCopyTip);
+
+    toggleCopyBody.appendChild(copyI);
+    toggleCopyBody.appendChild(cancelCopyI);
+    
+
+    let pasteI = buildElem('icon-paste clickable list-item-paste', 'i');
+    let pasteTip = buildElem('tooltip');
+    pasteTip.innerHTML = "Paste";
+    pasteI.addEventListener("click", (val) => {
+        // paste function
+    })
+    pasteI.appendChild(pasteTip);
+
     //Delete Animation
-    let trashI = buildElem('icon-trash clickable', 'i');
+    let trashI = buildElem('icon-trash clickable list-item-delete', 'i');
     let trashTip = buildElem('tooltip left');
     trashTip.innerHTML = "Delete";
     trashI.appendChild(trashTip);
@@ -290,8 +325,9 @@ const buildAccordion = (animation) => {
     //put them all together
     itemList.appendChild(arrow);
     itemList.appendChild(animInput);
-    itemList.appendChild(copyI);
+    itemList.appendChild(pasteI);
     itemList.appendChild(trashI);
+    itemList.appendChild(toggleCopyBody);
 
     accHead.appendChild(itemList);
     //#endregion
@@ -320,16 +356,47 @@ const buildFrameContainer = (frameClass) => {
     frameClass.inputElement = frameInput;
 
     //Copy Hitboxes
-    let copyHitboxes = buildElem('icon-copy clickable', 'i');
-    let copyTip = buildElem('tooltip');
-    copyTip.innerHTML = 'Copy Hitboxes';
-    copyHitboxes.appendChild(copyTip);
+    let toggleCopyHitboxesBody = buildElem('toggle-icon list-item-copy');
+    let toggleCopyHitboxes = document.createElement('input');
+    toggleCopyHitboxes.setAttribute('type', 'checkbox');
+    toggleCopyHitboxes.setAttribute('class', 'toggle-icon-checkbox');
+    toggleCopyHitboxes.addEventListener("change", (val) => {
+        isCopying = val.target.checked
+        Array.from(document.getElementsByClassName('list-item')).forEach(item => {
+            item.classList.toggle('disabled');
+        });
+
+        // disable functions
+    })
+    toggleCopyHitboxesBody.appendChild(toggleCopyHitboxes);
+
+    let copyHitboxes = buildElem('icon-copy', 'i');
+    let copyHitboxesTip = buildElem('tooltip');
+    copyHitboxesTip.innerHTML = 'Copy Hitboxes';
     copyHitboxes.addEventListener('click', () => {
         copiedHitboxes = frameClass.copyHitboxes();
     });
+    copyHitboxes.appendChild(copyHitboxesTip);
+
+    let cancelCopyHitboxes = buildElem('icon-cancel-copy', 'i');
+    let cancelCopyHitboxesTip = buildElem('tooltip');
+    cancelCopyHitboxesTip.innerHTML = "Cancel Copy";
+    cancelCopyHitboxes.appendChild(cancelCopyHitboxesTip);
+
+    toggleCopyHitboxesBody.appendChild(copyHitboxes);
+    toggleCopyHitboxesBody.appendChild(cancelCopyHitboxes);
+
+    //Paste Frame
+    let pasteHitboxes = buildElem('icon-paste clickable list-item-paste', 'i');
+    let pasteHitboxesTip = buildElem('tooltip');
+    pasteHitboxesTip.innerHTML = 'Paste Hitboxes';
+    pasteHitboxes.addEventListener("click", (val) => {
+        // paste function
+    })
+    pasteHitboxes.appendChild(pasteHitboxesTip);
 
     //Delete Frame
-    let trashFrames = buildElem('icon-trash clickable', 'i');
+    let trashFrames = buildElem('icon-trash clickable list-item-delete', 'i');
     let trashTip = buildElem('tooltip');
     trashTip.innerHTML = 'Delete';
     trashFrames.appendChild(trashTip);
@@ -364,8 +431,9 @@ const buildFrameContainer = (frameClass) => {
     trashFrames.addEventListener('mouseout', resetHover);
 
     frameContainer.appendChild(frameInput);
-    frameContainer.appendChild(copyHitboxes);
+    frameContainer.appendChild(pasteHitboxes);
     frameContainer.appendChild(trashFrames);
+    frameContainer.appendChild(toggleCopyHitboxesBody);
 
     let index = 0;
     const primaryCallback = (key) => {
@@ -388,7 +456,8 @@ const buildFrameContainer = (frameClass) => {
     objectLooper(frameClass.frameData, 1, Object.keys(frameClass.frameData).length-2, primaryCallback, secondaryCallback);
     
     frameContainer.addEventListener('click', () => {
-        if(hoverOnSecondayButton == true) return; 
+        if(hoverOnSecondayButton == true) return;
+        if (isCopying) return;
         if(currentFrame == null){
             frameContainer.classList.toggle('list-sub-item-active');
         }

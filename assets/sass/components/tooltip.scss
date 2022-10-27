@@ -1,5 +1,9 @@
 .tooltip {
-  display:none;
+  display: none;
+}
+
+.disabled .tooltip{
+  display: none !important;
 }
 
 *:not(.disabled):has(> .tooltip):hover, input[type="checkbox"]:not(.disabled):hover ~ *:has(> .tooltip) {

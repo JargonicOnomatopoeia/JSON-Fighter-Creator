@@ -4,7 +4,7 @@ div.accordion {
   max-height: 40px;
   transition: max-height 1000ms;
 
-  &:has( input[type="checkbox"]:checked) {
+  &:has( input[type="checkbox"].accordion-checkbox:checked) {
     max-height: 5000px;
   }
 

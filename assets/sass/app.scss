@@ -59,13 +59,9 @@ body {
   flex-grow:1;
 } 
 
-.list-item {
+.item-container {
   @include item-container;
   border-radius: 10px;
   background: $greenGrey;
   width: unset;
-}
-
-.disabled {
-  opacity: 0.5 !important;
 }

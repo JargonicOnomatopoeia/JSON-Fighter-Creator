@@ -69,8 +69,21 @@
   color: unset;
 }
 
+.disabled {
+  opacity: 0.5 !important;
+  cursor: default !important;
+}
+.disabled * {
+  opacity: 0.5 !important;
+  cursor: default !important;
+}
+
 .tooltip {
   display: none;
+}
+
+.disabled .tooltip {
+  display: none !important;
 }
 
 *:not(.disabled):has(> .tooltip):hover, input[type=checkbox]:not(.disabled):hover ~ *:has(> .tooltip) {
@@ -120,6 +133,7 @@ input {
   font-size: 16px;
   line-height: 16px;
   color: #21232D;
+  cursor: default;
 }
 input:active {
   border: none;
@@ -177,7 +191,7 @@ div.accordion {
   max-height: 40px;
   transition: max-height 1000ms;
 }
-div.accordion:has(input[type=checkbox]:checked) {
+div.accordion:has(input[type=checkbox].accordion-checkbox:checked) {
   max-height: 5000px;
 }
 div.accordion > .accordion-head {
@@ -191,7 +205,7 @@ div.accordion > .accordion-head i.accordion-arrow {
 }
 div.accordion > .accordion-head i.accordion-arrow > input[type=checkbox] {
   z-index: 9999;
-  opacity: 0;
+  opacity: 0 !important;
   position: absolute;
   left: 0px;
 }
@@ -232,7 +246,7 @@ div.accordion > .accordion-body {
 }
 .toggle-icon > input[type=checkbox] {
   z-index: 9999;
-  opacity: 0;
+  opacity: 0 !important;
   position: absolute;
   left: 0px;
 }
@@ -284,7 +298,7 @@ div.accordion > .accordion-body {
   row-gap: 8px;
   height: 0px;
 }
-#animation-list .list-item {
+#animation-list .list-list .list-item {
   display: flex;
   align-items: center;
   color: #D5EDA5;
@@ -293,24 +307,39 @@ div.accordion > .accordion-body {
   column-gap: 8px;
   background: #6D8187;
 }
-#animation-list .list-item:not(.disabled):hover {
+#animation-list .list-list .list-item:not(.disabled):hover {
   cursor: pointer;
   opacity: 80%;
 }
-#animation-list .list-item:not(.disabled):active {
+#animation-list .list-list .list-item:not(.disabled):active {
   opacity: 100% !important;
   cursor: pointer;
   color: white;
 }
-#animation-list .list-item:not(.disabled):has(*:hover), #animation-list .list-item:not(.disabled):has(*:active) {
+#animation-list .list-list .list-item:not(.disabled):has(*:hover), #animation-list .list-list .list-item:not(.disabled):has(*:active) {
   cursor: auto !important;
   opacity: 100% !important;
   color: unset;
 }
-#animation-list .list-item-active {
+#animation-list .list-list .list-item-active {
   background: #8CA6AE;
 }
-#animation-list .list-sub-item {
+#animation-list .list-list .list-item-active .list-item-copy {
+  display: unset;
+}
+#animation-list .list-list .list-item:not(#animation-list .list-list .list-item-active) .list-item-copy {
+  display: none;
+}
+#animation-list .list-list .list-item > .list-item-paste {
+  display: none;
+}
+#animation-list .list-list:has(.list-item > .list-item-copy.toggle-icon > .toggle-icon-checkbox:checked) .list-item > .list-item-delete {
+  display: none;
+}
+#animation-list .list-list:has(.list-item > .list-item-copy.toggle-icon > .toggle-icon-checkbox:checked) .list-item:has(> .list-item-copy.toggle-icon > .toggle-icon-checkbox:not(.toggle-icon-checkbox:checked)) > .list-item-paste {
+  display: unset;
+}
+#animation-list .list-list .list-sub-item {
   display: flex;
   align-items: center;
   color: #D5EDA5;
@@ -320,22 +349,37 @@ div.accordion > .accordion-body {
   background: #6D8187;
   margin-left: 16px;
 }
-#animation-list .list-sub-item:not(.disabled):hover {
+#animation-list .list-list .list-sub-item:not(.disabled):hover {
   cursor: pointer;
   opacity: 80%;
 }
-#animation-list .list-sub-item:not(.disabled):active {
+#animation-list .list-list .list-sub-item:not(.disabled):active {
   opacity: 100% !important;
   cursor: pointer;
   color: white;
 }
-#animation-list .list-sub-item:not(.disabled):has(*:hover), #animation-list .list-sub-item:not(.disabled):has(*:active) {
+#animation-list .list-list .list-sub-item:not(.disabled):has(*:hover), #animation-list .list-list .list-sub-item:not(.disabled):has(*:active) {
   cursor: auto !important;
   opacity: 100% !important;
   color: unset;
 }
-#animation-list .list-sub-item-active {
+#animation-list .list-list .list-sub-item-active {
   background: #8CA6AE;
+}
+#animation-list .list-list .list-sub-item-active .list-item-copy {
+  display: unset;
+}
+#animation-list .list-list .list-sub-item:not(#animation-list .list-list .list-sub-item-active) .list-item-copy {
+  display: none;
+}
+#animation-list .list-list .list-sub-item > .list-item-paste {
+  display: none;
+}
+#animation-list .list-list:has(.list-sub-item > .list-item-copy.toggle-icon > .toggle-icon-checkbox:checked) .list-sub-item > .list-item-delete {
+  display: none;
+}
+#animation-list .list-list:has(.list-sub-item > .list-item-copy.toggle-icon > .toggle-icon-checkbox:checked) .list-sub-item:has(> .list-item-copy.toggle-icon > .toggle-icon-checkbox:not(.toggle-icon-checkbox:checked)) > .list-item-paste {
+  display: unset;
 }
 
 #hitbox-list {
@@ -413,10 +457,10 @@ div.accordion > .accordion-body {
   column-gap: 16px;
   align-items: center;
 }
-.canvas-view .canvas-end .list-item {
+.canvas-view .canvas-end .item-container {
   width: unset;
 }
-.canvas-view .canvas-end .list-item input {
+.canvas-view .canvas-end .item-container input {
   text-align: center;
   width: 30px;
 }
@@ -497,7 +541,7 @@ body {
   flex-grow: 1;
 }
 
-.list-item {
+.item-container {
   display: flex;
   align-items: center;
   color: #D5EDA5;
@@ -507,10 +551,6 @@ body {
   border-radius: 10px;
   background: #749386;
   width: unset;
-}
-
-.disabled {
-  opacity: 0.5 !important;
 }
 
 /*# sourceMappingURL=index.css.map */

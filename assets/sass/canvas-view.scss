@@ -3,7 +3,7 @@
   .canvas-end {
     @include flex-mixin;
     align-items: center;
-    .list-item {
+    .item-container {
       width: unset;
 
       input {

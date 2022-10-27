@@ -1,3 +1,33 @@
+@mixin list-item {
+  @include item-container;
+  background: $darkBlueGrey;
+  @include clickable;
+
+  &-active {
+    background: $blueGrey;
+
+    .list-item-copy {
+      display: unset;
+    }
+  }
+
+  &:not(&-active) {
+    .list-item-copy {
+      display: none;
+    }
+  }
+}
+
+@mixin copy-on {
+  & > .list-item-delete {
+    display: none;
+  }
+
+  &:has(> .list-item-copy.toggle-icon > .toggle-icon-checkbox:not(.toggle-icon-checkbox:checked)) > .list-item-paste {
+    display: unset;
+  }
+}
+
 #animation-list {
   flex-basis: 50%;
 
@@ -6,14 +36,34 @@
       flex-direction: column;
       row-gap: 8px;
       height: 0px;
-    }
 
-    .list-item {
-      @include list-item;
-    }
+      .list-item {
+        @include list-item;
 
-    .list-sub-item {
-      @include list-item;
-      margin-left: 16px;
+        & > .list-item-paste {
+          display: none;
+        }
+      }
+
+      &:has(.list-item > .list-item-copy.toggle-icon > .toggle-icon-checkbox:checked) {
+        .list-item {
+          @include copy-on;
+        }
+      }
+
+      .list-sub-item {
+        @include list-item;
+        margin-left: 16px;
+
+        & > .list-item-paste {
+          display: none;
+        }
+      }
+
+      &:has(.list-sub-item > .list-item-copy.toggle-icon > .toggle-icon-checkbox:checked) {
+        .list-sub-item {
+          @include copy-on;
+        }
+      }
     }
 }
