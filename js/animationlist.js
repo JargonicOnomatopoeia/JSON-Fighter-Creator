@@ -1,7 +1,6 @@
 import { frame } from "./frameClass.js";
 import { animation } from "./animationClass.js"
 import * as animator from "./animator.js"
-import { buttonClipboard, buttonDownload, disableJSONButtons, enableJSONButtons } from "./main.js";
 
 export let animationListData = [];
 export let animationListClasses = [];
@@ -20,12 +19,18 @@ export let garbageHitboxes = [];
 export let garbageFrames = [];
 export let garbageAnimations = [];
 
+let buttonClipboard;
+let buttonDownload;
+
 export const initialize = () => {
     animationListElem = document.getElementById('animation-list-container');
     hitboxListElem = document.getElementById('hitbox-list-container');
     frameDataInputElems.push(...document.getElementsByClassName('finput'));
     frameDataInputElems.push(...document.getElementsByClassName('finput2'));
     animationDataInputElem = document.getElementsByClassName('ainput')[0];
+
+    buttonClipboard = document.getElementById("cp-json");
+    buttonDownload = document.getElementById("dl-json");
 
     buildFrameDataInput();
 }
@@ -270,7 +275,10 @@ const buildAccordion = (animation) => {
         clearFrameDataValues();
         clearHitboxes();
         acc.remove();
-        disableJSONButtons();
+        if(animationListClasses.length == 0){
+            buttonClipboard.classList.add('disabled');
+            buttonDownload.classList.add('disabled');
+        }
     });
 
     trashI.addEventListener('mouseenter', () =>{
@@ -331,6 +339,10 @@ const buildFrameContainer = (frameClass) => {
             animation.deleteThis();
         }else{
             frameClass.deleteThis();
+        }
+        if(animationListClasses.length == 0){
+            buttonClipboard.classList.add('disabled');
+            buttonDownload.classList.add('disabled');
         }
         clearHitboxes();
         clearFrameDataValues();

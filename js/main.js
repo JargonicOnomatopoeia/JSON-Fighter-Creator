@@ -3,27 +3,14 @@ import { createJSON, copyJSONToClipboard} from './output.js';
 import * as animator from './animator.js';
 import * as editor from './editor.js';
 
-export let buttonClipboard;
-export let buttonDownload;
-
-export const enableJSONButtons = () => {
-    if(animationList.animationListClasses.length != 0) return;
-    buttonClipboard.classList.remove('disabled');
-    buttonDownload.classList.remove('disabled');
-}
-
-export const disableJSONButtons = () => {
-    buttonClipboard.classList.add('disabled');
-    buttonDownload.classList.add('disabled');
-}
 
 window.onload = () => {
     //#region Declarations
     let imageUploader = document.getElementById("add-files");
     let buttonNewHitbox = document.getElementById("add-new-hitbox");
     let buttonNewHurtbox = document.getElementById("add-new-hurtbox");
-    buttonClipboard = document.getElementById("cp-json");
-    buttonDownload = document.getElementById("dl-json");
+    let buttonClipboard = document.getElementById("cp-json");
+    let buttonDownload = document.getElementById("dl-json");
     
     animationList.initialize();
     editor.initialize();
@@ -39,7 +26,8 @@ window.onload = () => {
     fileAdd.addEventListener('change', (e) => {
         if(window.File && window.FileReader && window.FileList && window.Blob){
             animationList.buildAnimationSprite(e.target.files);
-            enableJSONButtons();
+            buttonClipboard.classList.remove('disabled');
+            buttonDownload.classList.remove('disabled');
         }
     });
     //#endregion
