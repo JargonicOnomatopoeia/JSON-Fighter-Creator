@@ -202,7 +202,7 @@ export const initialize = () =>{
                 frameData.offset.y += roundNum(current.y, canvasClass.start.y);
                 currentFrame.setHitboxCoords();
                 currentFrame.setCoords();
-                animationList.triggerFrameDataListeners();
+                currentFrame.triggerListeners();
                 canvasClass.start.x = current.x;
                 canvasClass.start.y = current.y;
             }
