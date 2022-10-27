@@ -339,6 +339,12 @@ div.accordion > .accordion-body {
 #animation-list .list-list:has(.list-item > .list-item-copy.toggle-icon > .toggle-icon-checkbox:checked) .list-item:has(> .list-item-copy.toggle-icon > .toggle-icon-checkbox:not(.toggle-icon-checkbox:checked)) > .list-item-paste {
   display: unset;
 }
+#animation-list .list-list:has(.list-item > .list-item-copy.toggle-icon > .toggle-icon-checkbox:checked) .list-sub-item > .list-item-copy {
+  display: none;
+}
+#animation-list .list-list:has(.list-item > .list-item-copy.toggle-icon > .toggle-icon-checkbox:checked) .list-sub-item > .list-item-delete {
+  display: none;
+}
 #animation-list .list-list .list-sub-item {
   display: flex;
   align-items: center;
@@ -380,6 +386,12 @@ div.accordion > .accordion-body {
 }
 #animation-list .list-list:has(.list-sub-item > .list-item-copy.toggle-icon > .toggle-icon-checkbox:checked) .list-sub-item:has(> .list-item-copy.toggle-icon > .toggle-icon-checkbox:not(.toggle-icon-checkbox:checked)) > .list-item-paste {
   display: unset;
+}
+#animation-list .list-list:has(.list-sub-item > .list-item-copy.toggle-icon > .toggle-icon-checkbox:checked) .list-item > .list-item-copy {
+  display: none;
+}
+#animation-list .list-list:has(.list-sub-item > .list-item-copy.toggle-icon > .toggle-icon-checkbox:checked) .list-item > .list-item-delete {
+  display: none;
 }
 
 #hitbox-list {

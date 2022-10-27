@@ -267,11 +267,7 @@ const buildAccordion = (animation) => {
     toggleCopy.setAttribute('type', 'checkbox');
     toggleCopy.setAttribute('class', 'toggle-icon-checkbox');
     toggleCopy.addEventListener("change", (val) => {
-        isCopying = val.target.checked
-        Array.from(document.getElementsByClassName('list-sub-item')).forEach(item => {
-            item.classList.toggle('disabled');
-        });
-
+        isCopying = val.target.checked;
         // disable functions
     })
     toggleCopyBody.appendChild(toggleCopy);
@@ -361,10 +357,7 @@ const buildFrameContainer = (frameClass) => {
     toggleCopyHitboxes.setAttribute('type', 'checkbox');
     toggleCopyHitboxes.setAttribute('class', 'toggle-icon-checkbox');
     toggleCopyHitboxes.addEventListener("change", (val) => {
-        isCopying = val.target.checked
-        Array.from(document.getElementsByClassName('list-item')).forEach(item => {
-            item.classList.toggle('disabled');
-        });
+        isCopying = val.target.checked;
 
         // disable functions
     })
