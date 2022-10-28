@@ -21,6 +21,7 @@ export let garbageAnimations = [];
 
 let buttonClipboard;
 let buttonDownload;
+let buttonAddFiles;
 
 export const initialize = () => {
     animationListElem = document.getElementById('animation-list-container');
@@ -31,6 +32,7 @@ export const initialize = () => {
 
     buttonClipboard = document.getElementById("cp-json");
     buttonDownload = document.getElementById("dl-json");
+    buttonAddFiles = document.getElementById("add-files");
 
     buildFrameDataInput();
 }
@@ -222,8 +224,7 @@ const buildAccordion = (animation) => {
     let accHead = buildElem('accordion-head');
     let itemList = buildElem('list-item');
     accHead.addEventListener('click', () => {
-        if(hoverOnSecondayButton) return;
-        if (isCopying) return;
+        if(hoverOnSecondayButton == true || isCopying == true) return;
         if(currentAnimation == null){
             animation.headElement.classList.toggle('list-item-active');
         }
@@ -266,14 +267,35 @@ const buildAccordion = (animation) => {
     let toggleCopy = document.createElement('input');
     toggleCopy.setAttribute('type', 'checkbox');
     toggleCopy.setAttribute('class', 'toggle-icon-checkbox');
-    toggleCopy.addEventListener("change", (val) => {
-        isCopying = val.target.checked
-        Array.from(document.getElementsByClassName('list-sub-item')).forEach(item => {
+    toggleCopy.addEventListener("change", () => {
+        isCopying = toggleCopy.checked;
+        for(let x = 0; x < animationListClasses.length;x++){
+            let currentFrames = animationListClasses[x].frameDataListClasses;
+            for(let y = 0; y < currentFrames.length;y++){
+                currentFrames[y].parentElement.classList.toggle('disabled');
+            }
+        }
+
+        buttonDownload.classList.toggle('disabled');
+        buttonClipboard.classList.toggle('disabled');
+        buttonAddFiles.classList.toggle('disabled');
+
+        if(currentFrame != null){
+            currentFrame.parentElement.classList.toggle('list-sub-item-active');
+        }
+        /*Array.from(document.getElementsByClassName('list-sub-item')).forEach(item => {
             item.classList.toggle('disabled');
-        });
+        });*/
 
         // disable functions
-    })
+        
+    });
+
+    toggleCopy.addEventListener('mouseenter', () => {
+        hoverOnSecondayButton = true;
+    });
+
+    toggleCopy.addEventListener('mouseout', resetHover);
     toggleCopyBody.appendChild(toggleCopy);
 
     let copyI = buildElem('icon-copy', 'i');
@@ -294,6 +316,7 @@ const buildAccordion = (animation) => {
     let pasteTip = buildElem('tooltip');
     pasteTip.innerHTML = "Paste";
     pasteI.addEventListener("click", (val) => {
+        if(isCopying == true) return;
         // paste function
     })
     pasteI.appendChild(pasteTip);
@@ -304,7 +327,7 @@ const buildAccordion = (animation) => {
     trashTip.innerHTML = "Delete";
     trashI.appendChild(trashTip);
     trashI.addEventListener('click', () => {
-        if(!hoverOnSecondayButton) return;
+        if(!hoverOnSecondayButton || isCopying == true) return;
         animation.deleteThis();
         clearAnimationDataValue();
         clearFrameDataValues();
@@ -326,9 +349,9 @@ const buildAccordion = (animation) => {
     itemList.appendChild(arrow);
     itemList.appendChild(animInput);
     itemList.appendChild(pasteI);
-    itemList.appendChild(trashI);
     itemList.appendChild(toggleCopyBody);
-
+    itemList.appendChild(trashI);
+    
     accHead.appendChild(itemList);
     //#endregion
 
@@ -360,12 +383,15 @@ const buildFrameContainer = (frameClass) => {
     let toggleCopyHitboxes = document.createElement('input');
     toggleCopyHitboxes.setAttribute('type', 'checkbox');
     toggleCopyHitboxes.setAttribute('class', 'toggle-icon-checkbox');
-    toggleCopyHitboxes.addEventListener("change", (val) => {
-        isCopying = val.target.checked
-        Array.from(document.getElementsByClassName('list-item')).forEach(item => {
+    toggleCopyHitboxes.addEventListener("click", () => {
+        isCopying = toggleCopyHitboxes.checked;
+        frameClass.animRef.headElement.classList.toggle('list-item-active');
+        for(let x = 0; x < animationListClasses.length;x++){
+            animationListClasses[x].headElement.classList.toggle('disabled');
+        }
+        /*Array.from(document.getElementsByClassName('list-item')).forEach(item => {
             item.classList.toggle('disabled');
-        });
-
+        });*/
         // disable functions
     })
     toggleCopyHitboxesBody.appendChild(toggleCopyHitboxes);
@@ -401,6 +427,7 @@ const buildFrameContainer = (frameClass) => {
     trashTip.innerHTML = 'Delete';
     trashFrames.appendChild(trashTip);
     trashFrames.addEventListener('click', () => {
+        if(isCopying == true) return;
         let animation = frameClass.animRef;
         if(animation.frameDataListClasses.length == 1){
             animation.deleteThis();
@@ -421,7 +448,6 @@ const buildFrameContainer = (frameClass) => {
     const resetHover = () => {
         hoverOnSecondayButton = false;
     }
-
     frameClass.hoverListener = resetHover;
 
     trashFrames.addEventListener('mouseenter', () => {
@@ -432,9 +458,9 @@ const buildFrameContainer = (frameClass) => {
 
     frameContainer.appendChild(frameInput);
     frameContainer.appendChild(pasteHitboxes);
-    frameContainer.appendChild(trashFrames);
     frameContainer.appendChild(toggleCopyHitboxesBody);
-
+    frameContainer.appendChild(trashFrames);
+    
     let index = 0;
     const primaryCallback = (key) => {
         let frameDataInput = frameDataInputElems[index];
@@ -452,12 +478,10 @@ const buildFrameContainer = (frameClass) => {
         index++;
     }
 
-    
     objectLooper(frameClass.frameData, 1, Object.keys(frameClass.frameData).length-2, primaryCallback, secondaryCallback);
     
     frameContainer.addEventListener('click', () => {
-        if(hoverOnSecondayButton == true) return;
-        if (isCopying) return;
+        if(hoverOnSecondayButton == true || isCopying == true) return;
         if(currentFrame == null){
             frameContainer.classList.toggle('list-sub-item-active');
         }
@@ -614,7 +638,7 @@ const addCurrentHitboxes = () => {
     let hitboxClasses = currentFrame.hitboxListClasses;
     for(let x = 0; x < hitboxClasses.length;x++){
         hitboxListElem.appendChild(hitboxClasses[x].parentElement);
-        hitboxClasses[x].indexElement.innerHTML = x;
+        hitboxClasses[x].indexElement.innerHTML = x+1;
         //buildHitboxRowContainer(x, hitboxClass, hitboxClass.hitboxData.type == 'hurtbox');
     }
 }

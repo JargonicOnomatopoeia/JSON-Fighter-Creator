@@ -33,6 +33,7 @@ window.onload = () => {
     //#endregion
 
     imageUploader.addEventListener("click", () =>{
+        if(imageUploader.classList.contains('disabled') == true) return;
         fileAdd.click();
     });
     
@@ -47,14 +48,14 @@ window.onload = () => {
     let linkDownload = document.createElement('a');
     linkDownload.download = "JSON-Fighter-Creater.json";
     buttonDownload.addEventListener("click", () => {
-        if(animationList.animationListClasses.length <= 0) return;
+        if(buttonDownload.classList.contains('disabled') == true) return;
         linkDownload.href = createJSON();
         linkDownload.click();
     });
 
     buttonClipboard.addEventListener("click", () => {
-        if(animationList.animationListClasses.length <= 0) return;
-        copyJSONToClipboard
+        if(buttonClipboard.classList.contains('disabled') == true) return;
+        copyJSONToClipboard();
     });
     //#endregion
    
