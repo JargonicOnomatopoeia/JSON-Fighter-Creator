@@ -383,15 +383,12 @@ const buildFrameContainer = (frameClass) => {
     let toggleCopyHitboxes = document.createElement('input');
     toggleCopyHitboxes.setAttribute('type', 'checkbox');
     toggleCopyHitboxes.setAttribute('class', 'toggle-icon-checkbox');
-    toggleCopyHitboxes.addEventListener("click", () => {
-        isCopying = toggleCopyHitboxes.checked;
-        frameClass.animRef.headElement.classList.toggle('list-item-active');
-        for(let x = 0; x < animationListClasses.length;x++){
-            animationListClasses[x].headElement.classList.toggle('disabled');
-        }
-        /*Array.from(document.getElementsByClassName('list-item')).forEach(item => {
+    toggleCopyHitboxes.addEventListener("change", (val) => {
+        isCopying = val.target.checked
+        Array.from(document.getElementsByClassName('list-item')).forEach(item => {
             item.classList.toggle('disabled');
-        });*/
+        });
+
         // disable functions
     })
     toggleCopyHitboxesBody.appendChild(toggleCopyHitboxes);

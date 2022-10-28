@@ -28,6 +28,17 @@
   }
 }
 
+@mixin copy-on-hide-icons {
+  
+  & > .list-item-copy {
+    display: none;
+  }
+
+  & > .list-item-delete {
+    display: none;
+  }
+}
+
 #animation-list {
   flex-basis: 50%;
 
@@ -49,6 +60,10 @@
         .list-item {
           @include copy-on;
         }
+
+        .list-sub-item {
+          @include copy-on-hide-icons;
+        }
       }
 
       .list-sub-item {
@@ -63,6 +78,10 @@
       &:has(.list-sub-item > .list-item-copy.toggle-icon > .toggle-icon-checkbox:checked) {
         .list-sub-item {
           @include copy-on;
+        }
+
+        .list-item {
+          @include copy-on-hide-icons;
         }
       }
     }
