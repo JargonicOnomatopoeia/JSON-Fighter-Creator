@@ -223,26 +223,6 @@ const buildAccordion = (animation) => {
     //#region Accordion Head
     let accHead = buildElem('accordion-head');
     let itemList = buildElem('list-item');
-    accHead.addEventListener('click', () => {
-        if(hoverOnSecondayButton == true || isCopying == true) return;
-        if(currentAnimation == null){
-            animation.headElement.classList.toggle('list-item-active');
-        }
-        if(currentAnimation != null && currentAnimation != animation){
-            currentAnimation.headElement.classList.toggle('list-item-active');
-            itemList.classList.toggle('list-item-active');
-        }
-        if(currentFrame != null){
-            currentFrame.parentElement.classList.toggle('list-sub-item-active');
-        }
-        setCurrentAnim(animation);
-        animation.triggerListener();
-        animator.reset();
-        clearHitboxes();
-        setCurrentFrame();
-        animationDataInputElem.value = animation.animationData.chain;
-        clearFrameDataValues();
-    });
     animation.headElement = itemList;
 
     //For the toggle 
@@ -262,7 +242,7 @@ const buildAccordion = (animation) => {
     });
     animation.inputElement = animInput;
 
-    //Copy Animation???
+    //Copy Animation
     let toggleCopyBody = buildElem('toggle-icon list-item-copy');
     let toggleCopy = document.createElement('input');
     toggleCopy.setAttribute('type', 'checkbox');
@@ -270,9 +250,12 @@ const buildAccordion = (animation) => {
     toggleCopy.addEventListener("change", () => {
         isCopying = toggleCopy.checked;
         for(let x = 0; x < animationListClasses.length;x++){
+            animationListClasses[x].inputElement.disabled = isCopying;
             let currentFrames = animationListClasses[x].frameDataListClasses;
+
             for(let y = 0; y < currentFrames.length;y++){
                 currentFrames[y].parentElement.classList.toggle('disabled');
+                currentFrames[y].inputElement.disabled = isCopying;
             }
         }
 
@@ -361,6 +344,27 @@ const buildAccordion = (animation) => {
     animation.accordionBodyElement = accBody;
     //#endregion
 
+    accHead.addEventListener('click', () => {
+        if(hoverOnSecondayButton == true || isCopying == true) return;
+        if(currentAnimation == null){
+            animation.headElement.classList.toggle('list-item-active');
+        }
+        if(currentAnimation != null && currentAnimation != animation){
+            currentAnimation.headElement.classList.toggle('list-item-active');
+            itemList.classList.toggle('list-item-active');
+        }
+        if(currentFrame != null){
+            currentFrame.parentElement.classList.toggle('list-sub-item-active');
+        }
+        setCurrentAnim(animation);
+        animation.triggerListener();
+        animator.reset();
+        clearHitboxes();
+        setCurrentFrame();
+        clearFrameDataValues();
+        animationDataInputElem.value = animation.animationData.chain;
+    });
+
     acc.appendChild(accHead);
     acc.appendChild(accBody);
 }
@@ -383,12 +387,17 @@ const buildFrameContainer = (frameClass) => {
     let toggleCopyHitboxes = document.createElement('input');
     toggleCopyHitboxes.setAttribute('type', 'checkbox');
     toggleCopyHitboxes.setAttribute('class', 'toggle-icon-checkbox');
-    toggleCopyHitboxes.addEventListener("change", (val) => {
-        isCopying = val.target.checked
-        Array.from(document.getElementsByClassName('list-item')).forEach(item => {
-            item.classList.toggle('disabled');
-        });
-
+    toggleCopyHitboxes.addEventListener("change", () => {
+        isCopying = toggleCopyHitboxes.checked;
+        for(let x = 0; x < animationListClasses.length;x++){
+            let animationTemp = animationListClasses[x];
+            let frames = animationTemp.frameDataListClasses;
+            animationTemp.headElement.classList.toggle('disabled');
+            animationTemp.inputElement.disabled = isCopying;
+            for(let y = 0; y < frames.length; y++){
+                frames[y].inputElement.disabled = isCopying;
+            }
+        }
         // disable functions
     })
     toggleCopyHitboxesBody.appendChild(toggleCopyHitboxes);
@@ -404,6 +413,7 @@ const buildFrameContainer = (frameClass) => {
     let cancelCopyHitboxes = buildElem('icon-cancel-copy', 'i');
     let cancelCopyHitboxesTip = buildElem('tooltip');
     cancelCopyHitboxesTip.innerHTML = "Cancel Copy";
+
     cancelCopyHitboxes.appendChild(cancelCopyHitboxesTip);
 
     toggleCopyHitboxesBody.appendChild(copyHitboxes);
