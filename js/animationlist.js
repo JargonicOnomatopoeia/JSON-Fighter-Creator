@@ -401,6 +401,10 @@ export const buildFrameContainer = (frameClass) => {
                 frames[y].inputElement.disabled = isCopying;
             }
         }
+
+        buttonDownload.classList.toggle('disabled');
+        buttonClipboard.classList.toggle('disabled');
+        buttonAddFiles.classList.toggle('disabled');
     });
     frameClass.toggleCopyElement = toggleCopyHitboxes;
     toggleCopyHitboxesBody.appendChild(toggleCopyHitboxes);
