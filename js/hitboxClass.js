@@ -27,7 +27,7 @@ export class hitbox{
         this.setCoords();
     }
 
-    resetHitbox = (_frameRef, _hitboxType) => {
+    resetHitbox = (_frameRef = null, _hitboxType = "hitbox") => {
         let hitboxData = this.hitboxData;
         this.frameRef = _frameRef;
         this.frameData = _frameRef.frameData;

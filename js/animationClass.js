@@ -59,4 +59,33 @@ export class animation{
     triggerListener = () => {
         this.listener();
     }
+
+    copyFrames = (animationClass) => {
+        let frameCopies = [];
+        for(let x = 0 ; x < this.frameDataListClasses.length;x++){
+            let travFrame = this.frameDataListClasses[x];
+            let tempFrame;
+            if(animationList.garbageFrames.length > 0){
+                tempFrame = animationList.garbageFrames.pop()[0];
+                tempFrame.resetFrame(animationClass, travFrame.image.src, travFrame.frameData.name);
+            }else{
+                tempFrame = new frame(animationClass, travFrame.image.src, travFrame.frameData.name);
+                animationList.buildFrameContainer(travFrame);
+            }
+
+            const primaryCallback = (key) => {
+                tempFrame.frameData[key] = travFrame.frameData[key];
+            }
+
+            const secondaryCallback = (primaryKey, secondaryKey) => {
+                tempFrame.frameData[primaryKey][secondaryKey] = travFrame.frameData[primaryKey][secondaryKey];
+            }
+
+            animationList.objectLooper(travFrame.frameData, 1, Object.keys(travFrame.frameData).length-1, primaryCallback, secondaryCallback);
+            tempFrame.triggerListeners();
+            frameCopies.push(tempFrame);
+        }
+
+        return frameCopies;
+    }
 }

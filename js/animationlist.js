@@ -82,7 +82,7 @@ export const buildAnimationSprite = (imageArray) => {
                     newFrame.resetFrame(animationTemp, e.target.result, imageArray[x].name);
                 }else{
                     newFrame = new frame(animationTemp, e.target.result, imageArray[x].name);
-                    newFrame.element = buildFrameContainer(newFrame);
+                    buildFrameContainer(newFrame);
                     //newFrame.setCoords();
                     //console.log(newFrame.image.width+" "+newFrame.image.height);
                 }
@@ -126,7 +126,7 @@ export const inputNumCheck = (input, currentObject, callback) => {
     input.value = 0;
 }
 
-const objectLooper = (object, start, end, primaryCallback, secondaryCallback) => {
+export const objectLooper = (object, start, end, primaryCallback, secondaryCallback) => {
     let primeKeys = Object.keys(object);
     for(let x = start; x < end; x++){
         let primaryKey = primeKeys[x];
@@ -369,7 +369,7 @@ const buildAccordion = (animation) => {
     acc.appendChild(accBody);
 }
 
-const buildFrameContainer = (frameClass) => {
+export const buildFrameContainer = (frameClass) => {
     let hoverOnSecondayButton = false;
     let frameContainer = buildElem('list-sub-item');
     frameClass.parentElement = frameContainer;
@@ -398,7 +398,6 @@ const buildFrameContainer = (frameClass) => {
                 frames[y].inputElement.disabled = isCopying;
             }
         }
-        // disable functions
     })
     toggleCopyHitboxesBody.appendChild(toggleCopyHitboxes);
 
@@ -406,7 +405,7 @@ const buildFrameContainer = (frameClass) => {
     let copyHitboxesTip = buildElem('tooltip');
     copyHitboxesTip.innerHTML = 'Copy Hitboxes';
     copyHitboxes.addEventListener('click', () => {
-        copiedHitboxes = frameClass.copyHitboxes();
+        copiedHitboxes = currentFrame.copyHitboxes();
     });
     copyHitboxes.appendChild(copyHitboxesTip);
 

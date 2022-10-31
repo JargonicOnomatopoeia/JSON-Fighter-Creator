@@ -125,29 +125,31 @@ export class frame{
         this.animRef.deleteFrameData(this);
     }
 
-    copyHitboxes = () => {
+    copyHitboxes = (frameClass) => {
         let hitboxListCopy = [];
         for(let x = 0; x < this.hitboxListClasses.length; x++){
-            let tempHitbox = new hitbox();
-            let tempObjectKeys = Object.keys(tempHitbox.hitbox.keys);
             let hitbox = this.hitboxListClasses[x].hitbox;
-            for(let y = 0; y < tempObjectKeys.length;y++){
-                let primeKey = tempObjectKeys[y];
-                switch(tempHitbox[primeKey] instanceof Object){
-                    case true:
-                        let secondaryKeys = Object.keys(tempHitbox[primeKey]);
-                        for(let z = 0; z < secondaryKeys.length;z++){
-                            let secondaryKey = secondaryKeys[z];
-                            tempHitbox.hitboxData[primeKey][secondaryKey] = hitbox[primeKey][secondaryKey];
-                            
-                        }
-                    ;break;
-                    case false:
-                        tempHitbox.hitbox[primeKey] = hitbox[primeKey];
-                        
-                    ;break;
-                }
+            let tempHitbox;
+
+            if(animationList.garbageHitboxes.length > 0){
+                tempHitbox = animationList.garbageAnimations.pop()[0];
+                tempHitbox.resetHitbox(frameClass, hitbox.hitboxData.type);
+            }else{
+                tempHitbox = new hitbox(frameClass, hitbox.hitboxData.type);
+                animationList.buildHitboxRowContainer(tempHitbox);
             }
+
+            const primaryCallback = (key) => {
+                tempHitbox.hitboxData[key] = hitbox.hitboxData[key];
+            }
+
+            const secondaryCallback = (primaryKey, secondaryKey) => {
+                tempHitbox.hitboxData[primaryKey][secondaryKey] = hitbox.hitboxData[primaryKey][secondaryKey];
+            }
+
+            animationList.objectLooper(hitbox.hitboxData, 1, hitbox.hitboxData.length, primaryCallback, secondaryCallback);
+            
+            tempHitbox.triggerListeners();
             hitboxListCopy.push(tempHitbox);
         }
         return hitboxListCopy;
