@@ -247,6 +247,7 @@ const buildAccordion = (animation) => {
     let toggleCopy = document.createElement('input');
     toggleCopy.setAttribute('type', 'checkbox');
     toggleCopy.setAttribute('class', 'toggle-icon-checkbox');
+        
     toggleCopy.addEventListener("change", () => {
         isCopying = toggleCopy.checked;
         for(let x = 0; x < animationListClasses.length;x++){
@@ -273,6 +274,7 @@ const buildAccordion = (animation) => {
         // disable functions
         
     });
+    animation.toggleCopyElement = toggleCopy;
 
     toggleCopy.addEventListener('mouseenter', () => {
         hoverOnSecondayButton = true;
@@ -299,9 +301,9 @@ const buildAccordion = (animation) => {
     let pasteTip = buildElem('tooltip');
     pasteTip.innerHTML = "Paste";
     pasteI.addEventListener("click", () => {
+        currentAnimation.toggleCopyElement.click();
         let copiedFrames = currentAnimation.copyFrames(animation);
         animation.pasteFrames(copiedFrames);
-        isCopying = false;
     })
     pasteI.appendChild(pasteTip);
 
@@ -388,7 +390,7 @@ export const buildFrameContainer = (frameClass) => {
     let toggleCopyHitboxes = document.createElement('input');
     toggleCopyHitboxes.setAttribute('type', 'checkbox');
     toggleCopyHitboxes.setAttribute('class', 'toggle-icon-checkbox');
-    toggleCopyHitboxes.addEventListener("change", () => {
+    toggleCopyHitboxes.addEventListener("click", () => {
         isCopying = toggleCopyHitboxes.checked;
         for(let x = 0; x < animationListClasses.length;x++){
             let animationTemp = animationListClasses[x];
@@ -399,7 +401,8 @@ export const buildFrameContainer = (frameClass) => {
                 frames[y].inputElement.disabled = isCopying;
             }
         }
-    })
+    });
+    frameClass.toggleCopyElement = toggleCopyHitboxes;
     toggleCopyHitboxesBody.appendChild(toggleCopyHitboxes);
 
     let copyHitboxes = buildElem('icon-copy', 'i');
@@ -421,6 +424,8 @@ export const buildFrameContainer = (frameClass) => {
     let pasteHitboxesTip = buildElem('tooltip');
     pasteHitboxesTip.innerHTML = 'Paste Hitboxes';
     pasteHitboxes.addEventListener("click", () => {
+        currentFrame.toggleCopyElement.click();
+
         copiedHitboxes = currentFrame.copyHitboxes(frameClass);
         frameClass.pasteHitboxes(copiedHitboxes);
     });
@@ -447,7 +452,6 @@ export const buildFrameContainer = (frameClass) => {
         clearFrameDataValues();
         frameContainer.remove();
         animator.reset();
-        disableJSONButtons();
     });
 
     const resetHover = () => {

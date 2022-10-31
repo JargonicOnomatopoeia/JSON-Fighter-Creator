@@ -1,4 +1,5 @@
 import * as animationList from "./animationlist.js";
+import {frame} from "./frameClass.js"
 
 export class animation{
     constructor(_animationName = ""){
@@ -17,6 +18,7 @@ export class animation{
         this.accordionElement;
         this.headElement;
         this.dropdownElement;
+        this.toggleCopyElement;
         this.inputElement;
         this.accordionBodyElement;
     }
@@ -70,7 +72,7 @@ export class animation{
                 tempFrame.resetFrame(animationClass, travFrame.image.src, travFrame.frameData.name);
             }else{
                 tempFrame = new frame(animationClass, travFrame.image.src, travFrame.frameData.name);
-                animationList.buildFrameContainer(travFrame);
+                animationList.buildFrameContainer(tempFrame);
             }
 
             const primaryCallback = (key) => {

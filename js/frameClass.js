@@ -36,6 +36,7 @@ export class frame{
 
         this.parentElement;
         this.inputElement;
+        this.toggleCopyElement;
     }
 
     resetFrame = (_animRef, _imageSrc, _frameName) => {
@@ -128,26 +129,26 @@ export class frame{
     copyHitboxes = (frameClass) => {
         let hitboxListCopy = [];
         for(let x = 0; x < this.hitboxListClasses.length; x++){
-            let hitbox = this.hitboxListClasses[x].hitbox;
+            let hitboxClass = this.hitboxListClasses[x];
             let tempHitbox;
 
             if(animationList.garbageHitboxes.length > 0){
-                tempHitbox = animationList.garbageAnimations.pop()[0];
-                tempHitbox.resetHitbox(frameClass, hitbox.hitboxData.type);
+                tempHitbox = animationList.garbageHitboxes.pop()[0];
+                tempHitbox.resetHitbox(frameClass, hitboxClass.hitboxData.type);
             }else{
-                tempHitbox = new hitbox(frameClass, hitbox.hitboxData.type);
-                animationList.buildHitboxRowContainer(tempHitbox);
+                tempHitbox = new hitbox(frameClass, hitboxClass.hitboxData.type);
+                animationList.buildHitboxRowContainer(x+1, tempHitbox, (hitboxClass.hitboxData.type == "hurtbox")? true: false);
             }
 
             const primaryCallback = (key) => {
-                tempHitbox.hitboxData[key] = hitbox.hitboxData[key];
+                tempHitbox.hitboxData[key] = hitboxClass.hitboxData[key];
             }
 
             const secondaryCallback = (primaryKey, secondaryKey) => {
-                tempHitbox.hitboxData[primaryKey][secondaryKey] = hitbox.hitboxData[primaryKey][secondaryKey];
+                tempHitbox.hitboxData[primaryKey][secondaryKey] = hitboxClass.hitboxData[primaryKey][secondaryKey];
             }
 
-            animationList.objectLooper(hitbox.hitboxData, 1, hitbox.hitboxData.length, primaryCallback, secondaryCallback);
+            animationList.objectLooper(hitboxClass.hitboxData, 1, Object.keys(hitboxClass.hitboxData).length, primaryCallback, secondaryCallback);
             
             tempHitbox.triggerListeners();
             hitboxListCopy.push(tempHitbox);
@@ -157,7 +158,7 @@ export class frame{
 
     pasteHitboxes = (hitboxListCopy) => {
         for(let x = 0; x < hitboxListCopy.length;x++){
-            this.frameData.hitboxList.push(i.hitboxData);
+            this.frameData.hitboxList.push(hitboxListCopy[x].hitboxData);
         }
 
         this.hitboxListClasses.push(...hitboxListCopy);
