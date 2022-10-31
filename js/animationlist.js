@@ -301,6 +301,7 @@ const buildAccordion = (animation) => {
     pasteI.addEventListener("click", () => {
         let copiedFrames = currentAnimation.copyFrames(animation);
         animation.pasteFrames(copiedFrames);
+        isCopying = false;
     })
     pasteI.appendChild(pasteTip);
 
