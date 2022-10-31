@@ -155,12 +155,10 @@ export class frame{
         return hitboxListCopy;
     }
 
-    pasteHitbox = (hitboxListCopy) => {
-
-        hitboxListCopy.foreach(i => {
-            i.frameData = this;
+    pasteHitboxes = (hitboxListCopy) => {
+        for(let x = 0; x < hitboxListCopy.length;x++){
             this.frameData.hitboxList.push(i.hitboxData);
-        });
+        }
 
         this.hitboxListClasses.push(...hitboxListCopy);
     }

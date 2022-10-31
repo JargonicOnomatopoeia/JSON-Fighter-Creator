@@ -298,9 +298,9 @@ const buildAccordion = (animation) => {
     let pasteI = buildElem('icon-paste clickable list-item-paste', 'i');
     let pasteTip = buildElem('tooltip');
     pasteTip.innerHTML = "Paste";
-    pasteI.addEventListener("click", (val) => {
-        if(isCopying == true) return;
-        // paste function
+    pasteI.addEventListener("click", () => {
+        let copiedFrames = currentAnimation.copyFrames(animation);
+        animation.pasteFrames(copiedFrames);
     })
     pasteI.appendChild(pasteTip);
 
@@ -404,9 +404,6 @@ export const buildFrameContainer = (frameClass) => {
     let copyHitboxes = buildElem('icon-copy', 'i');
     let copyHitboxesTip = buildElem('tooltip');
     copyHitboxesTip.innerHTML = 'Copy Hitboxes';
-    copyHitboxes.addEventListener('click', () => {
-        copiedHitboxes = currentFrame.copyHitboxes();
-    });
     copyHitboxes.appendChild(copyHitboxesTip);
 
     let cancelCopyHitboxes = buildElem('icon-cancel-copy', 'i');
@@ -422,9 +419,10 @@ export const buildFrameContainer = (frameClass) => {
     let pasteHitboxes = buildElem('icon-paste clickable list-item-paste', 'i');
     let pasteHitboxesTip = buildElem('tooltip');
     pasteHitboxesTip.innerHTML = 'Paste Hitboxes';
-    pasteHitboxes.addEventListener("click", (val) => {
-        // paste function
-    })
+    pasteHitboxes.addEventListener("click", () => {
+        copiedHitboxes = currentFrame.copyHitboxes(frameClass);
+        frameClass.pasteHitboxes(copiedHitboxes);
+    });
     pasteHitboxes.appendChild(pasteHitboxesTip);
 
     //Delete Frame

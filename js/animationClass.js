@@ -82,10 +82,18 @@ export class animation{
             }
 
             animationList.objectLooper(travFrame.frameData, 1, Object.keys(travFrame.frameData).length-1, primaryCallback, secondaryCallback);
-            tempFrame.triggerListeners();
+
+            tempFrame.pasteHitboxes(travFrame.copyHitboxes(tempFrame));
             frameCopies.push(tempFrame);
         }
 
         return frameCopies;
+    }
+
+    pasteFrames = (frameList) => {
+        for(let x = 0; x < frameList.length;x++){
+            this.addFrameData(frameList[x]);
+            this.accordionBodyElement.appendChild(frameList[x].parentElement);
+        }
     }
 }
