@@ -16,7 +16,3 @@ An application that would let you make [hitboxes/hurtboxes](https://developer.am
 - Copy the hitbox/hurtbox data to clipboard
 - Download the hitbox/hurtbox JSON File.
 
-## Features to Implement In The Future
-------------
-- feature to load a hitbox/hurtbox JSON file
-- feature to accept spritesheets and its associated JSON file.
