@@ -44,29 +44,28 @@ export class hitbox{
     setCoords = () => {
         let coords = this.hitboxData.coords;
         let hoffset = this.hitboxData.offset;
-        let foffset = this.frameData.offset;
 
-        coords.left = hoffset.x + foffset.x - (this.hitboxData.width/2);
-        coords.top = hoffset.y + foffset.y - (this.hitboxData.height/2);
-        coords.right = hoffset.x + foffset.x + (this.hitboxData.width/2);
-        coords.bottom = hoffset.y + foffset.y + (this.hitboxData.height/2);
+        coords.left = hoffset.x - (this.hitboxData.width/2);
+        coords.top = hoffset.y - (this.hitboxData.height/2);
+        coords.right = hoffset.x + (this.hitboxData.width/2);
+        coords.bottom = hoffset.y + (this.hitboxData.height/2);
     }
 
     //#region getter
     getLeft = (scale = 1, pan = 0) => {
-        return this.hitboxData.coords.left * scale + pan;
+        return (this.hitboxData.coords.left + this.frameData.offset.x) * scale + pan;
     }
 
     getTop = (scale = 1, pan = 0) => {
-        return this.hitboxData.coords.top * scale + pan;
+        return (this.hitboxData.coords.top + this.frameData.offset.y) * scale + pan;
     }
 
     getRight = (scale = 1, pan = 0) => {
-        return this.hitboxData.coords.right * scale + pan;
+        return (this.hitboxData.coords.right + this.frameData.offset.x) * scale + pan;
     }
 
     getBottom = (scale = 1, pan = 0) => {
-        return this.hitboxData.coords.bottom * scale + pan;
+        return (this.hitboxData.coords.bottom + this.frameData.offset.y) * scale + pan;
     }
     //#endregion
 

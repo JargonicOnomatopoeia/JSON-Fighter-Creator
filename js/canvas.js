@@ -117,6 +117,7 @@ export class canvas{
 
     displayerHitbox = (currentHitbox, color, stroke = false) => {
         let hitboxData = currentHitbox.hitboxData;
+        let frameData = currentHitbox.frameRef.frameData;
         if(stroke == false){
             this.context.fillStyle = color;
             this.context.fillRect(currentHitbox.getLeft(), currentHitbox.getTop(), hitboxData.width, hitboxData.height);
