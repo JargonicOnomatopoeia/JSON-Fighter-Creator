@@ -102,7 +102,7 @@ export class frame{
 
     addNewHitbox = (type) => {
         let newHitbox = new hitbox(this, type);
-        this.frameData.hitboxList.push(newHitbox.hitbox);
+        this.frameData.hitboxList.push(newHitbox.hitboxData);
         this.hitboxListClasses.push(newHitbox);
 
         return newHitbox;
